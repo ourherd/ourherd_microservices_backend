@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+  gateway:
+    container_name: gateway_service
+    build:
+      context: .
+      target: development
+      dockerfile: ./apps/gateway/Dockerfile
+    env_file:
+      - .env
+    ports:
+      - '3020:3020'
+    networks:
+      - backend
+    depends_on:
+      - member
+      - rabbit
+  member:
+    container_name: member_service
+    build:
+      context: .
+      target: development
+      dockerfile: ./apps/member/Dockerfile
+    networks:
+      - backend
+    depends_on:
+      - primary_db
+      - rabbit
+networks:
+  backend:
+    driver: bridge

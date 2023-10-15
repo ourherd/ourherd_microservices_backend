@@ -1,0 +1,2 @@
+export const ACCOUNT_SERVICE = 'ACCOUNT SERVICE';
+export const ACCOUNT_MODULE = 'ACCOUNT MODULE';
