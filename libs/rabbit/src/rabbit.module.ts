@@ -3,6 +3,9 @@ import { RabbitServiceName } from "./interface/rabbit.interface";
 import { ClientsModule, MicroserviceOptions, Transport } from "@nestjs/microservices";
 import { RABBIT_SERVICE_OPTIONS, RABBIT_SERVICES } from "./constant/rabbit.constant";
 import { ConfigModule, ConfigService } from "@nestjs/config";
+import { getEnvPath } from '@app/common/env/env.helper';
+
+const envFilePath: string = getEnvPath(`${__dirname}/`);
 
 export class RabbitModule {
   static forServerProxy(service: RabbitServiceName): DynamicModule {
@@ -11,7 +14,7 @@ export class RabbitModule {
       module: RabbitModule,
       imports: [
         ConfigModule.forRoot({
-          envFilePath: './.env'
+          envFilePath: envFilePath
         })
       ],
       providers: [
@@ -22,7 +25,6 @@ export class RabbitModule {
               transport: Transport.RMQ,
               options: {
                 urls: [configService.get<string>('RABBIT_MQ_URI')],
-                // urls: ['amqps://wyuoplwy:G12LN2wy47tw8xEpeC8qehwkQOIJ5fFs@vulture.rmq.cloudamqp.com/wyuoplwy'],
                 queue: RABBIT_SERVICES[service].queue
               }
             }
