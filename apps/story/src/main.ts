@@ -5,7 +5,6 @@ import { MicroserviceOptions } from '@nestjs/microservices';
 import { RABBIT_SERVICE_OPTIONS } from '@app/rabbit';
 import { STORY_MODULE, STORY_SERVICE } from "./constant/story-patterns.constants";
 
-
 async function bootstrap() {
 
   let logger = new Logger(STORY_MODULE);
@@ -16,9 +15,7 @@ async function bootstrap() {
   // * start
   await app.startAllMicroservices();
 
-  logger.log(
-    `🚀 { ` + STORY_SERVICE +` } running on port ` ,
-  );
+  logger.log(`🚀 Application { ` + STORY_SERVICE +` } running 🚀`);
 
 }
 bootstrap();

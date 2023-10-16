@@ -46,14 +46,13 @@ export class RabbitModule {
               name: service,
               imports: [
                 ConfigModule.forRoot({
-                  envFilePath: './.env'
+                  envFilePath: envFilePath
                 })
               ],
               useFactory: (configService: ConfigService) => ({
                 transport: Transport.RMQ,
                 options: {
                   urls: [configService.get<string>('RABBIT_MQ_URI')],
-                  // urls: ['amqps://wyuoplwy:G12LN2wy47tw8xEpeC8qehwkQOIJ5fFs@vulture.rmq.cloudamqp.com/wyuoplwy'],
                   queue: RABBIT_SERVICES[service].queue
                 }
               }),

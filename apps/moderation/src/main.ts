@@ -1,23 +1,21 @@
 import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
-import { FeedModule } from './feed.module';
+import { ModerationModule } from './moderation.module';
 import { MicroserviceOptions } from '@nestjs/microservices';
 import { RABBIT_SERVICE_OPTIONS } from '@app/rabbit';
-import { FEED_MODULE, FEED_SERVICE } from "./constant/feed-patterns.constants";
-import { ACCOUNT_MODULE } from "../../account/src/constant/account-patterns.constants";
-
+import { MODERATION_MODULE, MODERATION_SERVICE } from "./constant/moderation-patterns.constants";
 
 async function bootstrap() {
 
-  let logger = new Logger(FEED_MODULE);
+  let logger = new Logger(MODERATION_MODULE);
 
-  const app = await NestFactory.create(FeedModule);
+  const app = await NestFactory.create(ModerationModule);
   // * setup
   app.connectMicroservice<MicroserviceOptions>(app.get<MicroserviceOptions>(RABBIT_SERVICE_OPTIONS));
   // * start
   await app.startAllMicroservices();
 
-  logger.log(`🚀 { ` + FEED_SERVICE +` } running 🚀`);
+  logger.log(`🚀 Application { ` + MODERATION_SERVICE +` } running 🚀`);
 
 }
 bootstrap();

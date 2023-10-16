@@ -160,6 +160,15 @@
       "compilerOptions": {
         "tsConfigPath": "libs/mail/tsconfig.lib.json"
       }
+    },
+    "moderation": {
+      "type": "application",
+      "root": "apps/moderation",
+      "entryFile": "main",
+      "sourceRoot": "apps/moderation/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/moderation/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,
