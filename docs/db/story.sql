@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS public.story
      "order"              integer,
     published_at         timestamp with time zone,
     ranking              integer  default 0 not null,
-    source varchar(10) default 'ourherd_app',
+    source varchar(10) default 'OURHERD_APP',
     revision serial,
 
     created_at timestamp with time zone default now() not null,
