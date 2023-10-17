@@ -1,81 +1,26 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/configuration-reference
 version: 2.1
 
-orbs:
-  aws-ecr: circleci/aws-ecr@8.1.3
-  terraform: circleci/terraform@3.2.1
-  aws-cli: circleci/aws-cli@2.0.3
+# Define a job to be invoked later in a workflow.
+# See: https://circleci.com/docs/configuration-reference/#jobs
+jobs:
+  say-hello:
+    # Specify the execution environment. You can specify an image from Docker Hub or use one of our convenience images from CircleCI's Developer Hub.
+    # See: https://circleci.com/docs/configuration-reference/#executor-job
+    docker:
+      - image: cimg/base:stable
+    # Add steps to the job
+    # See: https://circleci.com/docs/configuration-reference/#steps
+    steps:
+      - checkout
+      - run:
+          name: "Say hello"
+          command: "echo Hello, World!"
 
+# Orchestrate jobs using workflows
+# See: https://circleci.com/docs/configuration-reference/#workflows
 workflows:
-  # build-and-push-backend-account:
-  #   jobs:
-  #     - aws-ecr/build-and-push-image:
-  #         context: aws
-  #         create-repo: true
-  #         dockerfile: Dockerfile
-  #         path: ./apps/account
-  #         repo: backend-account
-  build-and-push-backend-gateway:
+  say-hello-workflow:
     jobs:
-      - aws-ecr/build-and-push-image:
-          context: aws
-          create-repo: true
-          dockerfile: Dockerfile
-          path: ./apps/gateway
-          repo: backend-gateway
-  # build-and-push-backend-feed:
-  #   jobs:
-  #     - aws-ecr/build-and-push-image:
-  #         context: aws
-  #         create-repo: true
-  #         dockerfile: Dockerfile
-  #         path: ./apps/feed
-  #         repo: backend-feed
-  # build-and-push-backend-mailer:
-  #   jobs:
-  #     - aws-ecr/build-and-push-image:
-  #         context: aws
-  #         create-repo: true
-  #         dockerfile: Dockerfile
-  #         path: ./apps/mailer
-  #         repo: backend-mailer
-  # build-and-push-backend-member:
-  #   jobs:
-  #     - aws-ecr/build-and-push-image:
-  #         context: aws
-  #         create-repo: true
-  #         dockerfile: Dockerfile
-  #         path: ./apps/member
-  #         repo: backend-member
-  # build-and-push-backend-notification:
-  #   jobs:
-  #     - aws-ecr/build-and-push-image:
-  #         context: aws
-  #         create-repo: true
-  #         dockerfile: Dockerfile
-  #         path: ./apps/notification
-  #         repo: backend-notification
-  # build-and-push-backend-reaction:
-  #   jobs:
-  #     - aws-ecr/build-and-push-image:
-  #         context: aws
-  #         create-repo: true
-  #         dockerfile: Dockerfile
-  #         path: ./apps/reaction
-  #         repo: backend-reaction
-  # build-and-push-backend-story:
-  #   jobs:
-  #     - aws-ecr/build-and-push-image:
-  #         context: aws
-  #         create-repo: true
-  #         dockerfile: Dockerfile
-  #         path: ./apps/story
-  #         repo: backend-story
-  # build-and-push-backend-survey:
-  #   jobs:
-  #     - aws-ecr/build-and-push-image:
-  #         context: aws
-  #         create-repo: true
-  #         dockerfile: Dockerfile
-  #         path: ./apps/survey
-  #         repo: backend-survey=-+
-  
+      - say-hello
