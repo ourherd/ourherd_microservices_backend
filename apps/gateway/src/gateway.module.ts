@@ -7,16 +7,17 @@ import { AuthenticationModule } from '@app/authentication';
 import { PolicyModule } from '@app/policy';
 import { MulterModule } from '@nestjs/platform-express';
 import multer from 'multer';
-
 import { MemberGatewayController } from './modules/member/member-gateway.controller'
 import { MemberProfileGatewayController } from './modules/member/member-profile-gateway.controller'
 
+import { getEnvPath } from '@app/common/env/env.helper';
+const envFilePath: string = getEnvPath(`${__dirname}/`);
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: './env'
+      envFilePath: envFilePath
     }),
     LanguageModule.register(
       path.join(__dirname, '../../../static/i18n')
@@ -27,7 +28,7 @@ import { MemberProfileGatewayController } from './modules/member/member-profile-
     RabbitModule.forClientProxy(RabbitServiceName.MEMBER),
     RabbitModule.forClientProxy(RabbitServiceName.ACCOUNT),
     RabbitModule.forClientProxy(RabbitServiceName.FEED),
-
+    RabbitModule.forClientProxy(RabbitServiceName.STORY),
     // AuthenticationModule.register(),
     // PolicyModule
   ],

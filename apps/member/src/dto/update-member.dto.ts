@@ -1,4 +1,4 @@
-import { IsDate, IsEnum, IsOptional, IsString, Length, IsEmail} from "class-validator";
+import { IsDate, IsEnum, IsOptional, IsString, Length, IsEmail, IsInt } from "class-validator";
 import { ApiProperty } from '@nestjs/swagger';
 import { EmploymentEnumType } from "../constant/member-patterns.constants";
 
@@ -39,9 +39,9 @@ export class UpdateMemberDto {
   public suburb: string;
 
   // Validates for a string
-  @IsString()
+  @IsInt()
   @IsOptional()
-  public postcode: string;
+  public postal_code: string;
 
   // Validates for a string
   @IsString()
