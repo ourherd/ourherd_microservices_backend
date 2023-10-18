@@ -7,6 +7,7 @@ import { AuthenticationModule } from '@app/authentication';
 import { PolicyModule } from '@app/policy';
 import { MulterModule } from '@nestjs/platform-express';
 import multer from 'multer';
+import { AccountGatewayController } from './modules/account/account-gateway.controller'
 import { MemberGatewayController } from './modules/member/member-gateway.controller'
 import { MemberProfileGatewayController } from './modules/member/member-profile-gateway.controller'
 
@@ -33,6 +34,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     // PolicyModule
   ],
   controllers: [
+    AccountGatewayController,
     MemberGatewayController,
     MemberProfileGatewayController
   ]
