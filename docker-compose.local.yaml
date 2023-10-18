@@ -27,6 +27,62 @@ services:
     depends_on:
       - primary_db
       - rabbit
+  account:
+    container_name: account_service
+    build:
+      context: .
+      target: development
+      dockerfile: ./apps/account/Dockerfile
+    networks:
+      - backend
+    depends_on:
+      - primary_db
+      - rabbit
+  story:
+    container_name: story_service
+    build:
+      context: .
+      target: development
+      dockerfile: ./apps/story/Dockerfile
+    networks:
+      - backend
+    depends_on:
+      - primary_db
+      - rabbit
+  feed:
+    container_name: feed_service
+    build:
+      context: .
+      target: development
+      dockerfile: ./apps/feed/Dockerfile
+    networks:
+      - backend
+    depends_on:
+      - primary_db
+      - rabbit
+  moderation:
+    container_name: moderation_service
+    build:
+      context: .
+      target: development
+      dockerfile: ./apps/moderation/Dockerfile
+    networks:
+      - backend
+    depends_on:
+      - primary_db
+      - rabbit
+  survey:
+    container_name: survey_service
+    build:
+      context: .
+      target: development
+      dockerfile: ./apps/survey/Dockerfile
+    networks:
+      - backend
+    depends_on:
+      - primary_db
+      - rabbit
+
 networks:
   backend:
     driver: bridge

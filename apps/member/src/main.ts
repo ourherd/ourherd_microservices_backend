@@ -16,9 +16,7 @@ async function bootstrap() {
   // * start
   await app.startAllMicroservices();
 
-  logger.log(
-    `🚀 { ` + MEMBER_MODULE +` } running on port 3020`,
-  );
+  logger.log(`🚀 Application { ` + MEMBER_MODULE +` } running 🚀`);
 
 }
 bootstrap();
