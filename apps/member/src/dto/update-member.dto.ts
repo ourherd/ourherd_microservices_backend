@@ -43,6 +43,10 @@ export class UpdateMemberDto {
   @IsOptional()
   public postal_code: string;
 
+  @IsString()
+  @IsOptional()
+  public mobile_number: string;
+
   // Validates for a string
   @IsString()
   @IsOptional()
