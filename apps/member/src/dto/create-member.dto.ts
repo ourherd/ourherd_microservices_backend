@@ -10,7 +10,11 @@ import {
   IsBoolean
 } from "class-validator";
 import { Transform } from 'class-transformer';
+import {
+  EmailNotRegistered
+} from "@app/common/validation-rules/email-not-registered.rule";
 import { uuid } from "uuidv4";
+
 
 export enum MemberStatus {
   ACTIVED = 'ACTIVATED',
@@ -32,7 +36,7 @@ export class CreateMemberDto  {
   @MinLength(4)
   @Matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,3}$/g)
   @Transform(({ value }) => value.toString().toLowerCase())
-  //@IsEmailUserAlreadyExist({ message: 'email already registered' })
+  // @EmailNotRegistered({ message: 'email already registered' })
   public email: string;
 
   @IsEnum(MemberStatus)
