@@ -22,6 +22,8 @@ export class MemberGatewayController {
     @Inject(RabbitServiceName.MEMBER) private memberClient: ClientProxy)
   { }
 
+  @Auth()
+  // @Roles(Role.MEMBER)
   @Get('/me')
   async getSelf() {
     return {

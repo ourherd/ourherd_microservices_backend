@@ -1,5 +1,5 @@
 
-CREATE TYPE role_type AS ENUM ('member', 'student');
+CREATE TYPE role_type AS ENUM ('MEMBER', 'STUDENT');
 
 CREATE TABLE IF NOT EXISTS public.account
 (
