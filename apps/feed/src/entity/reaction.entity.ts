@@ -11,6 +11,12 @@ export enum ReactionTypes {
 })
 export class ReactionEntity extends AbstractEntity {
 
+  @Column({ nullable: false })
+  member_id: string;
+
+  @Column({ nullable: false })
+  story_id: string;
+
   @Column({
     type: "enum",
     enum: ReactionTypes,
