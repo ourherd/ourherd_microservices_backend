@@ -18,15 +18,10 @@ export class MemberService {
   constructor(
       @InjectRepository(MemberEntity, Database.PRIMARY)
         private memberRepository: Repository<MemberEntity>,
-  ) {
-
-  }
+  ) {}
 
   async create(createDto: CreateMemberDto): Promise<IServiceResponse<MemberEntity>> {
     const memberExist = await this.findByEmail(createDto.email);
-
-    this.logger.log('member already exist --> ' + JSON.stringify('email '
-      + createDto.email +' --> ' + memberExist.message));
 
     if (!!memberExist.state) {
       return {

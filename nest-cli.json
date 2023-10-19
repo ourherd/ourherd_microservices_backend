@@ -143,15 +143,6 @@
         "tsConfigPath": "apps/story/tsconfig.app.json"
       }
     },
-    "reaction": {
-      "type": "application",
-      "root": "apps/reaction",
-      "entryFile": "main",
-      "sourceRoot": "apps/reaction/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/reaction/tsconfig.app.json"
-      }
-    },
     "mail": {
       "type": "library",
       "root": "libs/mail",
@@ -159,6 +150,15 @@
       "sourceRoot": "libs/mail/src",
       "compilerOptions": {
         "tsConfigPath": "libs/mail/tsconfig.lib.json"
+      }
+    },
+    "moderation": {
+      "type": "application",
+      "root": "apps/moderation",
+      "entryFile": "main",
+      "sourceRoot": "apps/moderation/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/moderation/tsconfig.app.json"
       }
     }
   },
