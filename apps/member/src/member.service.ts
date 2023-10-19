@@ -25,6 +25,9 @@ export class MemberService {
   async create(createDto: CreateMemberDto): Promise<IServiceResponse<MemberEntity>> {
     const memberExist = await this.findByEmail(createDto.email);
 
+    this.logger.log('member already exist --> ' + JSON.stringify('email '
+      + createDto.email +' --> ' + memberExist.message));
+
     if (!!memberExist.state) {
       return {
         state: !!memberExist.state,

@@ -14,7 +14,7 @@ export const RABBIT_SERVICES: Record<RabbitServiceName, { queue: string }> =
         queue: 'feed_queue'
     },
     STORY_SERVICE: {
-        queue: 'story_queue'
+        queue: 'feed_queue'
     },
     SURVEY_SERVICE: {
         queue: 'survey_queue'

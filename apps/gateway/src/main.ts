@@ -43,9 +43,8 @@ async function bootstrap() {
 
   let logger = new Logger('Gateway API');
   await app.listen(configService.get<number>('GATEWAY_PORT'));
-
   logger.log(
-    `🚀 Application { ` + GATEWAY_SERVICE + ` } running on port ` + configService.get<number>('GATEWAY_PORT'),
+    `🚀 { ` + GATEWAY_SERVICE + `} running on port ` + configService.get<number>('GATEWAY_PORT'),
   );
 
 }
