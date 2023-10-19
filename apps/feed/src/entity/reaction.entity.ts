@@ -1,5 +1,5 @@
 import { Column, Entity } from "typeorm";
-import { AbstractEntity } from '@app/database/base/base.entity';
+import { AbstractEntity } from "@app/database/base/base.entity";
 
 export enum ReactionTypes {
   LOVE = "LOVE",
@@ -9,8 +9,8 @@ export enum ReactionTypes {
 @Entity({
   name: 'reaction'
 })
-export class ReactionEntity extends AbstractEntity {
 
+export class ReactionEntity extends AbstractEntity {
   @Column({ nullable: false })
   member_id: string;
 
@@ -23,5 +23,4 @@ export class ReactionEntity extends AbstractEntity {
     default: ReactionTypes.LOVE
   })
   reaction_type: ReactionTypes;
-
 }

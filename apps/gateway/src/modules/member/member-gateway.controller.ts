@@ -34,9 +34,7 @@ export class MemberGatewayController {
   }
 
   @Post('/')
-  async createProfile (
-    @Body() createDto: CreateMemberDto,
-  ) : Promise<IGatewayResponse> {
+  async createProfile ( @Body() createDto: CreateMemberDto) : Promise<IGatewayResponse> {
 
     const { state, data } = await firstValueFrom(
       this.memberClient.send<IServiceResponse<MemberEntity>, { createDto: CreateMemberDto }>

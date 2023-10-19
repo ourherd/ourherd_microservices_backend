@@ -9,7 +9,8 @@ import { MulterModule } from '@nestjs/platform-express';
 import multer from 'multer';
 import { MemberGatewayController } from './modules/member/member-gateway.controller'
 import { MemberProfileGatewayController } from './modules/member/member-profile-gateway.controller'
-
+import { ReactionGatewayController } from './modules/reaction/reaction-gateway.controller'
+import { FeedGatewayController } from './modules/feed/feed-gateway.controller'
 import { getEnvPath } from '@app/common/env/env.helper';
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
@@ -25,16 +26,20 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     MulterModule.register({
       storage: multer.memoryStorage()
     }),
-    RabbitModule.forClientProxy(RabbitServiceName.MEMBER),
+
     RabbitModule.forClientProxy(RabbitServiceName.ACCOUNT),
+    RabbitModule.forClientProxy(RabbitServiceName.MEMBER),
     RabbitModule.forClientProxy(RabbitServiceName.FEED),
+    // RabbitModule.forClientProxy(RabbitServiceName.REACTION),
     RabbitModule.forClientProxy(RabbitServiceName.STORY),
     // AuthenticationModule.register(),
     // PolicyModule
   ],
   controllers: [
     MemberGatewayController,
-    MemberProfileGatewayController
+    MemberProfileGatewayController,
+    FeedGatewayController,
+    ReactionGatewayController
   ]
 })
 export class GatewayModule { }

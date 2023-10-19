@@ -9,14 +9,14 @@ export class PostReactionDto {
 
   @IsUUID()
   @IsString()
-  readonly member_id: string;
+  public member_id: string;
 
   @IsUUID()
   @IsString()
-  readonly story_id: string;
+  public story_id: string;
 
   @IsEnum(ReactionType)
   @IsOptional()
-  readonly reaction_type?: ReactionType = ReactionType.LOVE;
+  public reaction_type?: ReactionType = ReactionType.LOVE;
 
 }

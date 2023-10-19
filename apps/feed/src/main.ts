@@ -13,7 +13,7 @@ async function bootstrap() {
   app.connectMicroservice<MicroserviceOptions>(app.get<MicroserviceOptions>(RABBIT_SERVICE_OPTIONS));
   // * start
   await app.startAllMicroservices();
-  logger.log(`🚀 { ` + FEED_SERVICE +` } running 🚀`);
+  logger.log(`🚀 Application { ` + FEED_SERVICE +` } running 🚀`);
 
 }
 bootstrap();

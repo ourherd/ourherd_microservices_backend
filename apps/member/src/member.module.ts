@@ -9,7 +9,6 @@ import { IsEmailUserAlreadyExistConstraint } from "@app/common/validation-rules/
 import { getEnvPath } from '@app/common/env/env.helper';
 
 const envFilePath: string = getEnvPath(`${__dirname}/`);
-console.log(envFilePath)
 
 @Module({
   imports: [
