@@ -36,6 +36,7 @@ export class CreateMemberDto  {
   @MinLength(4)
   @Matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,3}$/g)
   @Transform(({ value }) => value.toString().toLowerCase())
+  // TODO This is not working yet
   // @EmailNotRegistered({ message: 'email already registered' })
   public email: string;
 
