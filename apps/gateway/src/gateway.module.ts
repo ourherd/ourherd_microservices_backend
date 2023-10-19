@@ -1,23 +1,22 @@
-import path from "path";
-import { LanguageModule } from "@app/language";
-import { RabbitModule, RabbitServiceName } from "@app/rabbit";
-import { Module } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
-import { MulterModule } from "@nestjs/platform-express";
-import multer from "multer";
-import { MemberGatewayController } from "./modules/member/member-gateway.controller";
-import { MemberProfileGatewayController } from "./modules/member/member-profile-gateway.controller";
-import { ReactionGatewayController } from "./modules/reaction/reaction-gateway.controller";
-import { FeedGatewayController } from "./modules/feed/feed-gateway.controller";
-import { getEnvPath } from "@app/common/env/env.helper";
+import path from 'path';
+import { LanguageModule } from '@app/language';
+import { RabbitModule, RabbitServiceName } from '@app/rabbit';
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { AuthenticationModule } from '@app/authentication';
+import { PolicyModule } from '@app/policy';
+import { MulterModule } from '@nestjs/platform-express';
+import multer from 'multer';
 
-const envFilePath: string = getEnvPath(`${__dirname}/`);
+import { MemberGatewayController } from './modules/member/member-gateway.controller'
+import { MemberProfileGatewayController } from './modules/member/member-profile-gateway.controller'
+
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: envFilePath
+      envFilePath: './env'
     }),
     LanguageModule.register(
       path.join(__dirname, '../../../static/i18n')
@@ -25,20 +24,16 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     MulterModule.register({
       storage: multer.memoryStorage()
     }),
-
-    RabbitModule.forClientProxy(RabbitServiceName.ACCOUNT),
     RabbitModule.forClientProxy(RabbitServiceName.MEMBER),
+    RabbitModule.forClientProxy(RabbitServiceName.ACCOUNT),
     RabbitModule.forClientProxy(RabbitServiceName.FEED),
-    // RabbitModule.forClientProxy(RabbitServiceName.REACTION),
-    RabbitModule.forClientProxy(RabbitServiceName.STORY),
+
     // AuthenticationModule.register(),
     // PolicyModule
   ],
   controllers: [
     MemberGatewayController,
-    MemberProfileGatewayController,
-    FeedGatewayController,
-    ReactionGatewayController
+    MemberProfileGatewayController
   ]
 })
 export class GatewayModule { }

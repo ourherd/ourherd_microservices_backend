@@ -9,12 +9,9 @@ import { ClassSerializerInterceptor, Logger, ValidationPipe, VersioningType } fr
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { HttpExceptionFilter } from '@app/common';
 import { GATEWAY_SERVICE } from "./constant/gateway-patterns.constants";
-import { useContainer } from "class-validator";
-import { MemberModule } from "../../member/src/member.module";
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(GatewayModule);
-  useContainer(app.select(GatewayModule), { fallbackOnErrors: true });
 
   // * config
   const configService = app.get(ConfigService);
@@ -46,9 +43,8 @@ async function bootstrap() {
 
   let logger = new Logger('Gateway API');
   await app.listen(configService.get<number>('GATEWAY_PORT'));
-
   logger.log(
-    `🚀 Application { ` + GATEWAY_SERVICE + ` } running on port ` + configService.get<number>('GATEWAY_PORT'),
+    `🚀 { ` + GATEWAY_SERVICE + `} running on port ` + configService.get<number>('GATEWAY_PORT'),
   );
 
 }

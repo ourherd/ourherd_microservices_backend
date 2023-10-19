@@ -4,9 +4,6 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DATABASE_CONFIG } from './constant/database.constant';
 import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
-import { getEnvPath } from '@app/common/env/env.helper';
-
-const envFilePath: string = getEnvPath(`${__dirname}/`);
 
 export class DatabaseModule {
 
@@ -18,7 +15,7 @@ export class DatabaseModule {
           name: database,
           imports: [
             ConfigModule.forRoot({
-              envFilePath: envFilePath
+              envFilePath: './.env'
             }),
           ],
           useFactory: (configService: ConfigService): TypeOrmModuleOptions => {
