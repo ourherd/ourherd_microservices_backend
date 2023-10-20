@@ -5,7 +5,7 @@ import { AbstractEntity } from '@app/database/base/base.entity';
   name: 'member'
 })
 
-export class MemberEntity extends AbstractEntity {
+export class MemberEntity  extends AbstractEntity {
 
   @Column({ nullable: true })
   email: string;

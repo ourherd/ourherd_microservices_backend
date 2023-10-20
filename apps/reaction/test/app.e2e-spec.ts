@@ -1,14 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { ModerationModule } from './../src/moderation.module';
+import { ReactionModule } from './../src/reaction.module';
 
-describe('ModerationController (e2e)', () => {
+describe('ReactionController (e2e)', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [ModerationModule],
+      imports: [ReactionModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();

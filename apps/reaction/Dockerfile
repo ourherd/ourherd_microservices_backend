@@ -12,12 +12,12 @@ COPY . .
 
 FROM base AS development
 
-CMD [ "npx", "nest", "start", "moderation", "--watch" ]
+CMD [ "npx", "nest", "start", "reaction", "--watch" ]
 
 FROM base AS production
 
-RUN npx nest build moderation
+RUN npx nest build reaction
 
 USER node
 
-CMD [ "node", "dist/apps/moderation/main" ]
+CMD [ "node", "dist/apps/reaction/main" ]
