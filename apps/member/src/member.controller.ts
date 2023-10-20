@@ -15,7 +15,6 @@ export class MemberController {
   constructor(private readonly memberService: MemberService) {}
 
   @MessagePattern(MEMBER_MESSAGE_PATTERNS.CREATE)
-  @MessagePattern(ACCOUNT_MESSAGE_PATTERNS.CREATE)
   async createMember(
     @Payload('createDto') createDto: CreateMemberDto): Promise<IServiceResponse<MemberEntity>> {
     return await this.memberService.create(createDto);

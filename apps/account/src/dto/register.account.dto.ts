@@ -21,13 +21,13 @@ export enum MemberType {
 
 export class CreateAccountDto {
 
-  @IsUUID()
+  // @IsUUID()
   @IsOptional()
   @IsString()
   @Transform(({ value }) => value = uuid())
   public id: string;
 
-  @IsUUID()
+  // @IsUUID()
   @IsOptional()
   @IsString()
   public member_id: string;

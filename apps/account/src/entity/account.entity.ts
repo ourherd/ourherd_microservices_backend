@@ -9,7 +9,7 @@ import { AccountDeviceEntity } from './account.device.entity'
 export class AccountEntity extends AbstractEntity {
 
   @Column({ nullable: false })
-  member_id: Date;
+  member_id: string;
 
   @Column({ nullable: true })
   email: string;

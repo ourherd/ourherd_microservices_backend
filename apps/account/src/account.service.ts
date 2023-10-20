@@ -1,12 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateAccountDto } from "./dto/register.account.dto";
-import { IServiceResponse } from "@app/rabbit";
+import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
 import { AccountEntity } from './entity/account.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Database } from '@app/database';
-import { has } from 'lodash';
+import * as bcrypt from 'bcrypt';
 import { ACCOUNT_MESSAGE_DB_RESPONSE } from './constant/account-patterns.constants';
+import { firstValueFrom } from 'rxjs';
+import { ClientProxy } from '@nestjs/microservices';
+import { MemberEntity } from 'apps/member/src/entity/member.entity';
+import { CreateMemberDto } from 'apps/member/src/dto/create-member.dto';
+import { MEMBER_MESSAGE_PATTERNS } from 'apps/member/src/constant/member-patterns.constants';
+import { AwsCognitoService } from './aws-cognito.service';
+import { LoginAccountDto } from './dto/login.account.dto';
+import { TokenAccountDto } from './dto/token.account.dto';
 
 @Injectable()
 export class AccountService {
@@ -14,46 +22,114 @@ export class AccountService {
   constructor(
     @InjectRepository(AccountEntity, Database.PRIMARY)
     private accountRepository: Repository<AccountEntity>,
+    @Inject(RabbitServiceName.MEMBER) 
+    private memberService: ClientProxy,
+    private awsCognitoService: AwsCognitoService
   ) {
 
   }
+  
 
-  async create(createDto: CreateAccountDto): Promise<IServiceResponse<AccountEntity>> {
+  async create(createAccoutDto: CreateAccountDto): Promise<IServiceResponse<AccountEntity>> {
     const bcrypt = require("bcrypt")
     const saltRounds = 10
 
-    // AccountEntity acc = new AccountEntity();
+    const accountExist = await this.findByEmail(createAccoutDto.email);
 
-    let email = createDto.email
-
-    const accountExist = await this.accountRepository.findOneBy({email});
-
-    if (!!accountExist) {
+    if (accountExist.state) {
       return {
-        state: !!accountExist,
-        data: accountExist,
+        state: accountExist.state,
+        data: accountExist.data,
         message: ACCOUNT_MESSAGE_DB_RESPONSE.EMAIL_FOUND
       };
     }
 
-    bcrypt
-      .genSalt(saltRounds)
-      .then(salt => {
-        console.log('Salt: ', salt)
-        return bcrypt.hash(createDto.password, salt)
-      })
-      .then(hash => {
-        createDto.password = hash
-      })
-      .catch(err => console.error(err.message))
+    const createDto = new CreateMemberDto();
+    
+    createDto.email = createAccoutDto.email
+    const { state, data } = await firstValueFrom(
+      this.memberService.send<IServiceResponse<MemberEntity>, { createDto: CreateMemberDto }>
+      (
+        MEMBER_MESSAGE_PATTERNS.CREATE,
+        {
+          createDto
+        }
+      )
+    );
+    
+    createAccoutDto.member_id = data.id
 
-    const result = this.accountRepository.create(createDto);
+    let accountInit =  new CreateAccountDto();
+    const accountEntity = this.accountRepository.create(accountInit);
+
+    const saltOrRounds = 10;
+    const hash = await bcrypt.hash(createAccoutDto.password, saltOrRounds);
+
+    console.log("HASH password",hash);
+      
+    accountEntity.password_hash = hash
+    // createAccoutDto.password = hash
+    accountEntity.member_id = createAccoutDto.member_id
+    accountEntity.email = createAccoutDto.email
+
+    const cognito_user = await this.awsCognitoService.registerUser(createAccoutDto)
+
+    console.log(cognito_user);
+    
+      
+    const result = await this.accountRepository.save(accountEntity);
 
     return {
-      state: true,
+      state: !!result,
       data: result,
-      message: 'memberExist.message'
+      message: ACCOUNT_MESSAGE_DB_RESPONSE.CREATED
     };
+  }
+
+  async findByEmail(email: string): Promise<IServiceResponse<AccountEntity>> {
+    const account = await this.accountRepository.findOneBy(
+      {
+        email: email
+      }
+    );
+
+    return {
+      state: !!account,
+      data: account,
+      message: !!account ? ACCOUNT_MESSAGE_DB_RESPONSE.EMAIL_FOUND : ACCOUNT_MESSAGE_DB_RESPONSE.EMAIL_NOT_FOUND
+    }
+  }
+
+  async login(loginAccountDto: LoginAccountDto): Promise<IServiceResponse<TokenAccountDto>> {
+
+    try{
+
+      const saltOrRounds = 10;
+      // loginAccountDto.password = await bcrypt.hash(loginAccountDto.password, saltOrRounds);
+
+      console.log(loginAccountDto);
+      
+
+      const cognito_token = await this.awsCognitoService.authenticateUser(loginAccountDto)
+
+      let loginAccount = new TokenAccountDto()
+      loginAccount.accessToken = cognito_token['accessToken']
+      loginAccount.refreshToken = cognito_token['refreshToken']
+      
+      return {
+        state: true,
+        data: loginAccount,
+        message: ACCOUNT_MESSAGE_DB_RESPONSE.EMAIL_FOUND
+      };
+    }catch(e) {
+      console.log(e)
+      return {
+        state: true,
+        data: null,
+        message: ACCOUNT_MESSAGE_DB_RESPONSE.NOT_FOUND
+      };
+    }
+    
   }
 
 }

@@ -43,7 +43,7 @@ export class MemberService {
 
     return {
       state: !!result,
-      data: result,
+      data: member,
       message: !!result ?
           MEMBER_MESSAGE_DB_RESPONSE.CREATED : MEMBER_MESSAGE_DB_RESPONSE.CREATED_FAILED
     };
@@ -82,7 +82,7 @@ export class MemberService {
   async findByEmail(email: string): Promise<IServiceResponse<MemberEntity>> {
     const member = await this.memberRepository.findOneBy(
       {
-        email
+        email: email
       }
     );
 
