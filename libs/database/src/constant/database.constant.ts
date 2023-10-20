@@ -2,7 +2,8 @@ import { DatabaseType } from 'typeorm';
 import { Database } from '../interface/database.interface';
 import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
 import { MemberEntity } from 'apps/member/src/entity/member.entity';
-// import { AccountEntity } from 'apps/account/src/entity/account.entity';
+import { AccountEntity } from 'apps/account/src/entity/account.entity';
+import { AccountDeviceEntity } from 'apps/account/src/entity/account.device.entity';
 // import { AuthRequestEntity } from "apps/auth/src/entity/auth-request.entity";
 
 export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string, entities: EntityClassOrSchema[] }> = {
@@ -10,14 +11,18 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
         type: 'postgres',
         env: 'PRIMARY',
         entities: [
-            MemberEntity
+            MemberEntity,
+            AccountEntity,
+            AccountDeviceEntity
         ]
     },
     secondary: {
         type: 'postgres',
         env: 'SECONDARY',
         entities: [
-            MemberEntity
+            MemberEntity,
+            AccountEntity,
+            AccountDeviceEntity
         ]
     }
 };
