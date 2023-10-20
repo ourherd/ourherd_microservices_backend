@@ -8,12 +8,14 @@ import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
 import { IServiceResponse } from '@app/rabbit';
 import { IPagination, PaginationDto } from '@app/common';
+import { ACCOUNT_MESSAGE_PATTERNS } from 'apps/account/src/constant/account-patterns.constants';
 
 @Controller()
 export class MemberController {
   constructor(private readonly memberService: MemberService) {}
 
   @MessagePattern(MEMBER_MESSAGE_PATTERNS.CREATE)
+  @MessagePattern(ACCOUNT_MESSAGE_PATTERNS.CREATE)
   async createMember(
     @Payload('createDto') createDto: CreateMemberDto): Promise<IServiceResponse<MemberEntity>> {
     return await this.memberService.create(createDto);
