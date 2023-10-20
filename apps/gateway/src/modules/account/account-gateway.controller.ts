@@ -1,10 +1,8 @@
-import { Body, Controller, Get, Inject, Post, Query } from "@nestjs/common";
+import { Controller, Inject, Post, Query } from "@nestjs/common";
 import { IGatewayResponse } from '../../common/interface/gateway.interface';
 import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
-import { IPagination, PaginationDto } from '@app/common';
 import { AccountEntity } from 'apps/account/src/entity/account.entity';
 import { CreateAccountDto } from "apps/account/src/dto/register.account.dto";
-import { Auth, CurrentUser } from "@app/authentication";
 import { ApiTags } from "@nestjs/swagger";
 import { firstValueFrom } from "rxjs";
 import { ACCOUNT_MESSAGE_PATTERNS } from "../../../../account/src/constant/account-patterns.constants";
