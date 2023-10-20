@@ -16,5 +16,12 @@ export class AccountController {
     // change the signature to await
     return this.accountService.create(createDto);
   }
+  
+  async getHello(): Promise<string> {
+    // change the signature to await
+    return "Hello World!"
+  }
+
+  
 
 }

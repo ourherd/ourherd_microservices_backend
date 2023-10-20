@@ -23,7 +23,8 @@ export class AccountEntity extends AbstractEntity {
   @Column({ nullable: true })
   default_role: string;
 
-  @OneToMany(type => AccountDeviceEntity) @JoinColumn()
+  @OneToMany(type => AccountDeviceEntity, account => account.id)
+  @JoinColumn({name: "account_id"})  
   device: AccountDeviceEntity;
 
 }

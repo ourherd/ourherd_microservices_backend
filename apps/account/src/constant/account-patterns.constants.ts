@@ -7,3 +7,18 @@ export const ACCOUNT_MESSAGE_PATTERNS = {
   REQUEST_RESET_PASSWORD: 'account.requestresetpassword',
   RESET_PASSWORD: 'account.resetpassword'
 }
+
+
+export const ACCOUNT_MESSAGE_DB_RESPONSE = {
+  CREATED: 'account.created',
+  CREATED_FAILED: 'account.update-failed',
+  UPDATED: 'account.updated',
+  UPDATED_FAILED: 'account.update-failed',
+  FIND_ALL: 'account.find-all',
+  FIND_BY_ID: 'account.findbyid',
+  FIND_BY_EMAIL: 'account.find-by-email',
+  FOUND: 'account.found',
+  NOT_FOUND: 'account.not-found',
+  EMAIL_FOUND: 'account.email-found',
+  EMAIL_NOT_FOUND: 'account.email-not-found'
+}

@@ -5,6 +5,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  IsStrongPassword,
   IsUUID,
   Matches,
   MinLength
@@ -31,11 +32,14 @@ export class CreateAccountDto {
   @IsString()
   public member_id: string;
 
-  @IsEmail()
   @IsNotEmpty()
   @IsString()
   @MinLength(4)
   public email: string;
+
+  @IsNotEmpty()
+  @IsString()
+  public password: string;
 
   @IsEnum(MemberType)
   @IsOptional()
