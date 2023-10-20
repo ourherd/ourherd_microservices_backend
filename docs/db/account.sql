@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS public.account
     new_email text,
 
     password_hash text,
-    default_role role_type default 'member',
+    default_role role_type default 'MEMBER',
 
     otp_secret text,
     mfa_enabled boolean DEFAULT false NOT NULL,
@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS public.account
     ticket_expires_at timestamp with time zone DEFAULT now() NOT NULL,
 
     created_at timestamp with time zone DEFAULT now() NOT NULL,
-    updated_at timestamp with time zone DEFAULT now() NOT NULL
+    updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    deleted_at timestamptz
 )
 
 CREATE TABLE IF NOT EXISTS public.account_device
