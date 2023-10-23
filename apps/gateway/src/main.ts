@@ -10,7 +10,6 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { HttpExceptionFilter } from '@app/common';
 import { GATEWAY_SERVICE } from "./constant/gateway-patterns.constants";
 import { useContainer } from "class-validator";
-import { MemberModule } from "../../member/src/member.module";
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(GatewayModule);

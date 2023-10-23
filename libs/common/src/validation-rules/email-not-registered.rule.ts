@@ -20,16 +20,8 @@ export class IsEmailNotRegistered implements ValidatorConstraintInterface {
     private memberRepository: Repository<MemberEntity>,
   ) {}
 
-  async validate(email: string, args: ValidationArguments) {
-
-    const memberRepository : Repository<MemberEntity> = await (
-      await import('../../../../apps/member/src/entity/member.entity')
-    );
-
-    return !!!(await memberRepository.findOne({ where: { email } }));
-    //
-    // const member = await this.memberService.findByEmail(email);
-    // return member !== undefined ? true : false;
+  async validate(email: string, ) {
+    return true;
   }
 }
 
