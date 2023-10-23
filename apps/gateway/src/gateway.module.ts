@@ -3,8 +3,6 @@ import { LanguageModule } from '@app/language';
 import { RabbitModule, RabbitServiceName } from '@app/rabbit';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AuthenticationModule } from '@app/authentication';
-import { PolicyModule } from '@app/policy';
 import { MulterModule } from '@nestjs/platform-express';
 import multer from 'multer';
 import { AccountGatewayController } from './modules/account/account-gateway.controller'
@@ -12,6 +10,8 @@ import { MemberGatewayController } from './modules/member/member-gateway.control
 import { MemberProfileGatewayController } from './modules/member/member-profile-gateway.controller'
 
 import { getEnvPath } from '@app/common/env/env.helper';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from '@app/authentication';
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
 @Module({
@@ -30,6 +30,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     RabbitModule.forClientProxy(RabbitServiceName.ACCOUNT),
     RabbitModule.forClientProxy(RabbitServiceName.FEED),
     RabbitModule.forClientProxy(RabbitServiceName.STORY),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     // AuthenticationModule.register(),
     // PolicyModule
   ],
@@ -37,6 +38,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     AccountGatewayController,
     MemberGatewayController,
     MemberProfileGatewayController
-  ]
+  ],
+  providers: [JwtStrategy],
 })
 export class GatewayModule { }

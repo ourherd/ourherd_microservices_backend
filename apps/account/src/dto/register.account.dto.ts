@@ -39,6 +39,10 @@ export class CreateAccountDto {
 
   @IsNotEmpty()
   @IsString()
+  @Matches(
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$&+,:;=?@#|'<>.^*()%!-])[A-Za-z\d@$&+,:;=?@#|'<>.^*()%!-]{8,}$/,
+    { message: 'invalid password' },
+  )
   public password: string;
 
   @IsEnum(MemberType)

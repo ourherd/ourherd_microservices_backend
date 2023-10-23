@@ -3,8 +3,10 @@ export const ACCOUNT_MODULE = 'ACCOUNT MODULE';
 
 export const ACCOUNT_MESSAGE_PATTERNS = {
   CREATE: 'account.create',
+  VERIFY: 'account.verify',
   LOGIN: 'account.login',
   UPDATE: 'account.update',
+  UPDATE_PASSWORD: 'account.update-password',
   REQUEST_RESET_PASSWORD: 'account.requestresetpassword',
   RESET_PASSWORD: 'account.resetpassword'
 }

@@ -1,7 +1,7 @@
 import { Auth, CurrentUser } from '@app/authentication';
 import { IServiceResponse, RabbitServiceName } from '@app/rabbit';
 import { uuid } from 'uuidv4';
-import { Body, Controller, Inject, Patch, Post, Param, ParseUUIDPipe, Logger } from "@nestjs/common";
+import { Body, Controller, Inject, Patch, Post, Param, ParseUUIDPipe, Logger, UseGuards } from "@nestjs/common";
 import { ClientProxy } from '@nestjs/microservices';
 import { IGatewayResponse } from '../../common/interface/gateway.interface';
 import { MemberEntity } from 'apps/member/src/entity/member.entity';
@@ -10,6 +10,7 @@ import { CreateMemberDto } from "apps/member/src/dto/create-member.dto";
 import { MEMBER_MESSAGE_PATTERNS, MEMBER_SERVICE } from "apps/member/src/constant/member-patterns.constants";
 import { firstValueFrom } from 'rxjs';
 import { ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('Profile Gateway')
 @Controller({
@@ -39,6 +40,7 @@ export class MemberProfileGatewayController {
     return { state, data };
   };
 
+  @UseGuards(AuthGuard('jwt'))
   @Patch('/:id')
   async updateProfile(
     @Param('id', ParseUUIDPipe) id: string,

@@ -6,7 +6,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Database, DatabaseModule } from '@app/database';
 import { getEnvPath } from '@app/common/env/env.helper';
 import { AccountEntity } from "./entity/account.entity";
-import { AwsCognitoService } from './aws-cognito.service';
+import { PassportModule } from '@nestjs/passport';
+import { CognitoModule } from '@libs/cognito';
 
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
@@ -19,10 +20,10 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     DatabaseModule.forEntity(Database.PRIMARY, [AccountEntity]),
     RabbitModule.forServerProxy(RabbitServiceName.ACCOUNT),
     RabbitModule.forClientProxy(RabbitServiceName.MEMBER),
-    
+    CognitoModule
   ],
   controllers: [AccountController],
-  providers: [AccountService, AwsCognitoService],
+  providers: [AccountService],
 })
 
 export class AccountModule {}

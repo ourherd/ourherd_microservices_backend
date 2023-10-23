@@ -5,26 +5,27 @@ import { AccountEntity } from './entity/account.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Database } from '@app/database';
-import * as bcrypt from 'bcrypt';
 import { ACCOUNT_MESSAGE_DB_RESPONSE } from './constant/account-patterns.constants';
 import { firstValueFrom } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
 import { MemberEntity } from 'apps/member/src/entity/member.entity';
 import { CreateMemberDto } from 'apps/member/src/dto/create-member.dto';
 import { MEMBER_MESSAGE_PATTERNS } from 'apps/member/src/constant/member-patterns.constants';
-import { AwsCognitoService } from './aws-cognito.service';
 import { LoginAccountDto } from './dto/login.account.dto';
 import { TokenAccountDto } from './dto/token.account.dto';
+import { CognitoService } from '@libs/cognito';
 
 @Injectable()
 export class AccountService {
 
+  @Inject(CognitoService)
+  private awsCognitoService: CognitoService
+
   constructor(
     @InjectRepository(AccountEntity, Database.PRIMARY)
     private accountRepository: Repository<AccountEntity>,
-    @Inject(RabbitServiceName.MEMBER) 
-    private memberService: ClientProxy,
-    private awsCognitoService: AwsCognitoService
+    @Inject(RabbitServiceName.MEMBER)
+    private memberService: ClientProxy
   ) {
 
   }
@@ -63,19 +64,13 @@ export class AccountService {
     const accountEntity = this.accountRepository.create(accountInit);
 
     const saltOrRounds = 10;
+    // TODO: move to dto
     const hash = await bcrypt.hash(createAccoutDto.password, saltOrRounds);
-
-    console.log("HASH password",hash);
-      
     accountEntity.password_hash = hash
-    // createAccoutDto.password = hash
     accountEntity.member_id = createAccoutDto.member_id
     accountEntity.email = createAccoutDto.email
 
     const cognito_user = await this.awsCognitoService.registerUser(createAccoutDto)
-
-    console.log(cognito_user);
-    
       
     const result = await this.accountRepository.save(accountEntity);
 
@@ -105,16 +100,11 @@ export class AccountService {
     try{
 
       const saltOrRounds = 10;
-      // loginAccountDto.password = await bcrypt.hash(loginAccountDto.password, saltOrRounds);
-
-      console.log(loginAccountDto);
-      
-
-      const cognito_token = await this.awsCognitoService.authenticateUser(loginAccountDto)
+      const cognitoToken = await this.awsCognitoService.authenticateUser(loginAccountDto)
 
       let loginAccount = new TokenAccountDto()
-      loginAccount.accessToken = cognito_token['accessToken']
-      loginAccount.refreshToken = cognito_token['refreshToken']
+      loginAccount.accessToken = cognitoToken['accessToken']
+      loginAccount.refreshToken = cognitoToken['refreshToken']
       
       return {
         state: true,
