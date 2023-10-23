@@ -1,9 +1,12 @@
 import { Column, Entity } from "typeorm";
 import { AbstractEntity } from "@app/database/base/base.entity";
 
-export enum ReactionTypes {
+export enum ReactionType {
   LOVE = "LOVE",
-  CLAP = "CLAP"
+  CLAP = "CLAP",
+  LIKE = "LIKE",
+  SUPPORT = "SUPPORT",
+  CELEBRATE = "CELEBRATE"
 }
 
 @Entity({
@@ -19,8 +22,8 @@ export class ReactionEntity extends AbstractEntity {
 
   @Column({
     type: "enum",
-    enum: ReactionTypes,
-    default: ReactionTypes.LOVE
+    enum: ReactionType,
+    default: ReactionType.LOVE
   })
-  reaction_type: ReactionTypes;
+  reaction_type: ReactionType;
 }

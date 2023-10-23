@@ -18,13 +18,13 @@ export class ReactionGatewayController {
   constructor(@Inject(RabbitServiceName.FEED) private reactionClient: ClientProxy) { }
 
   @Post('/')
-  async reactToStory ( @Body() reactDto: PostReactionDto,) : Promise<IGatewayResponse> {
+  async reactToStory ( @Body() reactionDto: PostReactionDto,) : Promise<IGatewayResponse> {
     const { state, data } = await firstValueFrom(
-      this.reactionClient.send<IServiceResponse<ReactionEntity>, { reactDto: PostReactionDto }>
+      this.reactionClient.send<IServiceResponse<ReactionEntity>, { reactionDto: PostReactionDto }>
       (
         REACTION_MESSAGE_PATTERNS.REACT,
         {
-          reactDto
+          reactionDto
         }
       )
     );

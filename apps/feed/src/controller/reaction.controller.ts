@@ -14,8 +14,7 @@ export class ReactionController {
 
   @MessagePattern(REACTION_MESSAGE_PATTERNS.REACT)
   async reaction (
-    @Payload('reactDto') reactDto: PostReactionDto): Promise<IServiceResponse<ReactionEntity>> {
-    this.logger.log('REACTION_MESSAGE_PATTERNS.REACT ' + reactDto.story_id);
-    return await this.reactionService.reactToStory(reactDto);
+    @Payload('reactionDto') reactionDto: PostReactionDto): Promise<IServiceResponse<ReactionEntity>> {
+    return await this.reactionService.reactionToStory(reactionDto);
   }
 }

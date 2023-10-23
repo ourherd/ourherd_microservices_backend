@@ -7,5 +7,8 @@ export const REACTION_MESSAGE_PATTERNS = {
 
 export const REACTION_MESSAGE_DB_RESPONSE = {
   CREATED: 'reaction.created',
-  CREATED_FAILED: 'reaction.create-failed'
+  CREATED_FAILED: 'reaction.create-failed',
+  CHANGED: 'reaction.changed',
+  FOUND: 'reaction.with-story-found',
+  NOT_FOUND: 'reaction.with-story-not-found',
 }

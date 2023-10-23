@@ -1,9 +1,6 @@
 import { IsEnum, IsOptional, IsString, IsUUID } from "class-validator";
-
-
-export enum ReactionType {
-  LOVE = 'LOVE'
-}
+import { ReactionType } from "./../entity/reaction.entity"
+import { Transform } from "class-transformer";
 
 export class PostReactionDto {
 
@@ -15,8 +12,9 @@ export class PostReactionDto {
   @IsString()
   public story_id: string;
 
-  @IsEnum(ReactionType)
   @IsOptional()
+  @Transform(({ value }) => value.toString().toUpperCase())
+  @IsEnum(ReactionType)
   public reaction_type?: ReactionType = ReactionType.LOVE;
 
 }
