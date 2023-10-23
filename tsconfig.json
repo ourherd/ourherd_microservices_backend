@@ -78,6 +78,12 @@
       ],
       "@app/mail/*": [
         "libs/mail/src/*"
+      ],
+      "@libs/cognito": [
+        "libs/cognito/src"
+      ],
+      "@libs/cognito/*": [
+        "libs/cognito/src/*"
       ]
     }
   }
