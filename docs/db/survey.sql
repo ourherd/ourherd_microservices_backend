@@ -5,7 +5,7 @@
 ---- WELLBEING_TODAY
 ---- LOOKOUT_FOR_YOUR_MATE
 
-CREATE TABLE IF NOT EXISTS public.survey
+CREATE TABLE IF NOT EXISTS public.surveys
 (
     id uuid default gen_random_uuid() not null constraint survey_pkey primary key,
     name varchar(255),
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS public.survey
 );
 
 
-CREATE TABLE IF NOT EXISTS public.survey_question
+CREATE TABLE IF NOT EXISTS public.survey_questions
 (
     id uuid default gen_random_uuid() not null constraint survey_question_pkey primary key,
     survey_id uuid,
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS public.survey_question
     deleted_at timestamp
 );
 
-CREATE TABLE IF NOT EXISTS public.survey_member
+CREATE TABLE IF NOT EXISTS public.survey_members
 (
     id uuid default gen_random_uuid() not null constraint survey_question_pkey primary key,
     survey_id uuid,
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS public.survey_member
     deleted_at timestamp
 );
 
-CREATE TABLE IF NOT EXISTS public.survey_response
+CREATE TABLE IF NOT EXISTS public.survey_responses
 (
     id uuid default gen_random_uuid() not null constraint survey_question_pkey primary key,
     survey_member_id uuid,

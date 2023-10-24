@@ -1,4 +1,4 @@
-create table public.story_save
+create table public.story_saves
 (
     id uuid default gen_random_uuid() not null constraint story_save_pkey primary key,
     created_at timestamp with time zone default now()             not null,

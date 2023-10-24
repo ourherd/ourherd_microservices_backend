@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS public.tag
+CREATE TABLE IF NOT EXISTS public.tags
 (
     id uuid default gen_random_uuid() not null constraint tag_pkey primary key,
     name text,

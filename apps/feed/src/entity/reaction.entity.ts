@@ -10,7 +10,7 @@ export enum ReactionType {
 }
 
 @Entity({
-  name: 'reaction'
+  name: 'reactions'
 })
 
 export class ReactionEntity extends AbstractEntity {
