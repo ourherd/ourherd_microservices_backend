@@ -5,8 +5,9 @@ export enum ReactionType {
   LOVE = "LOVE",
   CLAP = "CLAP",
   LIKE = "LIKE",
+  SMILE = "SMILE",
   SUPPORT = "SUPPORT",
-  CELEBRATE = "CELEBRATE"
+  STRENGTH = "STRENGTH"
 }
 
 @Entity({

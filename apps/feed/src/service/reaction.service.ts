@@ -20,22 +20,28 @@ export class ReactionService {
 
   async checkStoryWithReaction( reactionDto: PostReactionDto ): Promise<IServiceResponse<ReactionEntity>> {
 
-    const reaction = await this.reactionRepository.findOne(
+    const reaction = await this.reactionRepository.findOneBy(
       {
-        where: {
-          member_id: reactionDto.member_id,
-          story_id: reactionDto.story_id
-        },
+        member_id: reactionDto.member_id,
+        story_id: reactionDto.story_id
       }
     );
-    // TODO This won't work with multiples reactions CLAP | SMILE | LOVE
-    if ( reaction === null ) {
-      this.logger.log ('Create reaction on story --> '+ reactionDto.story_id );
-      this.logger.log ('Create reaction on story tyoe --> '+ reactionDto.reaction_type );
+
+    if ( reaction !== null ) {
+        if (reactionDto.reaction_type === reaction.reaction_type ) {
+
+          this.logger.log ('REMOVE reaction on story type DTO --> ' + JSON.stringify(reactionDto) );
+          return await this.reactionRepository.remove( reaction );
+        } else {
+
+          this.logger.log ('UPDATE reaction on story type DTO --> ' + JSON.stringify(reactionDto) );
+          return await this.reactionRepository.update( { id: reaction.id }, reactionDto );
+        }
+    } else {
+
+      this.logger.log ('CREATE reaction on story type DTO --> ' + JSON.stringify(reactionDto) );
       return await this.createReaction( reactionDto );
     }
-    this.logger.log ('Remove reaction on story --> '+ reactionDto.story_id );
-    return await this.reactionRepository.remove( reaction );
 
   }
 
