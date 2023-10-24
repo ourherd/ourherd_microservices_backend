@@ -2,32 +2,37 @@ import {
   registerDecorator,
   ValidationOptions,
   ValidatorConstraint,
-  ValidatorConstraintInterface,
-} from 'class-validator';
+  ValidatorConstraintInterface
+} from "class-validator";
+import { MemberEntity } from "../../../../apps/member/src/entity/member.entity";
+import { Injectable } from "@nestjs/common";
 
-import { MemberService } from "../../../../apps/member/src/member.service";
+import { Repository } from 'typeorm';
+import { InjectRepository } from "@nestjs/typeorm";
 
-@ValidatorConstraint({ name: 'isEmailUserAlreadyExist', async: true })
+
 @ValidatorConstraint({ async: true })
-export class IsEmailUserAlreadyExistConstraint implements ValidatorConstraintInterface {
-  // constructor(protected readonly memberService: MemberService) {}
-  constructor(private readonly memberService: MemberService) {}
+@Injectable()
+export class IsEmailNotRegistered implements ValidatorConstraintInterface {
 
-  async validate(email) {
-    const { state, data: member } = await this.memberService.findByEmail(email);
+  constructor(
+    @InjectRepository(MemberEntity)
+    private memberRepository: Repository<MemberEntity>,
+  ) {}
 
-    return member !== undefined ? true : false;
+  async validate(email: string, ) {
+    return true;
   }
 }
 
-export function IsEmailUserAlreadyExist(validationOptions?: ValidationOptions) {
+export function EmailNotRegistered(validationOptions?: ValidationOptions) {
   return function (object: object, propertyName: string) {
     registerDecorator({
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
       constraints: [],
-      validator: IsEmailUserAlreadyExistConstraint,
+      validator: IsEmailNotRegistered,
     });
   };
 }

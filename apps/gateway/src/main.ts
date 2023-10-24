@@ -9,9 +9,11 @@ import { ClassSerializerInterceptor, Logger, ValidationPipe, VersioningType } fr
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { HttpExceptionFilter } from '@app/common';
 import { GATEWAY_SERVICE } from "./constant/gateway-patterns.constants";
+import { useContainer } from "class-validator";
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(GatewayModule);
+  useContainer(app.select(GatewayModule), { fallbackOnErrors: true });
 
   // * config
   const configService = app.get(ConfigService);

@@ -1,13 +1,11 @@
-import { Module } from '@nestjs/common';
-import { MemberController } from './member.controller';
-import { MemberService } from './member.service';
-import { RabbitModule, RabbitServiceName } from '@app/rabbit';
-import { MemberEntity } from './entity/member.entity';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Database, DatabaseModule } from '@app/database';
-import { IsEmailUserAlreadyExistConstraint } from "@app/common/validation-rules/email-not-registered.rule";
-import { getEnvPath } from '@app/common/env/env.helper';
-import { CognitoAuthModule } from '@nestjs-cognito/auth';
+import { Module } from "@nestjs/common";
+import { MemberController } from "./member.controller";
+import { MemberService } from "./member.service";
+import { RabbitModule, RabbitServiceName } from "@app/rabbit";
+import { MemberEntity } from "./entity/member.entity";
+import { ConfigModule } from "@nestjs/config";
+import { Database, DatabaseModule } from "@app/database";
+import { getEnvPath } from "@app/common/env/env.helper";
 
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
@@ -23,7 +21,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     
   ],
   controllers: [MemberController],
-  providers: [MemberService, IsEmailUserAlreadyExistConstraint],
+  providers: [MemberService],
 })
 
 export class MemberModule {}

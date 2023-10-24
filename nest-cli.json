@@ -143,15 +143,6 @@
         "tsConfigPath": "apps/story/tsconfig.app.json"
       }
     },
-    "reaction": {
-      "type": "application",
-      "root": "apps/reaction",
-      "entryFile": "main",
-      "sourceRoot": "apps/reaction/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/reaction/tsconfig.app.json"
-      }
-    },
     "mail": {
       "type": "library",
       "root": "libs/mail",

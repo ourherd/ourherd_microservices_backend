@@ -4,6 +4,8 @@ import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-clas
 import { MemberEntity } from 'apps/member/src/entity/member.entity';
 import { AccountEntity } from 'apps/account/src/entity/account.entity';
 import { AccountDeviceEntity } from 'apps/account/src/entity/account.device.entity';
+import { ReactionEntity } from 'apps/feed/src/entity/reaction.entity';
+// import { AccountEntity } from 'apps/account/src/entity/account.entity';
 // import { AuthRequestEntity } from "apps/auth/src/entity/auth-request.entity";
 
 export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string, entities: EntityClassOrSchema[] }> = {
@@ -14,6 +16,7 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
             MemberEntity,
             AccountEntity,
             AccountDeviceEntity
+            ReactionEntity
         ]
     },
     secondary: {
@@ -23,6 +26,7 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
             MemberEntity,
             AccountEntity,
             AccountDeviceEntity
+            ReactionEntity
         ]
     }
 };

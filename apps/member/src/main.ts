@@ -1,21 +1,21 @@
-import { NestFactory } from '@nestjs/core';
-import { Logger } from '@nestjs/common';
-import { MemberModule } from './member.module';
-import { MicroserviceOptions } from '@nestjs/microservices';
-import { RABBIT_SERVICE_OPTIONS } from '@app/rabbit';
-import { MEMBER_SERVICE, MEMBER_MODULE } from "./constant/member-patterns.constants";
+import { NestFactory } from "@nestjs/core";
+import { Logger } from "@nestjs/common";
+import { MemberModule } from "./member.module";
+import { MicroserviceOptions } from "@nestjs/microservices";
+import { RABBIT_SERVICE_OPTIONS } from "@app/rabbit";
+import { MEMBER_MODULE, MEMBER_SERVICE } from "./constant/member-patterns.constants";
+import { useContainer } from "class-validator";
+import { GatewayModule } from "../../gateway/src/gateway.module";
 
 
 async function bootstrap() {
 
   let logger = new Logger(MEMBER_SERVICE);
-
   const app = await NestFactory.create(MemberModule);
   // * setup
   app.connectMicroservice<MicroserviceOptions>(app.get<MicroserviceOptions>(RABBIT_SERVICE_OPTIONS));
   // * start
   await app.startAllMicroservices();
-
   logger.log(`🚀 Application { ` + MEMBER_MODULE +` } running 🚀`);
 
 }

@@ -1,18 +1,17 @@
-import path from 'path';
-import { LanguageModule } from '@app/language';
-import { RabbitModule, RabbitServiceName } from '@app/rabbit';
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { MulterModule } from '@nestjs/platform-express';
-import multer from 'multer';
-import { AccountGatewayController } from './modules/account/account-gateway.controller'
-import { MemberGatewayController } from './modules/member/member-gateway.controller'
-import { MemberProfileGatewayController } from './modules/member/member-profile-gateway.controller'
-
-import { getEnvPath } from '@app/common/env/env.helper';
-import { PassportModule } from '@nestjs/passport';
+import path from "path";
+import { LanguageModule } from "@app/language";
+import { RabbitModule, RabbitServiceName } from "@app/rabbit";
+import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
+import { MulterModule } from "@nestjs/platform-express";
+import multer from "multer";
+import { MemberGatewayController } from "./modules/member/member-gateway.controller";
+import { MemberProfileGatewayController } from "./modules/member/member-profile-gateway.controller";
+import { ReactionGatewayController } from "./modules/reaction/reaction-gateway.controller";
+import { FeedGatewayController } from "./modules/feed/feed-gateway.controller";
+import { getEnvPath } from "@app/common/env/env.helper";
 import { JwtStrategy } from '@app/authentication';
-import { CognitoAuthModule } from '@nestjs-cognito/auth';
+
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
 @Module({
@@ -27,9 +26,11 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     MulterModule.register({
       storage: multer.memoryStorage()
     }),
-    RabbitModule.forClientProxy(RabbitServiceName.MEMBER),
+
     RabbitModule.forClientProxy(RabbitServiceName.ACCOUNT),
+    RabbitModule.forClientProxy(RabbitServiceName.MEMBER),
     RabbitModule.forClientProxy(RabbitServiceName.FEED),
+    // RabbitModule.forClientProxy(RabbitServiceName.REACTION),
     RabbitModule.forClientProxy(RabbitServiceName.STORY),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     // AuthenticationModule.register(),
@@ -39,7 +40,9 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
   controllers: [
     AccountGatewayController,
     MemberGatewayController,
-    MemberProfileGatewayController
+    MemberProfileGatewayController,
+    FeedGatewayController,
+    ReactionGatewayController
   ],
   providers: [JwtStrategy],
 })
