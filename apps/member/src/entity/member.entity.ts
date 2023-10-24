@@ -1,5 +1,25 @@
 import { Column, Entity } from "typeorm";
 import { AbstractEntity } from '@app/database/base/base.entity';
+import { IsEnum, IsOptional } from "class-validator";
+
+export enum MemberStatus {
+  ACTIVATED = 'ACTIVATED',
+  INACTIVATED = 'INACTIVATED',
+  BANNED = 'BANNED'
+}
+
+export enum EmploymentType {
+  NO_SELECTED = 'NO_SELECTED',
+  STUDYING_AT_SCHOOL = 'STUDYING_AT_SCHOOL',
+  STUDYING_AT_TAFE = 'STUDYING_AT_TAFE',
+  STUDYING_AT_UNIVERSITY = 'STUDYING_AT_UNIVERSITY',
+  WORKING_FULL_TIME = 'WORKING_FULL_TIME',
+  WORKING_PART_TIME = 'WORKING_PART_TIME',
+  WORKING_CASUALLY = 'WORKING_CASUALLY',
+  UNEMPLOYED = 'UNEMPLOYED',
+  NO_APPLY = 'NO_APPLY'
+}
+
 
 @Entity({
   name: 'members'
@@ -22,8 +42,9 @@ export class MemberEntity extends AbstractEntity {
   @Column({ nullable: true })
   birthday: Date;
 
-  @Column({ nullable: true })
-  status: string;
+  @IsOptional()
+  @IsEnum(MemberStatus)
+  status?: MemberStatus = MemberStatus.ACTIVATED;
 
   @Column({ default: false })
   verified: boolean;
@@ -43,8 +64,9 @@ export class MemberEntity extends AbstractEntity {
   @Column({ nullable: true })
   gender: string;
 
-  @Column({ nullable: true })
-  employment: string;
+  @IsOptional()
+  @IsEnum(EmploymentType)
+  employment?: EmploymentType = EmploymentType.NO_SELECTED;
 
   @Column({ nullable: true })
   avatar: string;

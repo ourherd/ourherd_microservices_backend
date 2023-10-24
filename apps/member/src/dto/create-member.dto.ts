@@ -14,13 +14,7 @@ import {
   EmailNotRegistered
 } from "@app/common/validation-rules/email-not-registered.rule";
 import { uuid } from "uuidv4";
-
-
-export enum MemberStatus {
-  ACTIVED = 'ACTIVATED',
-  DEACTIVATED = 'DEACTIVATED',
-  BANNED = 'BANNED'
-}
+import { MemberStatus } from "../entity/member.entity";
 
 export class CreateMemberDto  {
 
@@ -42,7 +36,7 @@ export class CreateMemberDto  {
 
   @IsEnum(MemberStatus)
   @IsOptional()
-  readonly status?: MemberStatus = MemberStatus.ACTIVED;
+  readonly status?: MemberStatus = MemberStatus.ACTIVATED;
 
   @IsOptional()
   @IsBoolean()

@@ -1,13 +1,9 @@
-import { IsDate, IsEnum, IsOptional, IsString, Length, IsEmail, IsInt } from "class-validator";
-import { ApiProperty } from '@nestjs/swagger';
-import { EmploymentEnumType } from "../constant/member-patterns.constants";
+import { IsDate, IsEnum, IsInt, IsOptional, IsString, Length } from "class-validator";
+import { ApiProperty, PartialType } from "@nestjs/swagger";
+import { CreateMemberDto } from "./create-member.dto";
+import { EmploymentType } from "../entity/member.entity";
 
-export class UpdateMemberDto {
-
-  @ApiProperty()
-  @IsOptional()
-  @IsEmail()
-  public email: string;
+export class UpdateMemberDto extends PartialType(CreateMemberDto) {
 
   @ApiProperty()
   @IsString()
@@ -50,8 +46,8 @@ export class UpdateMemberDto {
   // Validates for a string
   @IsString()
   @IsOptional()
-  @IsEnum(EmploymentEnumType)
-  public employment_status: EmploymentEnumType;
+  @IsEnum(EmploymentType)
+  public employment: EmploymentType = EmploymentType.NO_SELECTED;
 
   // Validates for a string
   @IsString()
