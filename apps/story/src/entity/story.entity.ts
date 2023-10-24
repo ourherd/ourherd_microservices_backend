@@ -1,6 +1,6 @@
 import { Column, Entity } from "typeorm";
 import { AbstractEntity } from "@app/database/base/base.entity";
-import { StorySourceType, StoryStatus, StoryType } from "./story.enum";
+import { StorySourceType, StoryStatus, StoryType } from "../constant/story.enum";
 
 @Entity({
   name: 'stories'
