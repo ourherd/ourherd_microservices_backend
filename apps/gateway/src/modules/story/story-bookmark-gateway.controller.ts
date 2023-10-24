@@ -13,14 +13,14 @@ import { BOOKMARK_MESSAGE_PATTERNS } from "../../../../story/src/constant/story-
   path: '/bookmark'
 })
 
-export class StorySaveGatewayController {
+export class StoryBookmarkGatewayController {
 
-  constructor(@Inject(RabbitServiceName.STORY) private storySaveClient: ClientProxy) { }
+  constructor(@Inject(RabbitServiceName.STORY) private storyBookmarkClient: ClientProxy) { }
 
   @Post('/')
-  async save ( @Body() bookmarkDto: PostStoryBookmarkDto,) : Promise<IGatewayResponse> {
+  async save ( @Body() bookmarkDto: PostStoryBookmarkDto) : Promise<IGatewayResponse> {
     const { state, data } = await firstValueFrom(
-      this.storySaveClient.send<IServiceResponse<StoryBookmarkEntity|null>, { bookmarkDto: PostStoryBookmarkDto }>
+      this.storyBookmarkClient.send<IServiceResponse<StoryBookmarkEntity|null>, { bookmarkDto: PostStoryBookmarkDto }>
       (
         BOOKMARK_MESSAGE_PATTERNS.SAVE_BOOKMARK,
         {

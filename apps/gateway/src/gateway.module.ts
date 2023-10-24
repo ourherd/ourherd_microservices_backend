@@ -9,7 +9,7 @@ import { MemberGatewayController } from "./modules/member/member-gateway.control
 import { MemberProfileGatewayController } from "./modules/member/member-profile-gateway.controller";
 import { ReactionGatewayController } from "./modules/reaction/reaction-gateway.controller";
 import { FeedGatewayController } from "./modules/feed/feed-gateway.controller";
-import { StorySaveGatewayController } from "./modules/story/story-save-gateway.controller";
+import { StoryBookmarkGatewayController } from "./modules/story/story-bookmark-gateway.controller";
 import { getEnvPath } from "@app/common/env/env.helper";
 
 const envFilePath: string = getEnvPath(`${__dirname}/`);
@@ -39,7 +39,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     MemberProfileGatewayController,
     FeedGatewayController,
     ReactionGatewayController,
-    StorySaveGatewayController
+    StoryBookmarkGatewayController
   ]
 })
 export class GatewayModule { }
