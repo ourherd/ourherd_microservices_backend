@@ -7,9 +7,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Database, DatabaseModule } from '@app/database';
 import { IsEmailUserAlreadyExistConstraint } from "@app/common/validation-rules/email-not-registered.rule";
 import { getEnvPath } from '@app/common/env/env.helper';
+import { CognitoAuthModule } from '@nestjs-cognito/auth';
 
 const envFilePath: string = getEnvPath(`${__dirname}/`);
-console.log(envFilePath)
 
 @Module({
   imports: [
@@ -19,7 +19,8 @@ console.log(envFilePath)
 
     DatabaseModule.register(Database.PRIMARY),
     DatabaseModule.forEntity(Database.PRIMARY, [MemberEntity]),
-    RabbitModule.forServerProxy(RabbitServiceName.MEMBER)
+    RabbitModule.forServerProxy(RabbitServiceName.MEMBER),
+    
   ],
   controllers: [MemberController],
   providers: [MemberService, IsEmailUserAlreadyExistConstraint],

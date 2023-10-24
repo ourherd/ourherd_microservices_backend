@@ -19,7 +19,7 @@ export enum MemberType {
   ADMIN = 'ADMIN'
 }
 
-export class CreateAccountDto {
+export class RegisterAccountDto {
 
   // @IsUUID()
   @IsOptional()

@@ -12,6 +12,7 @@ import { MemberProfileGatewayController } from './modules/member/member-profile-
 import { getEnvPath } from '@app/common/env/env.helper';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from '@app/authentication';
+import { CognitoAuthModule } from '@nestjs-cognito/auth';
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
 @Module({
@@ -32,7 +33,8 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     RabbitModule.forClientProxy(RabbitServiceName.STORY),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     // AuthenticationModule.register(),
-    // PolicyModule
+    // PolicyModule,
+
   ],
   controllers: [
     AccountGatewayController,

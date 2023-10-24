@@ -2,7 +2,7 @@ import { Body, Controller, Inject, Post, Query } from "@nestjs/common";
 import { IGatewayResponse } from '../../common/interface/gateway.interface';
 import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
 import { AccountEntity } from 'apps/account/src/entity/account.entity';
-import { CreateAccountDto } from "apps/account/src/dto/register.account.dto";
+import { RegisterAccountDto } from "apps/account/src/dto/register.account.dto";
 import { ApiTags } from "@nestjs/swagger";
 import { firstValueFrom } from "rxjs";
 import { ACCOUNT_MESSAGE_PATTERNS } from "../../../../account/src/constant/account-patterns.constants";
@@ -25,10 +25,10 @@ export class AccountGatewayController {
 
   @Post('/register')
   async register ( 
-    @Body() createDto: CreateAccountDto 
+    @Body() createDto: RegisterAccountDto 
     ): Promise<IGatewayResponse> {
     const { state, data } = await firstValueFrom(
-      this.accountClient.send<IServiceResponse<AccountEntity>, { createDto: CreateAccountDto}>
+      this.accountClient.send<IServiceResponse<AccountEntity>, { createDto: RegisterAccountDto}>
       (
         ACCOUNT_MESSAGE_PATTERNS.CREATE,
         {
@@ -60,7 +60,7 @@ export class AccountGatewayController {
     @Body() loginDto: LoginAccountDto 
     ): Promise<IGatewayResponse> {
     const { state, data } = await firstValueFrom(
-      this.accountClient.send<IServiceResponse<TokenAccountDto>, { loginDto: LoginAccountDto}>
+      this.accountClient.send<IServiceResponse<any>, { loginDto: LoginAccountDto}>
       (
         ACCOUNT_MESSAGE_PATTERNS.LOGIN,
         {

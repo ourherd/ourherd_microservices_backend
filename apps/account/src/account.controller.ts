@@ -1,12 +1,11 @@
-import { Controller, Inject, Post, UseGuards } from '@nestjs/common';
+import { Controller, Inject, UseGuards } from '@nestjs/common';
 import { AccountService } from './account.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { ACCOUNT_MESSAGE_PATTERNS } from './constant/account-patterns.constants';
-import { CreateAccountDto } from "./dto/register.account.dto";
+import { RegisterAccountDto } from "./dto/register.account.dto";
 import { IServiceResponse } from "@app/rabbit";
 import { AccountEntity } from "./entity/account.entity";
 import { LoginAccountDto } from './dto/login.account.dto';
-import { TokenAccountDto } from './dto/token.account.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthChangePasswordUserDto } from './dto/change-password.account.dto';
 import { AuthForgotPasswordUserDto } from './dto/reset-forget-password.dto';
@@ -26,7 +25,7 @@ export class AccountController {
 
   @MessagePattern(ACCOUNT_MESSAGE_PATTERNS.CREATE)
   async register(
-    @Payload('createDto') createDto: CreateAccountDto): Promise<IServiceResponse<AccountEntity>> {
+    @Payload('createDto') createDto: RegisterAccountDto): Promise<IServiceResponse<AccountEntity>> {
     // change the signature to await
     return this.accountService.create(createDto);
   }
@@ -44,7 +43,7 @@ export class AccountController {
   
   @MessagePattern(ACCOUNT_MESSAGE_PATTERNS.LOGIN)
   async login(
-    @Payload('loginDto') loginDto: LoginAccountDto): Promise<IServiceResponse<TokenAccountDto>> {
+    @Payload('loginDto') loginDto: LoginAccountDto): Promise<IServiceResponse<any>> {
     // change the signature to await
     return this.accountService.login(loginDto);
   }

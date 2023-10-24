@@ -7,8 +7,6 @@ import {
 
 export class TokenAccountDto {
 
-  public member_id: MemberEntity;
-
   @IsNotEmpty()
   @IsString()
   public accessToken: string;

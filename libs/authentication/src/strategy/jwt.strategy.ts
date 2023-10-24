@@ -22,6 +22,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       }
     
       async validate(payload: any) {
-        return { idUser: payload.sub, email: payload.email };
+        return { idUser: payload.username, email: payload.email, roles: payload['cognito:groups']};
       }
 }

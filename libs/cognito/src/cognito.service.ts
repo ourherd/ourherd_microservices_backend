@@ -5,7 +5,7 @@ import {
   CognitoUserAttribute,
   CognitoUserPool,
 } from 'amazon-cognito-identity-js';
-import { CreateAccountDto } from './dto/register.account.dto';
+import { RegisterAccountDto } from './dto/register.account.dto';
 import { LoginAccountDto } from './dto/login.account.dto';
 import { AuthChangePasswordUserDto } from './dto/change-password.account.dto';
 import { AuthConfirmPasswordUserDto } from './dto/reset-confirm-password.dto';
@@ -23,7 +23,7 @@ export class CognitoService {
     });
   }
 
-  async registerUser(authRegisterUserDto: CreateAccountDto) {
+  async registerUser(authRegisterUserDto: RegisterAccountDto) {
     const { email, password } = authRegisterUserDto;
 
     return new Promise((resolve, reject) => {

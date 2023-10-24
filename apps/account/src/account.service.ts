@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreateAccountDto } from "./dto/register.account.dto";
+import * as bcrypt from 'bcrypt';
+import { RegisterAccountDto } from "./dto/register.account.dto";
 import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
 import { AccountEntity } from './entity/account.entity';
 import { Repository } from 'typeorm';
@@ -12,7 +13,6 @@ import { MemberEntity } from 'apps/member/src/entity/member.entity';
 import { CreateMemberDto } from 'apps/member/src/dto/create-member.dto';
 import { MEMBER_MESSAGE_PATTERNS } from 'apps/member/src/constant/member-patterns.constants';
 import { LoginAccountDto } from './dto/login.account.dto';
-import { TokenAccountDto } from './dto/token.account.dto';
 import { CognitoService } from '@libs/cognito';
 
 @Injectable()
@@ -31,8 +31,7 @@ export class AccountService {
   }
   
 
-  async create(createAccoutDto: CreateAccountDto): Promise<IServiceResponse<AccountEntity>> {
-    const bcrypt = require("bcrypt")
+  async create(createAccoutDto: RegisterAccountDto): Promise<IServiceResponse<AccountEntity>> {
     const saltRounds = 10
 
     const accountExist = await this.findByEmail(createAccoutDto.email);
@@ -60,7 +59,7 @@ export class AccountService {
     
     createAccoutDto.member_id = data.id
 
-    let accountInit =  new CreateAccountDto();
+    let accountInit =  new RegisterAccountDto();
     const accountEntity = this.accountRepository.create(accountInit);
 
     const saltOrRounds = 10;
@@ -95,20 +94,14 @@ export class AccountService {
     }
   }
 
-  async login(loginAccountDto: LoginAccountDto): Promise<IServiceResponse<TokenAccountDto>> {
+  async login(loginAccountDto: LoginAccountDto): Promise<IServiceResponse<any>> {
 
     try{
-
-      const saltOrRounds = 10;
       const cognitoToken = await this.awsCognitoService.authenticateUser(loginAccountDto)
-
-      let loginAccount = new TokenAccountDto()
-      loginAccount.accessToken = cognitoToken['accessToken']
-      loginAccount.refreshToken = cognitoToken['refreshToken']
       
       return {
         state: true,
-        data: loginAccount,
+        data: cognitoToken,
         message: ACCOUNT_MESSAGE_DB_RESPONSE.EMAIL_FOUND
       };
     }catch(e) {
