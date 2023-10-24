@@ -38,7 +38,6 @@ export class UpdateMemberDto {
   @IsOptional()
   public suburb: string;
 
-  // Validates for a string
   @IsInt()
   @IsOptional()
   public postal_code: string;
@@ -47,7 +46,6 @@ export class UpdateMemberDto {
   @IsOptional()
   public mobile_number: string;
 
-  // Validates for a string
   @IsString()
   @IsOptional()
   @IsEnum(EmploymentEnumType)
