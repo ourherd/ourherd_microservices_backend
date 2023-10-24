@@ -16,5 +16,5 @@ CREATE TABLE IF NOT EXISTS public.resources
     updated_at timestamp with time zone default now() not null,
     deleted_at timestamp,
 
-    CONSTRAINT fk_story FOREIGN KEY(story_id) REFERENCES story(id)
+    CONSTRAINT fk_story FOREIGN KEY(story_id) REFERENCES stories(id)
 );
