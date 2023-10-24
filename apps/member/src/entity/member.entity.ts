@@ -1,6 +1,7 @@
 import { Column, Entity } from "typeorm";
 import { AbstractEntity } from '@app/database/base/base.entity';
 import { IsEnum, IsOptional } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
 
 export enum MemberStatus {
   ACTIVATED = 'ACTIVATED',
@@ -27,25 +28,41 @@ export enum EmploymentType {
 
 export class MemberEntity extends AbstractEntity {
 
+  @ApiProperty()
   @Column({ nullable: true })
   email: string;
 
+  @ApiProperty()
+  @IsOptional()
   @Column({ nullable: true })
   display_name: string;
 
+  @ApiProperty()
+  @IsOptional()
   @Column({ nullable: true })
   first_name: string;
 
+  @ApiProperty()
+  @IsOptional()
   @Column({ nullable: true })
   last_name: string;
 
+  @ApiProperty()
+  @IsOptional()
   @Column({ nullable: true })
   birthday: Date;
 
+  @ApiProperty({
+    isArray: false,
+    enum: MemberStatus,
+    example: MemberStatus.ACTIVATED
+  })
   @IsOptional()
   @IsEnum(MemberStatus)
   status?: MemberStatus = MemberStatus.ACTIVATED;
 
+  @ApiProperty()
+  @IsOptional()
   @Column({ default: false })
   verified: boolean;
 

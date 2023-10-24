@@ -2,7 +2,7 @@ import { Controller, Get, Logger } from "@nestjs/common";
 import { MEMBER_SERVICE } from "apps/member/src/constant/member-patterns.constants";
 import { ApiTags } from "@nestjs/swagger";
 
-@ApiTags('Profile Gateway')
+@ApiTags('Profile Module')
 @Controller({
   path: '/profile'
 })
