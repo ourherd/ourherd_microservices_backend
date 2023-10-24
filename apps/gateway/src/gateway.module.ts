@@ -29,7 +29,6 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     RabbitModule.forClientProxy(RabbitServiceName.ACCOUNT),
     RabbitModule.forClientProxy(RabbitServiceName.MEMBER),
     RabbitModule.forClientProxy(RabbitServiceName.FEED),
-    // RabbitModule.forClientProxy(RabbitServiceName.REACTION),
     RabbitModule.forClientProxy(RabbitServiceName.STORY),
     // AuthenticationModule.register(),
     // PolicyModule
