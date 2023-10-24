@@ -15,11 +15,10 @@ export class ReactionService {
 
   async reactionToStory(reactionDto: PostReactionDto): Promise<IServiceResponse<ReactionEntity>> {
     this.logger.log('Reaction Post --> ' + JSON.stringify(reactionDto));
-    return await this.checkStoryWithReaction( reactionDto );
+    return await this.reaction( reactionDto );
   }
 
-  async checkStoryWithReaction( reactionDto: PostReactionDto ): Promise<IServiceResponse<ReactionEntity>> {
-
+  private async reaction( reactionDto: PostReactionDto ): Promise<IServiceResponse<ReactionEntity>> {
     const reaction = await this.reactionRepository.findOneBy(
       {
         member_id: reactionDto.member_id,
@@ -38,14 +37,13 @@ export class ReactionService {
           return await this.reactionRepository.update( { id: reaction.id }, reactionDto );
         }
     } else {
-
       this.logger.log ('CREATE reaction on story type DTO --> ' + JSON.stringify(reactionDto) );
       return await this.createReaction( reactionDto );
     }
 
   }
 
-  async createReaction ( reactionDto: PostReactionDto ): Promise<IServiceResponse<ReactionEntity>> {
+  private async createReaction ( reactionDto: PostReactionDto ): Promise<IServiceResponse<ReactionEntity>> {
 
     const reaction = await this.reactionRepository.create(reactionDto);
     const result = await this.reactionRepository.save(reaction);
