@@ -1,11 +1,11 @@
-CREATE TYPE moderation_status AS ENUM ('APPROVED', 'CO_CREATION', 'ON_REVIEW', 'CLOSED');
+-- CREATE TYPE moderation_status AS ENUM ('APPROVED', 'CO_CREATION', 'ON_REVIEW', 'CLOSED');
 
-CREATE TABLE IF NOT EXISTS public.moderation
+CREATE TABLE IF NOT EXISTS public.moderations
 (
     id uuid  default gen_random_uuid() not null constraint moderation_pkey primary key,
     revision serial,
     story_id uuid not null,
-    "status" moderation_status not null,
+    "status" text not null default 'CO_CREATION',
     internal_note text,
     message_member text,
 

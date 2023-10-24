@@ -1,6 +1,4 @@
-CREATE TYPE statuses AS ENUM ('ACTIVATED', 'DEACTIVATED', 'BANNED');
-
-CREATE TABLE IF NOT EXISTS public.member
+CREATE TABLE IF NOT EXISTS public.members
 (
     id uuid  default gen_random_uuid() not null constraint member_pkey primary key,
     email text, -- I will be moving this out of members profile
@@ -9,7 +7,7 @@ CREATE TABLE IF NOT EXISTS public.member
     first_name text,
     last_name text, -- potentially use and based on legacy
     birthday  date,
-    "status" statuses default 'ACTIVATED',
+    "status" text default 'ACTIVATED',
     verified boolean default false,
     country text,
     suburb text,
