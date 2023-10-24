@@ -31,10 +31,11 @@ export class ReactionService {
     // TODO This won't work with multiples reactions CLAP | SMILE | LOVE
     if ( reaction === null ) {
       this.logger.log ('Create reaction on story --> '+ reactionDto.story_id );
+      this.logger.log ('Create reaction on story tyoe --> '+ reactionDto.reaction_type );
       return await this.createReaction( reactionDto );
     }
     this.logger.log ('Remove reaction on story --> '+ reactionDto.story_id );
-    return await this.reactionRepository.delete( reaction );
+    return await this.reactionRepository.remove( reaction );
 
   }
 
