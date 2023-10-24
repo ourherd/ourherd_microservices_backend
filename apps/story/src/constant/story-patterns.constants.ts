@@ -2,9 +2,11 @@ export const STORY_SERVICE = 'STORY SERVICE';
 export const STORY_MODULE = 'STORY MODULE';
 
 export const STORY_MESSAGE_PATTERNS = {
-  CREATE_IMAGE_FREE_FORM: 'story.create-image-free-form',
-  CREATE_IMAGE_GUIDE: 'story.create-draft-image-guide',
-  CREATE_VIDEO: 'story.create-draft-video',
+
+  DRAFT_IMAGE_FREE_FORM: 'story.draft-image-free-form',
+  DRAFT_IMAGE_GUIDE: 'story.draft-image-guide',
+  DRAFT_VIDEO: 'story.draft-video',
+
   UPDATE_IMAGE_FREE_FORM: 'story.update-image-free-form',
   UPDATE_IMAGE_GUIDE: 'story.update-image-guide',
   UPDATE_VIDEO: 'story.update-video',
