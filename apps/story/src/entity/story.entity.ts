@@ -1,7 +1,6 @@
 import { Column, Entity } from "typeorm";
 import { AbstractEntity } from "@app/database/base/base.entity";
 import { StorySourceType, StoryStatus, StoryType } from "./story.enum";
-import { isUUID } from "class-validator";
 
 @Entity({
   name: 'stories'
@@ -9,7 +8,6 @@ import { isUUID } from "class-validator";
 export class StoryEntity extends AbstractEntity {
 
   @Column({ nullable: false })
-  @isUUID()
   member_id: string;
 
   @Column({ nullable: true })
@@ -58,9 +56,9 @@ export class StoryEntity extends AbstractEntity {
   @Column({
     type: "enum",
     enum: StorySourceType,
-    default: StorySourceType.OURHERD
+    default: StorySourceType.OURHERD_APP
   })
-  source: StorySourceType = StorySourceType.OURHERD;
+  source: StorySourceType = StorySourceType.OURHERD_APP;
 
   @Column({ nullable: true, default: 0 })
   revision: number;

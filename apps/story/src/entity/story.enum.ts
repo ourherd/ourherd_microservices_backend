@@ -14,7 +14,12 @@ export enum StoryType {
 }
 
 export enum StorySourceType {
-  OURHERD = "OURHERD_APP",
+  OURHERD_APP = "OURHERD_APP",
   AV = "AMPLIFY_VOICES",
   WEBSITE = "OURHERD_WEBSITE"
+}
+
+export enum StoryVisibility {
+  PUBLIC = "PUBLIC",
+  PRIVATE = "PRIVATE"
 }
