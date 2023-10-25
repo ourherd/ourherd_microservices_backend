@@ -2,9 +2,10 @@ export const ACCOUNT_SERVICE = 'ACCOUNT SERVICE';
 export const ACCOUNT_MODULE = 'ACCOUNT MODULE';
 
 export const ACCOUNT_MESSAGE_PATTERNS = {
-  CREATE: 'account.create',
+  REGISTER: 'account.create',
   VERIFY: 'account.verify',
   LOGIN: 'account.login',
+  REFRESH: 'account.refresh',
   UPDATE: 'account.update',
   UPDATE_PASSWORD: 'account.update-password',
   REQUEST_RESET_PASSWORD: 'account.requestresetpassword',

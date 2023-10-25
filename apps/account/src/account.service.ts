@@ -1,83 +1,31 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { RegisterAccountDto } from "./dto/register.account.dto";
-import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
+import { IServiceResponse } from "@app/rabbit";
 import { AccountEntity } from './entity/account.entity';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Database } from '@app/database';
 import { ACCOUNT_MESSAGE_DB_RESPONSE } from './constant/account-patterns.constants';
-import { firstValueFrom } from 'rxjs';
-import { ClientProxy } from '@nestjs/microservices';
-import { MemberEntity } from 'apps/member/src/entity/member.entity';
-import { CreateMemberDto } from 'apps/member/src/dto/create-member.dto';
-import { MEMBER_MESSAGE_PATTERNS } from 'apps/member/src/constant/member-patterns.constants';
 import { LoginAccountDto } from './dto/login.account.dto';
 import { CognitoService } from '@libs/cognito';
+import { AuthChangePasswordUserDto } from './dto/change-password.account.dto';
+import { TokenAccountDto } from './dto/token.account.dto';
+import { AuthVerifyUserDto } from './dto/verify-email.account.dto';
+import { RefreshTokenAccountDto } from './dto/refresh-token.account.dto';
 
 @Injectable()
 export class AccountService {
 
-  @Inject(CognitoService)
-  private awsCognitoService: CognitoService
+  private saltOrRounds = 10
 
   constructor(
     @InjectRepository(AccountEntity, Database.PRIMARY)
     private accountRepository: Repository<AccountEntity>,
-    @Inject(RabbitServiceName.MEMBER)
-    private memberService: ClientProxy
+    @Inject(CognitoService)
+    private awsCognitoService: CognitoService
   ) {
 
-  }
-  
-
-  async create(createAccoutDto: RegisterAccountDto): Promise<IServiceResponse<AccountEntity>> {
-    const saltRounds = 10
-
-    const accountExist = await this.findByEmail(createAccoutDto.email);
-
-    if (accountExist.state) {
-      return {
-        state: accountExist.state,
-        data: accountExist.data,
-        message: ACCOUNT_MESSAGE_DB_RESPONSE.EMAIL_FOUND
-      };
-    }
-
-    const createDto = new CreateMemberDto();
-    
-    createDto.email = createAccoutDto.email
-    const { state, data } = await firstValueFrom(
-      this.memberService.send<IServiceResponse<MemberEntity>, { createDto: CreateMemberDto }>
-      (
-        MEMBER_MESSAGE_PATTERNS.CREATE,
-        {
-          createDto
-        }
-      )
-    );
-    
-    createAccoutDto.member_id = data.id
-
-    let accountInit =  new RegisterAccountDto();
-    const accountEntity = this.accountRepository.create(accountInit);
-
-    const saltOrRounds = 10;
-    // TODO: move to dto
-    const hash = await bcrypt.hash(createAccoutDto.password, saltOrRounds);
-    accountEntity.password_hash = hash
-    accountEntity.member_id = createAccoutDto.member_id
-    accountEntity.email = createAccoutDto.email
-
-    const cognito_user = await this.awsCognitoService.registerUser(createAccoutDto)
-      
-    const result = await this.accountRepository.save(accountEntity);
-
-    return {
-      state: !!result,
-      data: result,
-      message: ACCOUNT_MESSAGE_DB_RESPONSE.CREATED
-    };
   }
 
   async findByEmail(email: string): Promise<IServiceResponse<AccountEntity>> {
@@ -94,25 +42,212 @@ export class AccountService {
     }
   }
 
-  async login(loginAccountDto: LoginAccountDto): Promise<IServiceResponse<any>> {
+  async updatePassword(email: string, password: string): Promise<UpdateResult> {
+    return await this.accountRepository.update(
+      {
+        email: email
+      },
+      {
+        password: await bcrypt.hash(password, this.saltOrRounds)
+      }
+    );
+  }
 
-    try{
-      const cognitoToken = await this.awsCognitoService.authenticateUser(loginAccountDto)
-      
+
+  async register(createAccoutDto: RegisterAccountDto): Promise<IServiceResponse<AccountEntity>> {
+
+    const accountExist = await this.findByEmail(createAccoutDto.email);
+    const password = createAccoutDto.password
+
+    if (accountExist.state) {
       return {
-        state: true,
-        data: cognitoToken,
+        state: accountExist.state,
+        data: accountExist.data,
         message: ACCOUNT_MESSAGE_DB_RESPONSE.EMAIL_FOUND
       };
-    }catch(e) {
-      console.log(e)
+    }
+
+    const hash = await bcrypt.hash(createAccoutDto.password, this.saltOrRounds);
+    createAccoutDto.password = hash
+    const accountEntity = this.accountRepository.create(createAccoutDto);
+    const result = await this.accountRepository.save(accountEntity);
+
+    await this.awsCognitoService.registerUser(
+      createAccoutDto.email,
+      password
+    )
+
+    return {
+      state: !!result,
+      data: result,
+      message: ACCOUNT_MESSAGE_DB_RESPONSE.CREATED
+    };
+  }
+
+  
+  async login(loginAccountDto: LoginAccountDto): Promise<IServiceResponse<TokenAccountDto>> {
+
+    try {
+      const cognitoToken = await this.awsCognitoService.authenticateUser(
+        loginAccountDto.email,
+        loginAccountDto.password,
+      )
+
+      let tokenAccountDto = new TokenAccountDto()
+      tokenAccountDto.accessToken = cognitoToken['idToken']['jwtToken']
+      tokenAccountDto.refreshToken = cognitoToken['refreshToken']['token']
+
+      // TODO: Save token & refresh token into DB
+
+      return {
+        state: true,
+        data: tokenAccountDto,
+        message: ACCOUNT_MESSAGE_DB_RESPONSE.EMAIL_FOUND
+      };
+    } catch (e) {
+      return {
+        state: false,
+        data: e.name,
+        message: ACCOUNT_MESSAGE_DB_RESPONSE.NOT_FOUND
+      };
+    }
+
+  }
+  
+  async verifyEmail(authVerifyUserDto: AuthVerifyUserDto): Promise<IServiceResponse<UpdateResult>> {
+    let updateResult = null
+    try {
+      await this.awsCognitoService.verifyUser(
+        authVerifyUserDto.email,
+        authVerifyUserDto.confirmationCode,
+      ).then(
+        result => {
+            updateResult = this.accountRepository.update(
+            {
+              email: authVerifyUserDto.email
+            },
+            {
+              verified: true
+            }
+          );
+        },
+        error => {
+          throw new BadRequestException(
+            'Something bad happened',
+            { cause: new Error(), description: error }
+          )
+        }
+      )
+
+      // TODO: Save token & refresh token into DB
+
+      return {
+        state: true,
+        data: updateResult,
+        message: ACCOUNT_MESSAGE_DB_RESPONSE.EMAIL_FOUND
+      };
+    } catch (e) {
       return {
         state: true,
         data: null,
         message: ACCOUNT_MESSAGE_DB_RESPONSE.NOT_FOUND
       };
     }
-    
+
+  }
+
+
+  async changePassword(authChangePasswordUserDto: AuthChangePasswordUserDto): Promise<IServiceResponse<UpdateResult>> {
+
+    try {
+
+      await this.awsCognitoService.changeUserPassword(
+        authChangePasswordUserDto.email,
+        authChangePasswordUserDto.currentPassword,
+        authChangePasswordUserDto.newPassword,
+      )
+
+      let result = null
+      result = this.updatePassword(
+        authChangePasswordUserDto.email,
+        authChangePasswordUserDto.newPassword
+      ).then(
+        updateRsult => { result = updateRsult }
+      )
+
+      return {
+        state: true,
+        data: result
+      }
+    } catch (e) {
+      return {
+        state: false,
+        data: e.name,
+        message: ACCOUNT_MESSAGE_DB_RESPONSE.NOT_FOUND
+      };
+    }
+
+  }
+  async resetPassword(authConfirmPasswordUserDto: AuthChangePasswordUserDto): Promise<IServiceResponse<UpdateResult>> {
+
+    try {
+
+
+      await this.awsCognitoService.confirmUserPassword(
+        authConfirmPasswordUserDto.email,
+        authConfirmPasswordUserDto.confirmationCode,
+        authConfirmPasswordUserDto.newPassword,
+      )
+
+      let result = null
+      this.updatePassword(
+        authConfirmPasswordUserDto.email,
+        authConfirmPasswordUserDto.newPassword
+      ).then(
+        updateRsult => { result = updateRsult }
+      )
+
+      return {
+        state: true,
+        data: result
+      }
+    } catch (e) {
+      return {
+        state: true,
+        data: null,
+        message: ACCOUNT_MESSAGE_DB_RESPONSE.NOT_FOUND
+      };
+    }
+
+  }
+
+  async refreshToken(refreshTokenAccountDto: RefreshTokenAccountDto): Promise<IServiceResponse<TokenAccountDto>> {
+
+    try {
+      const cognitoToken = await this.awsCognitoService.refreshToken(
+        refreshTokenAccountDto.email,
+        refreshTokenAccountDto.refreshToken,
+      )
+
+      let tokenAccountDto = new TokenAccountDto()
+      tokenAccountDto.accessToken = cognitoToken['idToken']['jwtToken']
+      tokenAccountDto.refreshToken = cognitoToken['refreshToken']['token']
+
+      // TODO: Save new token into DB
+
+      return {
+        state: true,
+        data: tokenAccountDto,
+        message: ACCOUNT_MESSAGE_DB_RESPONSE.EMAIL_FOUND
+      };
+    } catch (e) {
+      return {
+        state: true,
+        data: null,
+        message: ACCOUNT_MESSAGE_DB_RESPONSE.NOT_FOUND
+      };
+    }
+
   }
 
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Inject, Post, Query } from "@nestjs/common";
+import { Body, Controller, Inject, Post } from "@nestjs/common";
 import { IGatewayResponse } from '../../common/interface/gateway.interface';
 import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
 import { AccountEntity } from 'apps/account/src/entity/account.entity';
@@ -8,11 +8,13 @@ import { firstValueFrom } from "rxjs";
 import { ACCOUNT_MESSAGE_PATTERNS } from "../../../../account/src/constant/account-patterns.constants";
 import { ClientProxy } from "@nestjs/microservices";
 import { LoginAccountDto } from "apps/account/src/dto/login.account.dto";
-import { TokenAccountDto } from "apps/account/src/dto/token.account.dto";
 import { AuthChangePasswordUserDto } from "apps/account/src/dto/change-password.account.dto";
 import { AuthForgotPasswordUserDto } from "apps/account/src/dto/reset-forget-password.dto";
 import { AuthConfirmPasswordUserDto } from "apps/account/src/dto/reset-confirm-password.dto";
 import { AuthVerifyUserDto } from "apps/account/src/dto/verify-email.account.dto";
+import { v4 as uuidv4 } from 'uuid';
+import { MEMBER_MESSAGE_PATTERNS } from "apps/member/src/constant/member-patterns.constants";
+import { RefreshTokenAccountDto } from "apps/account/src/dto/refresh-token.account.dto";
 
 @ApiTags('Account Gateway')
 @Controller({
@@ -21,16 +23,30 @@ import { AuthVerifyUserDto } from "apps/account/src/dto/verify-email.account.dto
 
 export class AccountGatewayController {
 
-  constructor( @Inject(RabbitServiceName.ACCOUNT) private accountClient: ClientProxy) { }
+  constructor( 
+    @Inject(RabbitServiceName.ACCOUNT) private accountClient: ClientProxy,
+    @Inject(RabbitServiceName.MEMBER) private memberClient: ClientProxy
+    ) { }
 
   @Post('/register')
   async register ( 
     @Body() createDto: RegisterAccountDto 
     ): Promise<IGatewayResponse> {
+      createDto.id = uuidv4();
+      createDto.member_id = createDto.id;
     const { state, data } = await firstValueFrom(
       this.accountClient.send<IServiceResponse<AccountEntity>, { createDto: RegisterAccountDto}>
       (
-        ACCOUNT_MESSAGE_PATTERNS.CREATE,
+        ACCOUNT_MESSAGE_PATTERNS.REGISTER,
+        {
+          createDto
+        }
+      )
+    );
+    await firstValueFrom(
+      this.memberClient.send<IServiceResponse<AccountEntity>, { createDto: RegisterAccountDto}>
+      (
+        MEMBER_MESSAGE_PATTERNS.CREATE,
         {
           createDto
         }
@@ -119,7 +135,21 @@ export class AccountGatewayController {
     return { state, data };
   }
 
-
+  @Post('/refresh')
+  async refreshToken ( 
+    @Body() refreshTokenAccountDto: RefreshTokenAccountDto 
+    ): Promise<IGatewayResponse> {
+    const { state, data } = await firstValueFrom(
+      this.accountClient.send<IServiceResponse<any>, { refreshTokenAccountDto: RefreshTokenAccountDto}>
+      (
+        ACCOUNT_MESSAGE_PATTERNS.REFRESH,
+        {
+          refreshTokenAccountDto
+        }
+      )
+    );
+    return { state, data };
+  }
 
 
 }

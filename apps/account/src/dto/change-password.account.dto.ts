@@ -1,20 +1,11 @@
 import { IsEmail, Matches } from 'class-validator';
+import { AuthConfirmPasswordUserDto } from './reset-confirm-password.dto';
+import { PartialType } from '@nestjs/swagger';
 
-export class AuthChangePasswordUserDto {
-  @IsEmail()
-  email: string;
-
-  /* Minimum eight characters, at least one uppercase letter, one lowercase letter, one number, and one special character */
-
+export class AuthChangePasswordUserDto extends PartialType(AuthConfirmPasswordUserDto) {
   @Matches(
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$&+,:;=?@#|'<>.^*()%!-])[A-Za-z\d@$&+,:;=?@#|'<>.^*()%!-]{8,}$/,
     { message: 'invalid password' },
   )
   currentPassword: string;
-
-  @Matches(
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$&+,:;=?@#|'<>.^*()%!-])[A-Za-z\d@$&+,:;=?@#|'<>.^*()%!-]{8,}$/,
-    { message: 'invalid password' },
-  )
-  newPassword: string;
 }

@@ -13,6 +13,9 @@ import { AuthConfirmPasswordUserDto } from './dto/reset-confirm-password.dto';
 import { AuthVerifyUserDto } from './dto/verify-email.account.dto';
 import { CognitoService } from '@libs/cognito';
 
+import { UpdateResult } from 'typeorm';
+import { RefreshTokenAccountDto } from './dto/refresh-token.account.dto';
+
 @Controller()
 export class AccountController {
   @Inject(CognitoService)
@@ -20,68 +23,55 @@ export class AccountController {
 
   constructor(
     private readonly accountService: AccountService,
-    
-    ) {}
 
-  @MessagePattern(ACCOUNT_MESSAGE_PATTERNS.CREATE)
+  ) { }
+
+  @MessagePattern(ACCOUNT_MESSAGE_PATTERNS.REGISTER)
   async register(
-    @Payload('createDto') createDto: RegisterAccountDto): Promise<IServiceResponse<AccountEntity>> {
-    // change the signature to await
-    return this.accountService.create(createDto);
+    @Payload('createDto') registerAccountDto: RegisterAccountDto): Promise<IServiceResponse<AccountEntity>> {
+    return this.accountService.register(registerAccountDto);
   }
-  
+
   @MessagePattern(ACCOUNT_MESSAGE_PATTERNS.VERIFY)
   async verifyEmail(
     @Payload('authVerifyUserDto') authVerifyUserDto: AuthVerifyUserDto): Promise<IServiceResponse<any>> {
-    // change the signature to await
-    let result = await this.awsCognitoService.verifyUser(authVerifyUserDto)
-      return {
-        state: true,
-        data: result
-      }
+    return this.accountService.verifyEmail(authVerifyUserDto)
   }
-  
+
   @MessagePattern(ACCOUNT_MESSAGE_PATTERNS.LOGIN)
   async login(
     @Payload('loginDto') loginDto: LoginAccountDto): Promise<IServiceResponse<any>> {
-    // change the signature to await
     return this.accountService.login(loginDto);
   }
-  
+
   @MessagePattern(ACCOUNT_MESSAGE_PATTERNS.UPDATE_PASSWORD)
   async changePassword(
-    @Payload('authChangePasswordUserDto') authChangePasswordUserDto: AuthChangePasswordUserDto): Promise<IServiceResponse<String>> {
-      let result = await this.awsCognitoService.changeUserPassword(authChangePasswordUserDto)
-      return {
-        state: true,
-        data: String(result)
-      }
+    @Payload('authChangePasswordUserDto') authChangePasswordUserDto: AuthChangePasswordUserDto): Promise<IServiceResponse<UpdateResult>> {
+    return this.accountService.changePassword(authChangePasswordUserDto)
   }
-  
+
   @MessagePattern(ACCOUNT_MESSAGE_PATTERNS.REQUEST_RESET_PASSWORD)
   async requestResetPassword(
     @Payload('authForgotPasswordUserDto') authForgotPasswordUserDto: AuthForgotPasswordUserDto): Promise<IServiceResponse<any>> {
-      let result = await this.awsCognitoService.forgotUserPassword(authForgotPasswordUserDto)
-      return {
-        state: true,
-        data: result
-      }
+    let result = await this.awsCognitoService.forgotUserPassword(
+      authForgotPasswordUserDto.email
+    )
+    return {
+      state: true,
+      data: result
+    }
   }
-  
+
   @MessagePattern(ACCOUNT_MESSAGE_PATTERNS.RESET_PASSWORD)
   async resetPassword(
-    @Payload('authConfirmPasswordUserDto') authConfirmPasswordUserDto: AuthConfirmPasswordUserDto): Promise<IServiceResponse<any>> {
-      let result = await this.awsCognitoService.confirmUserPassword(authConfirmPasswordUserDto)
-      return {
-        state: true,
-        data: result
-      }
+    @Payload('authConfirmPasswordUserDto') authConfirmPasswordUserDto: AuthChangePasswordUserDto): Promise<IServiceResponse<any>> {
+    return this.accountService.resetPassword(authConfirmPasswordUserDto);
   }
-  
-  @UseGuards(AuthGuard('jwt'))
-  async getHello(): Promise<string> {
-    // change the signature to await
-    return "Hello World!"
+
+  @MessagePattern(ACCOUNT_MESSAGE_PATTERNS.REFRESH)
+  async refreshToken(
+    @Payload('refreshTokenAccountDto') refreshTokenAccountDto: RefreshTokenAccountDto): Promise<IServiceResponse<any>> {
+    return this.accountService.refreshToken(refreshTokenAccountDto);
   }
 
 }

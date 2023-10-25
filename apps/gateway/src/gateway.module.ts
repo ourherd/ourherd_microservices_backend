@@ -7,11 +7,13 @@ import { MulterModule } from "@nestjs/platform-express";
 import multer from "multer";
 import { MemberGatewayController } from "./modules/member/member-gateway.controller";
 import { MemberProfileGatewayController } from "./modules/member/member-profile-gateway.controller";
-import { ReactionGatewayController } from "./modules/reaction/reaction-gateway.controller";
-import { FeedGatewayController } from "./modules/feed/feed-gateway.controller";
-import { getEnvPath } from "@app/common/env/env.helper";
 import { JwtStrategy } from '@app/authentication';
 
+import { getEnvPath } from '@app/common/env/env.helper';
+import { PassportModule } from '@nestjs/passport';
+import { FeedGatewayController } from './modules/feed/feed-gateway.controller';
+import { ReactionGatewayController } from './modules/reaction/reaction-gateway.controller';
+import { AccountGatewayController } from "./modules/account/account-gateway.controller";
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
 @Module({

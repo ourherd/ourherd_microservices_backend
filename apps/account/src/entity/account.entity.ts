@@ -3,7 +3,7 @@ import { AbstractEntity } from '@app/database/base/base.entity';
 import { AccountDeviceEntity } from './account.device.entity'
 
 @Entity({
-  name: 'account'
+  name: 'accounts'
 })
 
 export class AccountEntity extends AbstractEntity {
@@ -18,7 +18,7 @@ export class AccountEntity extends AbstractEntity {
   new_email: string;
 
   @Column({ nullable: true })
-  password_hash: string;
+  password: string;
 
   @Column({ nullable: true })
   default_role: string;
@@ -26,5 +26,8 @@ export class AccountEntity extends AbstractEntity {
   @OneToMany(type => AccountDeviceEntity, account => account.id)
   @JoinColumn({name: "account_id"})  
   device: AccountDeviceEntity;
+
+  @Column({ default: false })
+  verified: boolean;
 
 }
