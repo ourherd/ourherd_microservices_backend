@@ -10,6 +10,8 @@ import { MemberProfileGatewayController } from "./modules/member/member-profile-
 import { ReactionGatewayController } from "./modules/reaction/reaction-gateway.controller";
 import { FeedGatewayController } from "./modules/feed/feed-gateway.controller";
 import { StoryBookmarkGatewayController } from "./modules/story/story-bookmark-gateway.controller";
+import { StoryDraftGatewayController } from "./modules/story/story-draft-gateway.controller";
+
 import { getEnvPath } from "@app/common/env/env.helper";
 
 const envFilePath: string = getEnvPath(`${__dirname}/`);
@@ -39,7 +41,8 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     MemberProfileGatewayController,
     FeedGatewayController,
     ReactionGatewayController,
-    StoryBookmarkGatewayController
+    StoryBookmarkGatewayController,
+    StoryDraftGatewayController
   ]
 })
 export class GatewayModule { }
