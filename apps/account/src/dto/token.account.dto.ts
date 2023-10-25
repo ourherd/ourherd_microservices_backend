@@ -1,8 +1,6 @@
-import { MemberEntity } from "apps/member/src/entity/member.entity";
 import {
   IsNotEmpty,
-  IsString,
-  MinLength
+  IsString
 } from "class-validator";
 
 export class TokenAccountDto {
@@ -10,7 +8,7 @@ export class TokenAccountDto {
   @IsNotEmpty()
   @IsString()
   public accessToken: string;
-  
+
   @IsNotEmpty()
   @IsString()
   public refreshToken: string;
