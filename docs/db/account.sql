@@ -8,11 +8,12 @@ CREATE TABLE IF NOT EXISTS public.accounts
     email text,
     new_email text,
 
-    password_hash text,
+    password text,
     default_role role_type default 'MEMBER',
 
     otp_secret text,
     mfa_enabled boolean DEFAULT false NOT NULL,
+    verified boolean default false,
     -- manage the reset password here
     ticket uuid DEFAULT gen_random_uuid() NOT NULL,
     ticket_expires_at timestamp with time zone DEFAULT now() NOT NULL,
