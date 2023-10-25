@@ -1,19 +1,11 @@
 import {
-  IsEmail,
-  IsNotEmpty,
-  IsString,
-  MinLength,
-  Matches,
   IsEnum,
   IsOptional,
-  IsUUID,
   IsBoolean
 } from "class-validator";
 import { Transform } from 'class-transformer';
-import {
-  EmailNotRegistered
-} from "@app/common/validation-rules/email-not-registered.rule";
-import { uuid } from "uuidv4";
+import { PartialType } from '@nestjs/mapped-types';
+import { RegisterAccountDto } from "apps/account/src/dto/register.account.dto";
 
 
 export enum MemberStatus {
@@ -22,23 +14,7 @@ export enum MemberStatus {
   BANNED = 'BANNED'
 }
 
-export class CreateMemberDto  {
-
-  @IsUUID()
-  @IsOptional()
-  @IsString()
-  @Transform(({ value }) => value = uuid())
-  public id: string;
-
-  @IsEmail()
-  @IsNotEmpty()
-  @IsString()
-  @MinLength(4)
-  @Matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,3}$/g)
-  @Transform(({ value }) => value.toString().toLowerCase())
-  // TODO This is not working yet
-  // @EmailNotRegistered({ message: 'email already registered' })
-  public email: string;
+export class CreateMemberDto extends PartialType(RegisterAccountDto) {
 
   @IsEnum(MemberStatus)
   @IsOptional()
