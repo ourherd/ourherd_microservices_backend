@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
 import { StoryController } from './controller/story.controller';
 import { StoryBookmarkController } from './controller/story.bookmark.controller';
+import { StoryDraftController } from "./controller/story.draft.controller";
 import { StoryService } from './service/story.service';
 import { StoryBookmarkService } from './service/story.bookmark.service';
+import { StoryDraftService } from './service/story.draft.service';
 import { RabbitModule, RabbitServiceName } from '@app/rabbit';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Database, DatabaseModule } from '@app/database';
@@ -29,8 +31,8 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     ]),
     RabbitModule.forServerProxy(RabbitServiceName.STORY)
   ],
-  controllers: [StoryController, StoryBookmarkController],
-  providers: [StoryService, StoryBookmarkService],
+  controllers: [StoryController, StoryDraftController,  StoryBookmarkController],
+  providers: [StoryService, StoryDraftService, StoryBookmarkService],
 })
 
 export class StoryModule {}

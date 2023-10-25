@@ -14,7 +14,7 @@ export enum StoryMedium {
 
 export enum StoryType {
   VIDEO = "VIDEO",
-  TEXT_FREEFORM = "TEXT_FREEFORM",
+  TEXT = "TEXT",
   TEXT_GUIDED = "TEXT_GUIDED"
 }
 
