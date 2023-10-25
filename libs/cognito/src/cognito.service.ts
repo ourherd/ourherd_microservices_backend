@@ -1,16 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import {
   AuthenticationDetails,
+  CognitoRefreshToken,
   CognitoUser,
-  CognitoUserAttribute,
   CognitoUserPool,
 } from 'amazon-cognito-identity-js';
-import { RegisterAccountDto } from './dto/register.account.dto';
-import { LoginAccountDto } from './dto/login.account.dto';
-import { AuthChangePasswordUserDto } from './dto/change-password.account.dto';
-import { AuthConfirmPasswordUserDto } from './dto/reset-confirm-password.dto';
-import { AuthForgotPasswordUserDto } from './dto/reset-forget-password.dto';
-import { AuthVerifyUserDto } from './dto/verify-email.account.dto';
 
 @Injectable()
 export class CognitoService {
@@ -23,8 +17,10 @@ export class CognitoService {
     });
   }
 
-  async registerUser(authRegisterUserDto: RegisterAccountDto) {
-    const { email, password } = authRegisterUserDto;
+  async registerUser(
+    email: string, 
+    password: string
+    ) {
 
     return new Promise((resolve, reject) => {
       this.userPool.signUp(
@@ -43,8 +39,10 @@ export class CognitoService {
     });
   }
 
-  async authenticateUser(authLoginUserDto: LoginAccountDto) {
-    const { email, password } = authLoginUserDto;
+  async authenticateUser(
+    email: string,
+    password: string
+  ) {
     const userData = {
       Username: email,
       Pool: this.userPool,
@@ -59,11 +57,15 @@ export class CognitoService {
 
     return new Promise((resolve, reject) => {
       userCognito.authenticateUser(authenticationDetails, {
-        onSuccess: (result) => {
-          resolve({
-            accessToken: result.getAccessToken().getJwtToken(),
-            refreshToken: result.getRefreshToken().getToken(),
-          });
+        onSuccess: () => {
+          userCognito.getSession(
+            (err, result) => {
+              if (err) {
+                reject(err);
+              }
+              resolve(result);
+            }
+          )
         },
         onFailure: (err) => {
           reject(err);
@@ -73,9 +75,10 @@ export class CognitoService {
   }
 
   async changeUserPassword(
-    authChangePasswordUserDto: AuthChangePasswordUserDto,
+    email: string, 
+    currentPassword: string, 
+    newPassword: string
   ) {
-    const { email, currentPassword, newPassword } = authChangePasswordUserDto;
 
     const userData = {
       Username: email,
@@ -112,9 +115,8 @@ export class CognitoService {
   }
 
   async forgotUserPassword(
-    authForgotPasswordUserDto: AuthForgotPasswordUserDto,
+    email: string
   ) {
-    const { email } = authForgotPasswordUserDto;
 
     const userData = {
       Username: email,
@@ -136,9 +138,10 @@ export class CognitoService {
   }
 
   async confirmUserPassword(
-    authConfirmPasswordUserDto: AuthConfirmPasswordUserDto,
+    email: string, 
+    confirmationCode: string, 
+    newPassword: string
   ) {
-    const { email, confirmationCode, newPassword } = authConfirmPasswordUserDto;
 
     const userData = {
       Username: email,
@@ -160,10 +163,34 @@ export class CognitoService {
   }
 
   async verifyUser(
-    authVerifyUserDto: AuthVerifyUserDto,
+    email: string, 
+    confirmationCode: string
   ) {
 
-    const { email, confirmationCode } = authVerifyUserDto;
+    const userData = {
+      Username: email,
+      Pool: this.userPool,
+    };
+
+    const userCognito = new CognitoUser(userData); 
+
+    return new Promise((resolve, reject) => {
+      userCognito.confirmRegistration(confirmationCode,
+        true,
+        (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        })
+    });
+  }
+  
+  async refreshToken(
+    email: string, 
+    refreshToken: string
+  ) {
 
     const userData = {
       Username: email,
@@ -172,9 +199,13 @@ export class CognitoService {
 
     const userCognito = new CognitoUser(userData);
 
+    const cognitoRefreshToken = new CognitoRefreshToken({
+      RefreshToken: refreshToken
+    })
+
     return new Promise((resolve, reject) => {
-      userCognito.confirmRegistration(confirmationCode,
-        true,
+      userCognito.refreshSession(
+        cognitoRefreshToken,
         (err, result) => {
           if (err) {
             reject(err);
