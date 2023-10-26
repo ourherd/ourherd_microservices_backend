@@ -15,24 +15,24 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
         type: 'postgres',
         env: 'PRIMARY',
         entities: [
-          MemberEntity,
-          ReactionEntity,
-          StoryEntity,
-          StoryBookmarkEntity,
-          AccountEntity,
-          AccountDeviceEntity
+            MemberEntity,
+            ReactionEntity,
+            StoryEntity,
+            StoryBookmarkEntity,
+            AccountEntity,
+            AccountDeviceEntity,
         ]
     },
     secondary: {
         type: 'postgres',
         env: 'SECONDARY',
         entities: [
-          MemberEntity,
-          ReactionEntity,
-          StoryEntity,
-          StoryBookmarkEntity,
-          AccountEntity,
-          AccountDeviceEntity
+            MemberEntity,
+            ReactionEntity,
+            StoryEntity,
+            StoryBookmarkEntity,
+            AccountEntity,
+            AccountDeviceEntity,
         ]
     }
 };
