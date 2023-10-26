@@ -1,12 +1,7 @@
-import {
-  IsEnum,
-  IsOptional,
-  IsBoolean
-} from "class-validator";
-import { Transform } from 'class-transformer';
-import { PartialType } from '@nestjs/mapped-types';
-import { RegisterAccountDto } from "apps/account/src/dto/register.account.dto";
-
+import { IsEmail, IsNotEmpty, IsOptional, IsString, IsUUID, Matches, MinLength } from "class-validator";
+import { Transform } from "class-transformer";
+import { uuid } from "uuidv4";
+import { ApiProperty } from "@nestjs/swagger";
 
 export enum MemberStatus {
   ACTIVED = 'ACTIVATED',
@@ -14,15 +9,28 @@ export enum MemberStatus {
   BANNED = 'BANNED'
 }
 
-export class CreateMemberDto extends PartialType(RegisterAccountDto) {
+export class CreateMemberDto  {
 
-  @IsEnum(MemberStatus)
+  @IsUUID()
   @IsOptional()
-  readonly status?: MemberStatus = MemberStatus.ACTIVED;
+  @IsString()
+  @Transform(({ value }) => value = uuid())
+  public id: string;
 
-  @IsOptional()
-  @IsBoolean()
-  @Transform(({ value} ) => value === false)
-  readonly verified: boolean;
+  @ApiProperty({
+    description: 'Email address',
+    pattern: '/^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,3}$/g',
+    example: 'hello@ourherd.io',
+    required: true
+  })
+  @IsEmail()
+  @IsNotEmpty()
+  @IsString()
+  @MinLength(4)
+  @Matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,3}$/g)
+  @Transform(({ value }) => value.toString().toLowerCase())
+  // TODO This is not working yet
+  // @EmailNotRegistered({ message: 'email already registered' })
+  public email: string;
 
 }

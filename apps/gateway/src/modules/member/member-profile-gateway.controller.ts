@@ -11,7 +11,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { Roles } from '@app/authentication/decorator/role.decorator';
 import { Role } from 'apps/account/src/interface/role.interface';
 
-@ApiTags('Profile Gateway')
+@ApiTags('Profile Module')
 @Controller({
   path: '/profile'
 })
