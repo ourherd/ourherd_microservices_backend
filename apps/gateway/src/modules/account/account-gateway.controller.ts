@@ -23,41 +23,43 @@ import { RefreshTokenAccountDto } from "apps/account/src/dto/refresh-token.accou
 
 export class AccountGatewayController {
 
-  constructor( 
+  constructor(
     @Inject(RabbitServiceName.ACCOUNT) private accountClient: ClientProxy,
     @Inject(RabbitServiceName.MEMBER) private memberClient: ClientProxy
     ) { }
 
   @Post('/register')
-  async register ( 
-    @Body() createDto: RegisterAccountDto 
+  async register (
+    @Body() createDto: RegisterAccountDto
     ): Promise<IGatewayResponse> {
-      createDto.id = uuidv4();
+
+      // TODO Change it later
       createDto.member_id = createDto.id;
-    const { state, data } = await firstValueFrom(
-      this.accountClient.send<IServiceResponse<AccountEntity>, { createDto: RegisterAccountDto}>
-      (
-        ACCOUNT_MESSAGE_PATTERNS.REGISTER,
-        {
-          createDto
-        }
-      )
-    );
-    await firstValueFrom(
-      this.memberClient.send<IServiceResponse<AccountEntity>, { createDto: RegisterAccountDto}>
-      (
-        MEMBER_MESSAGE_PATTERNS.CREATE,
-        {
-          createDto
-        }
-      )
+
+      const { state, data } = await firstValueFrom(
+        this.accountClient.send<IServiceResponse<AccountEntity>, { createDto: RegisterAccountDto}>
+        (
+          ACCOUNT_MESSAGE_PATTERNS.REGISTER,
+          {
+            createDto
+          }
+        )
+      );
+      await firstValueFrom(
+        this.memberClient.send<IServiceResponse<AccountEntity>, { createDto: RegisterAccountDto}>
+        (
+          MEMBER_MESSAGE_PATTERNS.CREATE,
+          {
+            createDto
+          }
+        )
     );
     return { state, data };
   }
-  
+
   @Post('/verify')
-  async verify ( 
-    @Body() authVerifyUserDto: AuthVerifyUserDto 
+  async verify (
+    @Body() authVerifyUserDto: AuthVerifyUserDto
     ): Promise<IGatewayResponse> {
     const { state, data } = await firstValueFrom(
       this.accountClient.send<IServiceResponse<any>, { authVerifyUserDto: AuthVerifyUserDto}>
@@ -70,10 +72,10 @@ export class AccountGatewayController {
     );
     return { state, data };
   }
-  
+
   @Post('/login')
-  async login ( 
-    @Body() loginDto: LoginAccountDto 
+  async login (
+    @Body() loginDto: LoginAccountDto
     ): Promise<IGatewayResponse> {
     const { state, data } = await firstValueFrom(
       this.accountClient.send<IServiceResponse<any>, { loginDto: LoginAccountDto}>
@@ -86,10 +88,10 @@ export class AccountGatewayController {
     );
     return { state, data };
   }
-  
+
   @Post('/change-password')
-  async changePassword ( 
-    @Body() authChangePasswordUserDto: AuthChangePasswordUserDto 
+  async changePassword (
+    @Body() authChangePasswordUserDto: AuthChangePasswordUserDto
     ): Promise<IGatewayResponse> {
     const { state, data } = await firstValueFrom(
       this.accountClient.send<IServiceResponse<String>, { authChangePasswordUserDto: AuthChangePasswordUserDto}>
@@ -102,10 +104,10 @@ export class AccountGatewayController {
     );
     return { state, data };
   }
-  
+
   @Post('/forgot-password')
-  async requestResetPassword ( 
-    @Body() authForgotPasswordUserDto: AuthForgotPasswordUserDto 
+  async requestResetPassword (
+    @Body() authForgotPasswordUserDto: AuthForgotPasswordUserDto
     ): Promise<IGatewayResponse> {
     const { state, data } = await firstValueFrom(
       this.accountClient.send<IServiceResponse<any>, { authForgotPasswordUserDto: AuthForgotPasswordUserDto}>
@@ -118,10 +120,10 @@ export class AccountGatewayController {
     );
     return { state, data };
   }
-  
+
   @Post('/confirm-password')
-  async confirmResetPassword ( 
-    @Body() authConfirmPasswordUserDto: AuthConfirmPasswordUserDto 
+  async confirmResetPassword (
+    @Body() authConfirmPasswordUserDto: AuthConfirmPasswordUserDto
     ): Promise<IGatewayResponse> {
     const { state, data } = await firstValueFrom(
       this.accountClient.send<IServiceResponse<any>, { authConfirmPasswordUserDto: AuthConfirmPasswordUserDto}>
@@ -136,8 +138,8 @@ export class AccountGatewayController {
   }
 
   @Post('/refresh')
-  async refreshToken ( 
-    @Body() refreshTokenAccountDto: RefreshTokenAccountDto 
+  async refreshToken (
+    @Body() refreshTokenAccountDto: RefreshTokenAccountDto
     ): Promise<IGatewayResponse> {
     const { state, data } = await firstValueFrom(
       this.accountClient.send<IServiceResponse<any>, { refreshTokenAccountDto: RefreshTokenAccountDto}>

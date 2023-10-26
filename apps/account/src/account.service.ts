@@ -20,13 +20,8 @@ export class AccountService {
   private saltOrRounds = 10
 
   constructor(
-    @InjectRepository(AccountEntity, Database.PRIMARY)
-    private accountRepository: Repository<AccountEntity>,
-    @Inject(CognitoService)
-    private awsCognitoService: CognitoService
-  ) {
-
-  }
+    @InjectRepository(AccountEntity, Database.PRIMARY) private accountRepository: Repository<AccountEntity>,
+    @Inject(CognitoService) private awsCognitoService: CognitoService) {}
 
   async findByEmail(email: string): Promise<IServiceResponse<AccountEntity>> {
     const account = await this.accountRepository.findOneBy(
@@ -41,18 +36,6 @@ export class AccountService {
       message: !!account ? ACCOUNT_MESSAGE_DB_RESPONSE.EMAIL_FOUND : ACCOUNT_MESSAGE_DB_RESPONSE.EMAIL_NOT_FOUND
     }
   }
-
-  async updatePassword(email: string, password: string): Promise<UpdateResult> {
-    return await this.accountRepository.update(
-      {
-        email: email
-      },
-      {
-        password: await bcrypt.hash(password, this.saltOrRounds)
-      }
-    );
-  }
-
 
   async register(createAccoutDto: RegisterAccountDto): Promise<IServiceResponse<AccountEntity>> {
 
@@ -84,7 +67,6 @@ export class AccountService {
     };
   }
 
-  
   async login(loginAccountDto: LoginAccountDto): Promise<IServiceResponse<TokenAccountDto>> {
 
     try {
@@ -113,7 +95,7 @@ export class AccountService {
     }
 
   }
-  
+
   async verifyEmail(authVerifyUserDto: AuthVerifyUserDto): Promise<IServiceResponse<UpdateResult>> {
     let updateResult = null
     try {
@@ -156,7 +138,36 @@ export class AccountService {
 
   }
 
+  async refreshToken(refreshTokenAccountDto: RefreshTokenAccountDto): Promise<IServiceResponse<TokenAccountDto>> {
 
+    try {
+      const cognitoToken = await this.awsCognitoService.refreshToken(
+        refreshTokenAccountDto.email,
+        refreshTokenAccountDto.refreshToken,
+      )
+
+      let tokenAccountDto = new TokenAccountDto()
+      tokenAccountDto.accessToken = cognitoToken['idToken']['jwtToken']
+      tokenAccountDto.refreshToken = cognitoToken['refreshToken']['token']
+
+      // TODO: Save new token into DB
+
+      return {
+        state: true,
+        data: tokenAccountDto,
+        message: ACCOUNT_MESSAGE_DB_RESPONSE.EMAIL_FOUND
+      };
+    } catch (e) {
+      return {
+        state: true,
+        data: null,
+        message: ACCOUNT_MESSAGE_DB_RESPONSE.NOT_FOUND
+      };
+    }
+
+  }
+
+  // TODO MOVE THIS INTO A SERVICE
   async changePassword(authChangePasswordUserDto: AuthChangePasswordUserDto): Promise<IServiceResponse<UpdateResult>> {
 
     try {
@@ -188,6 +199,7 @@ export class AccountService {
     }
 
   }
+
   async resetPassword(authConfirmPasswordUserDto: AuthChangePasswordUserDto): Promise<IServiceResponse<UpdateResult>> {
 
     try {
@@ -221,33 +233,16 @@ export class AccountService {
 
   }
 
-  async refreshToken(refreshTokenAccountDto: RefreshTokenAccountDto): Promise<IServiceResponse<TokenAccountDto>> {
-
-    try {
-      const cognitoToken = await this.awsCognitoService.refreshToken(
-        refreshTokenAccountDto.email,
-        refreshTokenAccountDto.refreshToken,
-      )
-
-      let tokenAccountDto = new TokenAccountDto()
-      tokenAccountDto.accessToken = cognitoToken['idToken']['jwtToken']
-      tokenAccountDto.refreshToken = cognitoToken['refreshToken']['token']
-
-      // TODO: Save new token into DB
-
-      return {
-        state: true,
-        data: tokenAccountDto,
-        message: ACCOUNT_MESSAGE_DB_RESPONSE.EMAIL_FOUND
-      };
-    } catch (e) {
-      return {
-        state: true,
-        data: null,
-        message: ACCOUNT_MESSAGE_DB_RESPONSE.NOT_FOUND
-      };
-    }
-
+  async updatePassword(email: string, password: string): Promise<UpdateResult> {
+    return await this.accountRepository.update(
+      {
+        email: email
+      },
+      {
+        password: await bcrypt.hash(password, this.saltOrRounds)
+      }
+    );
   }
+
 
 }

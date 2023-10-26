@@ -1,15 +1,4 @@
-import {
-  IsBoolean,
-  IsEmail,
-  IsEnum,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsStrongPassword,
-  IsUUID,
-  Matches,
-  MinLength
-} from "class-validator";
+import { IsEnum, IsNotEmpty, IsOptional, IsString, Matches, MinLength } from "class-validator";
 import { Transform } from "class-transformer";
 import { uuid } from "uuidv4";
 
@@ -24,13 +13,12 @@ export class RegisterAccountDto {
   // @IsUUID()
   @IsOptional()
   @IsString()
-  @Transform(({ value }) => value = uuid())
-  public id: string;
+  public id: string = uuid();
 
   // @IsUUID()
   @IsOptional()
   @IsString()
-  public member_id: string;
+  public member_id: string = uuid();
 
   @IsNotEmpty()
   @IsString()

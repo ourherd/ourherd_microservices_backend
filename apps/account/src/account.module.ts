@@ -1,17 +1,16 @@
-import { Module } from '@nestjs/common';
-import { AccountController } from './account.controller';
-import { AccountService } from './account.service';
-import { RabbitModule, RabbitServiceName } from '@app/rabbit';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Database, DatabaseModule } from '@app/database';
-import { getEnvPath } from '@app/common/env/env.helper';
+import { Module } from "@nestjs/common";
+import { AccountController } from "./account.controller";
+import { AccountService } from "./account.service";
+import { RabbitModule, RabbitServiceName } from "@app/rabbit";
+import { ConfigModule } from "@nestjs/config";
+import { Database, DatabaseModule } from "@app/database";
+import { getEnvPath } from "@app/common/env/env.helper";
 import { AccountEntity } from "./entity/account.entity";
-import { PassportModule } from '@nestjs/passport';
-import { CognitoModule } from '@libs/cognito';
-import { CognitoAuthModule } from '@nestjs-cognito/auth';
+import { CognitoModule } from "@libs/cognito";
 
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
+// TODO ADD service and controller
 @Module({
   imports: [
     ConfigModule.forRoot({

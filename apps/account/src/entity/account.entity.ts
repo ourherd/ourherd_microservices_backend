@@ -6,6 +6,7 @@ import { AccountDeviceEntity } from './account.device.entity'
   name: 'accounts'
 })
 
+// TODO add member id as a FK
 export class AccountEntity extends AbstractEntity {
 
   @Column({ nullable: false })
@@ -24,7 +25,7 @@ export class AccountEntity extends AbstractEntity {
   default_role: string;
 
   @OneToMany(type => AccountDeviceEntity, account => account.id)
-  @JoinColumn({name: "account_id"})  
+  @JoinColumn({name: "account_id"})
   device: AccountDeviceEntity;
 
   @Column({ default: false })

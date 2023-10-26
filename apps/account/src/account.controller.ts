@@ -43,6 +43,12 @@ export class AccountController {
     @Payload('loginDto') loginDto: LoginAccountDto): Promise<IServiceResponse<any>> {
     return this.accountService.login(loginDto);
   }
+  // TODO CALL  ACCOUNT_MESSAGE_PATTERNS refresh ACCOUNT_MESSAGE_PATTERNS.REFRESH_TOKEN
+  @MessagePattern(ACCOUNT_MESSAGE_PATTERNS.REFRESH)
+  async refreshToken(
+    @Payload('refreshTokenAccountDto') refreshTokenAccountDto: RefreshTokenAccountDto): Promise<IServiceResponse<any>> {
+    return this.accountService.refreshToken(refreshTokenAccountDto);
+  }
 
   @MessagePattern(ACCOUNT_MESSAGE_PATTERNS.UPDATE_PASSWORD)
   async changePassword(
@@ -68,10 +74,5 @@ export class AccountController {
     return this.accountService.resetPassword(authConfirmPasswordUserDto);
   }
 
-  @MessagePattern(ACCOUNT_MESSAGE_PATTERNS.REFRESH)
-  async refreshToken(
-    @Payload('refreshTokenAccountDto') refreshTokenAccountDto: RefreshTokenAccountDto): Promise<IServiceResponse<any>> {
-    return this.accountService.refreshToken(refreshTokenAccountDto);
-  }
 
 }
