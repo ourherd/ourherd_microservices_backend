@@ -37,3 +37,5 @@ lerna-debug.log*
 # env
 .env
 .vscode/settings.json
+/envs/*.env
+envs
