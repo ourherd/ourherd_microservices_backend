@@ -1,4 +1,4 @@
-import { Column, Entity, OneToOne, JoinColumn, OneToMany } from "typeorm";
+import { Column, Entity, OneToOne, JoinColumn, OneToMany, ManyToOne } from "typeorm";
 import { AbstractEntity } from '@app/database/base/base.entity';
 import { AccountDeviceEntity } from './account.device.entity'
 import { MemberEntity } from "apps/member/src/entity/member.entity";
@@ -9,7 +9,8 @@ import { MemberEntity } from "apps/member/src/entity/member.entity";
 
 export class AccountEntity extends AbstractEntity {
 
-  @OneToOne(() => MemberEntity)
+  @ManyToOne(() => MemberEntity,(member) => member.account )
+  @JoinColumn({name: "member_id"})
   member_id: MemberEntity;
 
   @Column({ nullable: true })

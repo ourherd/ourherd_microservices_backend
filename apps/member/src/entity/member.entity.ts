@@ -1,5 +1,6 @@
-import { Column, Entity } from "typeorm";
+import { Column, Entity, OneToMany } from "typeorm";
 import { AbstractEntity } from '@app/database/base/base.entity';
+import { AccountEntity } from "apps/account/src/entity/account.entity";
 
 @Entity({
   name: 'members'
@@ -54,5 +55,8 @@ export class MemberEntity extends AbstractEntity {
 
   @Column({ nullable: true })
   sequence_identity: string;
+
+  @OneToMany(() => AccountEntity, (user) => user.member_id)
+  account: AccountEntity
 
 }
