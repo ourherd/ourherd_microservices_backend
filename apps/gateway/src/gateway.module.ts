@@ -13,6 +13,7 @@ import { ReactionGatewayController } from './modules/reaction/reaction-gateway.c
 import { StoryBookmarkGatewayController } from "./modules/story/story-bookmark-gateway.controller";
 import { StoryDraftGatewayController } from "./modules/story/story-draft-gateway.controller";
 import { AccountGatewayController } from "./modules/account/account-gateway.controller";
+import { AccountPasswordGatewayController } from "./modules/account/account-password-gateway.controller";
 
 import { getEnvPath } from "@app/common/env/env.helper";
 import { JwtStrategy } from '@app/authentication';
@@ -42,6 +43,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
   ],
   controllers: [
     AccountGatewayController,
+    AccountPasswordGatewayController,
     MemberGatewayController,
     MemberProfileGatewayController,
     FeedGatewayController,

@@ -5,7 +5,7 @@ export const ACCOUNT_MESSAGE_PATTERNS = {
   REGISTER: 'account.create',
   VERIFY: 'account.verify',
   LOGIN: 'account.login',
-  REFRESH: 'account.refresh',
+  REFRESH_TOKEN: 'account.refresh',
   UPDATE: 'account.update',
   UPDATE_PASSWORD: 'account.update-password',
   REQUEST_RESET_PASSWORD: 'account.requestresetpassword',
@@ -24,5 +24,6 @@ export const ACCOUNT_MESSAGE_DB_RESPONSE = {
   FOUND: 'account.found',
   NOT_FOUND: 'account.not-found',
   EMAIL_FOUND: 'account.email-found',
+  EXISTING_EMAIL: 'account.email-existing',
   EMAIL_NOT_FOUND: 'account.email-not-found'
 }
