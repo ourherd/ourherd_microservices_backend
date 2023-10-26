@@ -51,11 +51,10 @@ export class AccountService {
         };
       }
 
-      const hash = await bcrypt.hash(createAccoutDto.password, this.saltOrRounds);
+      const hash = await bcrypt.hash(password, this.saltOrRounds);
       createAccoutDto.password = hash
       createAccoutDto.member_id = memberEntity
-      const accountEntity = this.accountRepository.create(createAccoutDto);
-      const result = await this.accountRepository.save(accountEntity);
+      const result = await this.accountRepository.save(createAccoutDto);
 
       await this.awsCognitoService.registerUser(
         createAccoutDto.email,
