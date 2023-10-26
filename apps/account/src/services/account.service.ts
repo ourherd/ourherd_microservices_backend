@@ -43,11 +43,13 @@ export class AccountService {
     }
   }
 
-  async register(createAccoutDto: RegisterAccountDto, memberEntity: MemberEntity): Promise<IServiceResponse<AccountEntity>> {
+  async register(createAccountDto: RegisterAccountDto, memberEntity: MemberEntity): Promise<IServiceResponse<AccountEntity>> {
     try {
 
-      const accountExist = await this.findByEmail(createAccoutDto.email);
-      const password = createAccoutDto.password
+      const accountExist = await this.findByEmail(createAccountDto.email);
+
+      console.log('accountExist --> ' + JSON.stringify(accountExist) )
+
 
       if (accountExist.state) {
         return {
@@ -56,14 +58,15 @@ export class AccountService {
           message: ACCOUNT_MESSAGE_DB_RESPONSE.EXISTING_EMAIL
         };
       }
-
+      console.log('createAccountDto --> ' + JSON.stringify(createAccountDto) )
+      const password = createAccountDto.password;
       const hash = await bcrypt.hash(password, this.saltOrRounds);
-      createAccoutDto.password = hash
-      createAccoutDto.member_id = memberEntity
-      const result = await this.accountRepository.save(createAccoutDto);
+      createAccountDto.password = hash;
+      createAccountDto.member_id = memberEntity;
+      const result = await this.accountRepository.save(createAccountDto);
 
       await this.awsCognitoService.registerUser(
-        createAccoutDto.email,
+        createAccountDto.email,
         password
       )
 
