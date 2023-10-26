@@ -4,7 +4,7 @@ import { uuid } from "uuidv4";
 import { ApiProperty } from "@nestjs/swagger";
 
 export enum MemberStatus {
-  ACTIVED = 'ACTIVATED',
+  ACTIVATED = 'ACTIVATED',
   DEACTIVATED = 'DEACTIVATED',
   BANNED = 'BANNED'
 }
