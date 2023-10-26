@@ -14,6 +14,7 @@ import { PassportModule } from '@nestjs/passport';
 import { FeedGatewayController } from './modules/feed/feed-gateway.controller';
 import { ReactionGatewayController } from './modules/reaction/reaction-gateway.controller';
 import { AccountGatewayController } from "./modules/account/account-gateway.controller";
+import { AccountPasswordGatewayController } from "./modules/account/account-password-gateway.controller";
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
 @Module({
@@ -41,6 +42,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
   ],
   controllers: [
     AccountGatewayController,
+    AccountPasswordGatewayController,
     MemberGatewayController,
     MemberProfileGatewayController,
     FeedGatewayController,
