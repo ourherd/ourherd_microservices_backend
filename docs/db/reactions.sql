@@ -1,9 +1,9 @@
-CREATE TYPE ReactionType AS ENUM ('LOVE', 'CLAP', 'SMILE', 'SUPPORT', 'STRENGTH');
+CREATE TYPE reaction_type AS ENUM ('LOVE', 'CLAP', 'SMILE', 'SUPPORT', 'STRENGTH');
 
 create table public.reactions
 (
     id uuid default gen_random_uuid() not null constraint reaction_pkey primary key,
-    reaction_type ReactionType NOT NULL,
+    reaction_type reaction_type NOT NULL,
 
     member_id uuid  not null constraint reaction_member_id_fkey references "members" on update restrict on delete restrict,
     story_id  uuid not null constraint reaction_story_id_fkey references stories on update restrict on delete restrict,

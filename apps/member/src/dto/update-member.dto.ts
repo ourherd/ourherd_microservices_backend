@@ -85,6 +85,7 @@ export class UpdateMemberDto  {
   @IsOptional()
   public suburb: string;
 
+
   @ApiProperty({
     description: "Member Postcode",
     example: 2000,
@@ -107,7 +108,7 @@ export class UpdateMemberDto  {
     description: "Member Employment type",
     enum: EmploymentType,
     isArray: false,
-    default: EmploymentType.NO_SELECTED,
+    default: EmploymentType.NO_APPLY,
     example: 'NO_SELECTED, STUDYING_AT_SCHOOL, STUDYING_AT_TAFE, STUDYING_AT_UNIVERSITY, WORKING_FULL_TIME, WORKING_PART_TIME, WORKING_CASUALLY, UNEMPLOYED, NO_APPLY',
     required: false
   })

@@ -7,13 +7,16 @@ import { MulterModule } from "@nestjs/platform-express";
 import multer from "multer";
 import { MemberGatewayController } from "./modules/member/member-gateway.controller";
 import { MemberProfileGatewayController } from "./modules/member/member-profile-gateway.controller";
-import { JwtStrategy } from '@app/authentication';
-
-import { getEnvPath } from '@app/common/env/env.helper';
 import { PassportModule } from '@nestjs/passport';
 import { FeedGatewayController } from './modules/feed/feed-gateway.controller';
 import { ReactionGatewayController } from './modules/reaction/reaction-gateway.controller';
+import { StoryBookmarkGatewayController } from "./modules/story/story-bookmark-gateway.controller";
+import { StoryDraftGatewayController } from "./modules/story/story-draft-gateway.controller";
 import { AccountGatewayController } from "./modules/account/account-gateway.controller";
+
+import { getEnvPath } from "@app/common/env/env.helper";
+import { JwtStrategy } from '@app/authentication';
+
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
 @Module({
@@ -36,14 +39,16 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     PassportModule.register({ defaultStrategy: 'jwt' }),
     // AuthenticationModule.register(),
     // PolicyModule,
-
   ],
   controllers: [
     AccountGatewayController,
     MemberGatewayController,
     MemberProfileGatewayController,
     FeedGatewayController,
-    ReactionGatewayController
+    ReactionGatewayController,
+    StoryBookmarkGatewayController,
+    StoryDraftGatewayController
+
   ],
   providers: [JwtStrategy],
 })
