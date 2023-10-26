@@ -1,6 +1,6 @@
 import { StoryDraftBaseDto } from "./story.draft.base.dto";
 import { IsEnum, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
-import { StoryType } from "../constant/story.enum";
+import { StoryType, StoryMedium } from "../constant/story.enum";
 import { Transform } from "class-transformer";
 
 export class StoryDraftTextFreeformDto extends StoryDraftBaseDto {
@@ -14,10 +14,17 @@ export class StoryDraftTextFreeformDto extends StoryDraftBaseDto {
   @IsNotEmpty()
   public content: string;
 
-  @Transform(({ value }) => value = StoryType.TEXT )
+  @Transform(({ value }) => value = StoryType.TEXT_FREE_FORM )
   @IsString()
   @IsOptional()
   @IsEnum(StoryType)
-  readonly story_type: StoryType = StoryType.TEXT;
+  readonly story_type: StoryType = StoryType.TEXT_FREE_FORM;
+
+  @Transform(({ value }) => value = StoryMedium.TEXT )
+  @IsString()
+  @IsOptional()
+  @IsEnum(StoryMedium)
+  readonly story_medium: StoryMedium = StoryMedium.TEXT;
+
 
 }

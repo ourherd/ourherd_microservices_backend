@@ -1,4 +1,5 @@
-CREATE TYPE MemberStatus AS ENUM ('ACTIVATED', 'INACTIVATED', 'BANNED');
+DROP TYPE member_status;
+CREATE TYPE member_status AS ENUM ('ACTIVATED', 'INACTIVATED', 'BANNED');
 
 CREATE TABLE IF NOT EXISTS public.members
 (
@@ -9,7 +10,7 @@ CREATE TABLE IF NOT EXISTS public.members
     first_name text,
     last_name text, -- potentially use and based on legacy
     birthday  date,
-    "status" MemberStatus default 'ACTIVATED',
+    "status" member_status default 'ACTIVATED',
     verified boolean default false,
     country text,
     suburb text,

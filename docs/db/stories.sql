@@ -1,5 +1,10 @@
+DROP TYPE story_statuses;
 CREATE TYPE story_statuses AS ENUM ('PUBLISHED', 'AWAITING_REVIEW', 'ON_REVIEW', 'CO_CREATION', 'DRAFT', 'SUBMITTED' );
+
+DROP TYPE story_medium;
 CREATE TYPE story_medium AS ENUM ('VIDEO', 'TEXT');
+
+DROP TYPE story_type;
 CREATE TYPE story_type AS ENUM ('VIDEO', 'TEXT_FREE_FORM', 'TEXT_GUIDED');
 
 CREATE TABLE IF NOT EXISTS public.stories

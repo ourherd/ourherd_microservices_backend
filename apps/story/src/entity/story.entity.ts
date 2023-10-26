@@ -1,6 +1,6 @@
 import { Column, Entity } from "typeorm";
 import { AbstractEntity } from "@app/database/base/base.entity";
-import { StorySourceType, StoryStatus, StoryType } from "../constant/story.enum";
+import { StoryMedium, StorySourceType, StoryStatus, StoryType } from "../constant/story.enum";
 
 @Entity({
   name: 'stories'
@@ -18,7 +18,19 @@ export class StoryEntity extends AbstractEntity {
     enum: StoryStatus,
     default: StoryStatus.DRAFT
   })
-  status: StoryStatus;
+  story_status: StoryStatus;
+
+  @Column({
+    type: "enum",
+    enum: StoryType,
+  })
+  story_type: StoryType;
+
+  @Column({
+    type: "enum",
+    enum: StoryMedium,
+  })
+  story_medium: StoryMedium;
 
   @Column({ default: false, nullable: true })
   has_hero_statement: boolean;
@@ -40,12 +52,6 @@ export class StoryEntity extends AbstractEntity {
 
   @Column({ nullable: true })
   content_4: string;
-
-  @Column({
-    type: "enum",
-    enum: StoryType
-  })
-  story_type: StoryType;
 
   @Column({ nullable: true, default: 0 })
   order: number;
