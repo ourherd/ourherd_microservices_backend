@@ -1,34 +1,27 @@
-import { IServiceResponse, RabbitServiceName } from '@app/rabbit';
-import { IJwtPayload } from '@app/token';
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { ClientProxy } from '@nestjs/microservices';
+import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { MEMBER_MESSAGE_PATTERNS } from 'apps/member/src/constant/member-patterns.constants';
-import { MemberEntity } from 'apps/member/src/entity/member.entity';
+import { passportJwtSecret } from 'jwks-rsa';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
-    constructor(
-        private configService: ConfigService
-        //@Inject(RabbitServiceName.AUTH) private authClient: ClientProxy
-    ) {
+    constructor() {
         super({
-            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-            ignoreExpiration: false,
-            secretOrKey: configService.get<string>('JWT_SECRET'),
+          jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+          ignoreExpiration: false,
+          _audience: process.env.AWS_COGNITO_COGNITO_CLIENT_ID,
+          issuer: process.env.AWS_COGNITO_AUTHORITY,
+          algorithms: ['RS256'],
+          secretOrKeyProvider: passportJwtSecret({
+            cache: true,
+            rateLimit: true,
+            jwksRequestsPerMinute: 5,
+            jwksUri: process.env.AWS_COGNITO_AUTHORITY + '/.well-known/jwks.json',
+          }),
         });
-    }
-
-    async validate(payload: IJwtPayload) {
-        // const { state, data: user } = await firstValueFrom(
-        //     //this.userClient.send<IServiceResponse<UserEntity>>(USER_MESSAGE_PATTERNS.FIND_BY_ID, payload.id)
-        // )
-        // if (!state) {
-        //     throw new UnauthorizedException();
-        // }
-        // return user;
-    }
+      }
+    
+      async validate(payload: any) {
+        return { idUser: payload.username, email: payload.email, roles: payload['cognito:groups']};
+      }
 }

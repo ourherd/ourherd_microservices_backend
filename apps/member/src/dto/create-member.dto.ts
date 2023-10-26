@@ -3,6 +3,12 @@ import { Transform } from "class-transformer";
 import { uuid } from "uuidv4";
 import { ApiProperty } from "@nestjs/swagger";
 
+export enum MemberStatus {
+  ACTIVED = 'ACTIVATED',
+  DEACTIVATED = 'DEACTIVATED',
+  BANNED = 'BANNED'
+}
+
 export class CreateMemberDto  {
 
   @IsUUID()
@@ -26,6 +32,5 @@ export class CreateMemberDto  {
   // TODO This is not working yet
   // @EmailNotRegistered({ message: 'email already registered' })
   public email: string;
-
 
 }
