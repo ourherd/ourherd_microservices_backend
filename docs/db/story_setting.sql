@@ -1,11 +1,11 @@
--- CREATE TYPE story_visibility AS ENUM ('PUBLIC', 'PRIVATE');
+CREATE TYPE story_visibility AS ENUM ('PUBLIC', 'PRIVATE');
 
 CREATE TABLE IF NOT EXISTS public.story_settings
 (
     id uuid  default gen_random_uuid() not null constraint story_s_pkey primary key,
     story_id  uuid not null constraint story_setting_id_fkey references "stories" on update restrict on delete restrict,
 
-    visibility text default 'PUBLIC',
+    visibility story_visibility default 'PUBLIC',
     is_shareable  boolean default true not null,
     -- privacy table
     share_name boolean default false,

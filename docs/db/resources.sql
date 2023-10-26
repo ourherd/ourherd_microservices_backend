@@ -1,11 +1,12 @@
--- CREATE TYPE resource_media_type AS ENUM ('VIDEO', 'IMAGE');
+DROP TYPE resource_media_type;
+CREATE TYPE resource_media_type AS ENUM ('VIDEO', 'IMAGE');
 
-CREATE TABLE IF NOT EXISTS public.resources
+CREATE TABLE IF NOT EXISTS public.story_resources
 (
     id uuid  default gen_random_uuid() not null constraint resource_pkey primary key,
     story_id uuid,
 
-    resource_type resource_media_type not null default 'VIDEO',
+    resource_type resource_media_type,
     media_resource_url text,
     media_preview_url text,
 

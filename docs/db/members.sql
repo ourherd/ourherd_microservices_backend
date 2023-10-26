@@ -1,3 +1,6 @@
+DROP TYPE member_status;
+CREATE TYPE member_status AS ENUM ('ACTIVATED', 'INACTIVATED', 'BANNED');
+
 CREATE TABLE IF NOT EXISTS public.members
 (
     id uuid  default gen_random_uuid() not null constraint member_pkey primary key,
@@ -7,7 +10,7 @@ CREATE TABLE IF NOT EXISTS public.members
     first_name text,
     last_name text, -- potentially use and based on legacy
     birthday  date,
-    "status" text default 'ACTIVATED',
+    "status" member_status default 'ACTIVATED',
     verified boolean default false,
     country text,
     suburb text,

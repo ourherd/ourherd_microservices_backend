@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS public.survey_members
     member_id uuid,
     full_name varchar(255),
     consent boolean default false,
-    queston_text text,
+    question_text text,
     "status" varchar(255),
 
     created_at timestamp with time zone default now() not null,

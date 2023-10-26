@@ -5,6 +5,8 @@ import { MemberEntity } from 'apps/member/src/entity/member.entity';
 import { AccountEntity } from 'apps/account/src/entity/account.entity';
 import { AccountDeviceEntity } from 'apps/account/src/entity/account.device.entity';
 import { ReactionEntity } from 'apps/feed/src/entity/reaction.entity';
+import { StoryEntity } from 'apps/story/src/entity/story.entity';
+import { StoryBookmarkEntity } from 'apps/story/src/entity/story.bookmark.entity';
 // import { AccountEntity } from 'apps/account/src/entity/account.entity';
 // import { AuthRequestEntity } from "apps/auth/src/entity/auth-request.entity";
 
@@ -13,20 +15,24 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
         type: 'postgres',
         env: 'PRIMARY',
         entities: [
-            MemberEntity,
-            AccountEntity,
-            AccountDeviceEntity,
-            ReactionEntity
+          MemberEntity,
+          ReactionEntity,
+          StoryEntity,
+          StoryBookmarkEntity,
+          AccountEntity,
+          AccountDeviceEntity
         ]
     },
     secondary: {
         type: 'postgres',
         env: 'SECONDARY',
         entities: [
-            MemberEntity,
-            AccountEntity,
-            AccountDeviceEntity,
-            ReactionEntity
+          MemberEntity,
+          ReactionEntity,
+          StoryEntity,
+          StoryBookmarkEntity,
+          AccountEntity,
+          AccountDeviceEntity
         ]
     }
 };

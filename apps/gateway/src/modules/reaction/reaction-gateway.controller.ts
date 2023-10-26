@@ -8,7 +8,7 @@ import { PostReactionDto } from "../../../../feed/src/dto/post.reaction.dto";
 import { IGatewayResponse } from "../../common/interface/gateway.interface";
 import { ReactionEntity } from "../../../../feed/src/entity/reaction.entity";
 
-@ApiTags('Reaction Gateway')
+@ApiTags('Reaction Module')
 @Controller({
   path: '/reaction'
 })
