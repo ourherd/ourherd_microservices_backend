@@ -24,15 +24,21 @@ export class AccountService {
     @Inject(CognitoService) private awsCognitoService: CognitoService) { }
 
   async findByEmail(email: string): Promise<IServiceResponse<AccountEntity>> {
-    const account = await this.accountRepository.findOneBy(
+    const account = await this.accountRepository.find(
       {
-        email: email
-      }
+        where: {
+          email: email
+        },
+        relations: {
+          member_id: true
+        },
+      },
+
     );
 
     return {
       state: !!account,
-      data: account,
+      data: account[0],
       message: !!account ? ACCOUNT_MESSAGE_DB_RESPONSE.EMAIL_FOUND : ACCOUNT_MESSAGE_DB_RESPONSE.EMAIL_NOT_FOUND
     }
   }
