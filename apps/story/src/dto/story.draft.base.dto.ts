@@ -9,7 +9,7 @@ export class StoryDraftBaseDto {
   @IsString()
   @IsOptional()
   @Transform(({ value }) => value = v4())
-  public id: string = uuid();
+  public id: string = v4();
 
   @IsUUID()
   @IsString()
