@@ -15,7 +15,7 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
         entities: [
             MemberEntity,
             AccountEntity,
-            AccountDeviceEntity
+            AccountDeviceEntity,
             ReactionEntity
         ]
     },
@@ -25,7 +25,7 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
         entities: [
             MemberEntity,
             AccountEntity,
-            AccountDeviceEntity
+            AccountDeviceEntity,
             ReactionEntity
         ]
     }
