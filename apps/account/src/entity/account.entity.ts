@@ -1,16 +1,16 @@
 import { Column, Entity, OneToOne, JoinColumn, OneToMany } from "typeorm";
 import { AbstractEntity } from '@app/database/base/base.entity';
 import { AccountDeviceEntity } from './account.device.entity'
+import { MemberEntity } from "apps/member/src/entity/member.entity";
 
 @Entity({
   name: 'accounts'
 })
 
-// TODO add member id as a FK
 export class AccountEntity extends AbstractEntity {
 
-  @Column({ nullable: false })
-  member_id: string;
+  @OneToOne(() => MemberEntity)
+  member_id: MemberEntity;
 
   @Column({ nullable: true })
   email: string;

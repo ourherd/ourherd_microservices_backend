@@ -9,12 +9,12 @@ import { AuthChangePasswordUserDto } from "apps/account/src/dto/change-password.
 import { AuthForgotPasswordUserDto } from "apps/account/src/dto/reset-forget-password.dto";
 import { AuthConfirmPasswordUserDto } from "apps/account/src/dto/reset-confirm-password.dto";
 
-@ApiTags('Account Gateway')
+@ApiTags('Password Gateway')
 @Controller({
-  path: '/account'
+  path: '/password'
 })
 
-export class AccountGatewayController {
+export class AccountPasswordGatewayController {
 
   constructor(
     @Inject(RabbitServiceName.ACCOUNT) private accountClient: ClientProxy) { }

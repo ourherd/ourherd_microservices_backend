@@ -1,16 +1,17 @@
 import { Module } from "@nestjs/common";
-import { AccountController } from "./account.controller";
-import { AccountService } from "./account.service";
+import { AccountController } from "./controllers/account.controller";
+import { AccountService } from "./services/account.service";
 import { RabbitModule, RabbitServiceName } from "@app/rabbit";
 import { ConfigModule } from "@nestjs/config";
 import { Database, DatabaseModule } from "@app/database";
 import { getEnvPath } from "@app/common/env/env.helper";
 import { AccountEntity } from "./entity/account.entity";
 import { CognitoModule } from "@libs/cognito";
+import { PasswordService } from "./services/password.service";
+import { PasswordController } from "./controllers/password.controller";
 
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
-// TODO ADD service and controller
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -22,8 +23,8 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     RabbitModule.forClientProxy(RabbitServiceName.MEMBER),
     CognitoModule,
   ],
-  controllers: [AccountController],
-  providers: [AccountService],
+  controllers: [AccountController, PasswordController],
+  providers: [AccountService, PasswordService],
 })
 
 export class AccountModule {}
