@@ -1,5 +1,5 @@
 import { MemberEntity } from "apps/member/src/entity/member.entity";
-import { IsEnum, IsNotEmpty, IsOptional, IsString, Matches, MinLength } from "class-validator";
+import { IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID, Matches, MinLength } from "class-validator";
 import { uuid } from "uuidv4";
 
 export enum MemberType {
@@ -10,8 +10,9 @@ export enum MemberType {
 
 export class RegisterAccountDto {
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
+  @IsUUID()
   public id: string = uuid();
 
   @IsOptional()
