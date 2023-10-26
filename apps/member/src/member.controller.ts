@@ -4,12 +4,11 @@ import { MemberService } from './member.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { MEMBER_MESSAGE_PATTERNS } from './constant/member-patterns.constants';
 import { MemberEntity } from './entity/member.entity';
-
 import { CreateMemberDto } from './dto/create-member.dto';
 import { UpdateMemberDto } from './dto/update-member.dto';
-
 import { IServiceResponse } from '@app/rabbit';
 import { IPagination, PaginationDto } from '@app/common';
+import { ACCOUNT_MESSAGE_PATTERNS } from 'apps/account/src/constant/account-patterns.constants';
 
 @Controller()
 export class MemberController {

@@ -14,7 +14,7 @@ async function bootstrap() {
   // * start
   await app.startAllMicroservices();
 
-  logger.log(`🚀 { ` + ACCOUNT_MODULE +` } running 🚀`);
+  logger.log(`🚀 Application { ` + ACCOUNT_MODULE +` } running 🚀`);
 
 }
 bootstrap();

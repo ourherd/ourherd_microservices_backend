@@ -3,8 +3,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { getEnvPath } from '@app/common/env/env.helper';
 
+const envFilePath: string = getEnvPath(`${__dirname}/common/envs`);
+
 export class TokenModule {
-  // const envFilePath: string = getEnvPath(`${__dirname}/common/envs`);
+
   static register(): DynamicModule {
     return {
       module: TokenModule,
@@ -12,7 +14,7 @@ export class TokenModule {
         JwtModule.registerAsync({
           imports: [
             ConfigModule.forRoot({
-              envFilePath: './.env'
+              envFilePath: envFilePath
             })
           ],
           useFactory: (configService: ConfigService) => ({

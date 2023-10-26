@@ -160,6 +160,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/moderation/tsconfig.app.json"
       }
+    },
+    "cognito": {
+      "type": "library",
+      "root": "libs/cognito",
+      "entryFile": "index",
+      "sourceRoot": "libs/cognito/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/cognito/tsconfig.lib.json"
+      }
     }
   },
   "monorepo": true,
