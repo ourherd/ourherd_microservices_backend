@@ -1,6 +1,6 @@
 CREATE TYPE story_statuses AS ENUM ('PUBLISHED', 'AWAITING_REVIEW', 'ON_REVIEW', 'CO_CREATION', 'DRAFT', 'SUBMITTED' );
 CREATE TYPE story_medium AS ENUM ('VIDEO', 'TEXT');
-CREATE TYPE story_type AS ENUM ('VIDEO', 'TEXT_FREEFORM', 'TEXT_GUIDED');
+CREATE TYPE story_type AS ENUM ('VIDEO', 'TEXT_FREE_FORM', 'TEXT_GUIDED');
 
 CREATE TABLE IF NOT EXISTS public.stories
 (
@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS public.stories
     title varchar(255),
     story_medium story_medium not null,
     story_type story_type not null,
-    "status" story_statuses not null default 'DRAFT',
+    story_status story_statuses not null default 'DRAFT',
     source text default 'OURHERD_APP',
 
     has_hero_statement boolean default false not null,
