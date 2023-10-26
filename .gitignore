@@ -39,3 +39,4 @@ lerna-debug.log*
 .vscode/settings.json
 /envs/*.env
 envs
+/envs
