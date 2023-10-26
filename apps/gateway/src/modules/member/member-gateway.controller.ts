@@ -11,7 +11,7 @@ import { ClientProxy } from "@nestjs/microservices";
 import { CreateMemberDto } from "../../../../member/src/dto/create-member.dto";
 import { UpdateMemberDto } from "../../../../member/src/dto/update-member.dto";
 
-@ApiTags('Member Gateway')
+@ApiTags('Member Module')
 @Controller({
   path: '/member'
 })

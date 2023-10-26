@@ -1,9 +1,4 @@
 import { PaginationDto } from "@app/common";
-import { ApiProperty, IntersectionType } from "@nestjs/swagger";
-import { Transform } from "class-transformer";
-import { IsBoolean, IsDateString, IsNumber, IsOptional, IsString } from "class-validator";
+import { IntersectionType } from "@nestjs/swagger";
 
-export class FindMemberDto extends IntersectionType(PaginationDto) {
-
-
-}
+export class FindMemberDto extends IntersectionType(PaginationDto) {}

@@ -1,20 +1,7 @@
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsString,
-  MinLength,
-  Matches,
-  IsEnum,
-  IsOptional,
-  IsUUID,
-  IsBoolean
-} from "class-validator";
-import { Transform } from 'class-transformer';
-import {
-  EmailNotRegistered
-} from "@app/common/validation-rules/email-not-registered.rule";
+import { IsEmail, IsNotEmpty, IsOptional, IsString, IsUUID, Matches, MinLength } from "class-validator";
+import { Transform } from "class-transformer";
 import { uuid } from "uuidv4";
-
+import { ApiProperty } from "@nestjs/swagger";
 
 export enum MemberStatus {
   ACTIVED = 'ACTIVATED',
@@ -30,6 +17,12 @@ export class CreateMemberDto  {
   @Transform(({ value }) => value = uuid())
   public id: string;
 
+  @ApiProperty({
+    description: 'Email address',
+    pattern: '/^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,3}$/g',
+    example: 'hello@ourherd.io',
+    required: true
+  })
   @IsEmail()
   @IsNotEmpty()
   @IsString()
@@ -39,14 +32,5 @@ export class CreateMemberDto  {
   // TODO This is not working yet
   // @EmailNotRegistered({ message: 'email already registered' })
   public email: string;
-
-  @IsEnum(MemberStatus)
-  @IsOptional()
-  readonly status?: MemberStatus = MemberStatus.ACTIVED;
-
-  @IsOptional()
-  @IsBoolean()
-  @Transform(({ value} ) => value === false)
-  readonly verified: boolean;
 
 }

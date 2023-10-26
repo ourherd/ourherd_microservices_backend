@@ -4,7 +4,7 @@ import { IGatewayResponse } from "../../common/interface/gateway.interface";
 import { RabbitServiceName } from "@app/rabbit";
 import { ClientProxy } from "@nestjs/microservices";
 
-@ApiTags('Feed Gateway')
+@ApiTags('Feed Module')
 @Controller({
   path: '/feed'
 })

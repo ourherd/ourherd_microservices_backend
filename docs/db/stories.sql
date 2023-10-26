@@ -1,6 +1,6 @@
-CREATE TYPE StoryStatuses AS ENUM ('PUBLISHED', 'AWAITING_REVIEW', 'ON_REVIEW', 'CO_CREATION', 'DRAFT', 'SUBMITTED' );
-CREATE TYPE StoryMedium AS ENUM ('VIDEO', 'TEXT');
-CREATE TYPE StoryType AS ENUM ('VIDEO', 'TEXT_FREEFORM', 'TEXT_GUIDED');
+CREATE TYPE story_statuses AS ENUM ('PUBLISHED', 'AWAITING_REVIEW', 'ON_REVIEW', 'CO_CREATION', 'DRAFT', 'SUBMITTED' );
+CREATE TYPE story_medium AS ENUM ('VIDEO', 'TEXT');
+CREATE TYPE story_type AS ENUM ('VIDEO', 'TEXT_FREEFORM', 'TEXT_GUIDED');
 
 CREATE TABLE IF NOT EXISTS public.stories
 (
@@ -8,8 +8,11 @@ CREATE TABLE IF NOT EXISTS public.stories
     member_id uuid not null constraint story_member_id_fkey references "members" on update restrict on delete restrict,
 
     title varchar(255),
-    story_medium StoryMedium,
-    story_type StoryType,
+    story_medium story_medium not null,
+    story_type story_type not null,
+    "status" story_statuses not null default 'DRAFT',
+    source text default 'OURHERD_APP',
+
     has_hero_statement boolean default false not null,
     hero_statement varchar(255),
     -- content for TEXT
@@ -20,15 +23,12 @@ CREATE TABLE IF NOT EXISTS public.stories
     content_3 text,
     content_4 text,
 
-    status StoryStatuses default 'DRAFT',
     "order"              integer,
     published_at         timestamp with time zone,
     ranking              integer  default 0 not null,
-    source text default 'OURHERD_APP',
     revision serial,
 
     created_at timestamp with time zone default now() not null,
     updated_at timestamp with time zone default now() not null,
     deleted_at timestamptz
-
 );
