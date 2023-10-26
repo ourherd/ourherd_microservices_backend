@@ -40,18 +40,16 @@ export class AccountGatewayController {
         )
     );
 
-    let memberEntity = resultMember.data
-
     let resultAccount = await firstValueFrom(
-      this.accountClient.send<IServiceResponse<AccountEntity>, { createDto: RegisterAccountDto, memberEntity: MemberEntity }>
+      this.accountClient.send<IServiceResponse<AccountEntity>, { createDto: RegisterAccountDto }>
         (
           ACCOUNT_MESSAGE_PATTERNS.REGISTER,
           {
-            createDto,
-            memberEntity
+            createDto
           }
         )
     );
+
     return resultAccount;
   }
 

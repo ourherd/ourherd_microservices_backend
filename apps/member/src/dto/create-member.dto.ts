@@ -15,7 +15,7 @@ export class CreateMemberDto  {
   @IsOptional()
   @IsString()
   @Transform(({ value }) => value = v4())
-  public id: string;
+  public id: string =  v4();
 
   @ApiProperty({
     description: 'Email address',

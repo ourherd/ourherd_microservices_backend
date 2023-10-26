@@ -15,10 +15,10 @@ export class RegisterAccountDto {
   @IsString()
   @IsUUID()
   @Transform(({ value }) => value = v4())
-  public id: string;
+  public id: string = v4();
 
   @IsOptional()
-  public member_id: MemberEntity;
+  public member_id: string = v4();
 
   @IsNotEmpty()
   @IsString()
