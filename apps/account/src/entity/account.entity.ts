@@ -32,7 +32,4 @@ export class AccountEntity extends AbstractEntity {
   @JoinColumn({ name: "member_id" })
   member: MemberEntity
 
-  @Column({ nullable: true })
-  member_id: string;
-
 }

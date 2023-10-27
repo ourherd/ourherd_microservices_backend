@@ -18,7 +18,7 @@ export class RegisterAccountDto {
   public id: string = v4();
 
   @IsOptional()
-  public member_id: string = v4();
+  public member: MemberEntity
 
   @IsNotEmpty()
   @IsString()

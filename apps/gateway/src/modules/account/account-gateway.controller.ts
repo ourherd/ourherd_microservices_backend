@@ -40,6 +40,10 @@ export class AccountGatewayController {
         )
     );
 
+    // follow the concept of relational entity field
+    // https://github.com/typeorm/typeorm/blob/master/docs/one-to-one-relations.md
+    createDto.member = resultMember.data
+
     let resultAccount = await firstValueFrom(
       this.accountClient.send<IServiceResponse<AccountEntity>, { createDto: RegisterAccountDto }>
         (

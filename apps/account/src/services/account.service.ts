@@ -58,7 +58,6 @@ export class AccountService {
       const password = createAccountDto.password;
       const hash = await bcrypt.hash(password, this.saltOrRounds);
       createAccountDto.password = hash;
-      createAccountDto.member_id = createAccountDto.member_id;
 
       const result = await this.accountRepository.save(createAccountDto);
 
