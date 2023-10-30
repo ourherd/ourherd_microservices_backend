@@ -5,6 +5,7 @@ import {
   CognitoUser,
   CognitoUserPool,
 } from 'amazon-cognito-identity-js';
+import AWS from 'aws-sdk';
 
 @Injectable()
 export class CognitoService {
@@ -18,11 +19,13 @@ export class CognitoService {
   }
 
   async registerUser(
-    email: string, 
+    email: string,
     password: string
-    ) {
+  ) {
 
-    return new Promise((resolve, reject) => {
+    // sign up user with email
+
+    const signUpResult = new Promise((resolve, reject) => {
       this.userPool.signUp(
         email,
         password,
@@ -37,6 +40,32 @@ export class CognitoService {
         },
       );
     });
+
+    AWS.config.update({
+      'region': process.env.AWS_REGION,
+      'accessKeyId': process.env.AWS_ACCESS_KEY_ID,
+      'secretAccessKey': process.env.AWS_SECRET_ACCESS_KEY
+    });
+    let cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider();
+
+    let parameters = { 
+      UserPoolId : process.env.AWS_COGNITO_USER_POOL_ID,
+      Username : email,
+      UserAttributes : [
+          {
+              'Name': 'email_verified' ,
+              'Value': 'true'
+          },
+      ]}
+      
+    cognitoIdentityServiceProvider.adminUpdateUserAttributes(parameters, function (err, result) {
+        if(err)
+        console.log(err);
+        else
+        console.log("Attribute updated successfully");
+    })
+
+    return signUpResult
   }
 
   async authenticateUser(
@@ -75,8 +104,8 @@ export class CognitoService {
   }
 
   async changeUserPassword(
-    email: string, 
-    currentPassword: string, 
+    email: string,
+    currentPassword: string,
     newPassword: string
   ) {
 
@@ -138,8 +167,8 @@ export class CognitoService {
   }
 
   async confirmUserPassword(
-    email: string, 
-    confirmationCode: string, 
+    email: string,
+    confirmationCode: string,
     newPassword: string
   ) {
 
@@ -163,7 +192,7 @@ export class CognitoService {
   }
 
   async verifyUser(
-    email: string, 
+    email: string,
     confirmationCode: string
   ) {
 
@@ -172,7 +201,7 @@ export class CognitoService {
       Pool: this.userPool,
     };
 
-    const userCognito = new CognitoUser(userData); 
+    const userCognito = new CognitoUser(userData);
 
     return new Promise((resolve, reject) => {
       userCognito.confirmRegistration(confirmationCode,
@@ -186,9 +215,9 @@ export class CognitoService {
         })
     });
   }
-  
+
   async refreshToken(
-    email: string, 
+    email: string,
     refreshToken: string
   ) {
 
