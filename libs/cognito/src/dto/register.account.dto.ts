@@ -11,7 +11,7 @@ import {
   MinLength
 } from "class-validator";
 import { Transform } from "class-transformer";
-import { uuid } from "uuidv4";
+import { v4 } from 'uuid';
 
 export enum MemberType {
   MEMBER = 'MEMBER',
@@ -21,13 +21,11 @@ export enum MemberType {
 
 export class RegisterAccountDto {
 
-  // @IsUUID()
   @IsOptional()
   @IsString()
-  @Transform(({ value }) => value = uuid())
-  public id: string;
+  @Transform(({ value }) => value = v4())
+  public id: string = v4();
 
-  // @IsUUID()
   @IsOptional()
   @IsString()
   public member_id: string;

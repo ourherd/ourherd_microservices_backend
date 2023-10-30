@@ -50,7 +50,6 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     ReactionGatewayController,
     StoryBookmarkGatewayController,
     StoryDraftGatewayController
-
   ],
   providers: [JwtStrategy],
 })

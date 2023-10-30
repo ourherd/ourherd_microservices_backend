@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS public.accounts
 
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
-    deleted_at timestamptz
+    deleted_at timestamptz,
+    CONSTRAINT fk_member FOREIGN KEY(member_id) REFERENCES members(id) ON DELETE CASCADE
 );
 
 SELECT enum_range(NULL::role_type);

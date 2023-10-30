@@ -1,5 +1,6 @@
-import { Column, Entity, OneToMany } from "typeorm";
-import { AbstractEntity } from '@app/database/base/base.entity';
+import { Column, Entity, JoinColumn, OneToOne } from "typeorm";
+
+import { AbstractEntity } from "@app/database/base/base.entity";
 import { AccountEntity } from "apps/account/src/entity/account.entity";
 import { IsEnum, IsOptional } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
@@ -95,7 +96,14 @@ export class MemberEntity extends AbstractEntity {
   @Column({ nullable: true })
   sequence_identity: string;
 
-  @OneToMany(() => AccountEntity, (user) => user.member_id)
-  account: AccountEntity
+  // @OneToMany(() => AccountEntity, (user) => user.member_id)
+  // account: AccountEntity
+
+  // @OneToOne(() => AccountEntity, (account) => account.member, { cascade: true })
+  // @JoinColumn()
+  // account: AccountEntity;
+
+  // @OneToOne(() => User, (user) => user.profile)
+  // user: User;
 
 }

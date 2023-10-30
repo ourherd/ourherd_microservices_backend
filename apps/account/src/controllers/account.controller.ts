@@ -25,10 +25,9 @@ export class AccountController {
 
   @MessagePattern(ACCOUNT_MESSAGE_PATTERNS.REGISTER)
   async register(
-    @Payload('createDto') registerAccountDto: RegisterAccountDto,  
-    @Payload('memberEntity') memberEntity: MemberEntity
+    @Payload('createDto') registerAccountDto: RegisterAccountDto
   ): Promise<IServiceResponse<AccountEntity>> {
-    return this.accountService.register(registerAccountDto, memberEntity);
+    return this.accountService.register(registerAccountDto,);
   }
 
   @MessagePattern(ACCOUNT_MESSAGE_PATTERNS.VERIFY)
