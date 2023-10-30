@@ -12,9 +12,7 @@ export class MailerController {
   @MessagePattern(MAILER_MESSAGE_PATTERNS.WELCOME_EMAIL_REQUEST_SENT)
   async sendMailWelcome(
     @Payload('welcomeMailerDto') welcomeMailerDto: WelcomeMailerDto): Promise<IServiceResponse<String>> {
-    const mailerResult = this.mailerService.welcomeEmail(welcomeMailerDto)
-    console.log(mailerResult);
-    
+    const mailerResult = this.mailerService.welcomeEmail(welcomeMailerDto)    
     return mailerResult
   }
 }

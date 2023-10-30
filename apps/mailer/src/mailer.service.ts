@@ -25,7 +25,7 @@ export class MailerServiceExt {
           data: "SUCCESS"
         };
       } catch (err) {
-        console.log(err);
+        console.log("Error:", err);
         
         return {
           state: false,
@@ -35,7 +35,7 @@ export class MailerServiceExt {
 
 
     } catch (error) {
-      console.log(error);
+      console.log("Error:", error);
       return {
         state: false,
         data: error.name
