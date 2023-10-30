@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, IsOptional, IsString, IsUUID, Matches, MinLength } from "class-validator";
 import { Transform } from "class-transformer";
-import { uuid } from "uuidv4";
+import { v4 } from 'uuid';
 import { ApiProperty } from "@nestjs/swagger";
 
 export enum MemberStatus {
@@ -14,8 +14,8 @@ export class CreateMemberDto  {
   @IsUUID()
   @IsOptional()
   @IsString()
-  @Transform(({ value }) => value = uuid())
-  public id: string;
+  @Transform(({ value }) => value = v4())
+  public id: string =  v4();
 
   @ApiProperty({
     description: 'Email address',

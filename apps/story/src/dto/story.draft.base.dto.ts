@@ -1,6 +1,6 @@
 import { IsEnum, IsOptional, IsString, IsUUID } from "class-validator";
 import { Transform } from "class-transformer";
-import { uuid } from "uuidv4";
+import { v4 } from 'uuid';
 import { StorySourceType, StoryStatus } from "../constant/story.enum";
 
 export class StoryDraftBaseDto {
@@ -8,8 +8,8 @@ export class StoryDraftBaseDto {
   @IsUUID()
   @IsString()
   @IsOptional()
-  @Transform(({ value }) => value = uuid())
-  public id: string = uuid();
+  @Transform(({ value }) => value = v4())
+  public id: string = v4();
 
   @IsUUID()
   @IsString()

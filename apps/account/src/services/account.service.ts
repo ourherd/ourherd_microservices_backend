@@ -24,31 +24,29 @@ export class AccountService {
     @Inject(CognitoService) private awsCognitoService: CognitoService) { }
 
   async findByEmail(email: string): Promise<IServiceResponse<AccountEntity>> {
-    const account = await this.accountRepository.find(
-      {
-        where: {
-          email: email
-        },
-        relations: {
-          member_id: true
-        },
-      },
 
+    const account = await this.accountRepository.findOneBy(
+      {
+        email: email
+      }
     );
+
+    if ( account === null ) {
+      console.log('account ---> null ' + JSON.stringify(account) );
+    }
 
     return {
       state: !!account,
-      data: account[0],
+      data: account,
       message: !!account ? ACCOUNT_MESSAGE_DB_RESPONSE.EMAIL_FOUND : ACCOUNT_MESSAGE_DB_RESPONSE.EMAIL_NOT_FOUND
     }
   }
 
-  async register(createAccoutDto: RegisterAccountDto, memberEntity: MemberEntity): Promise<IServiceResponse<AccountEntity>> {
+  async register(createAccountDto: RegisterAccountDto): Promise<IServiceResponse<AccountEntity>> {
     try {
-
-      const accountExist = await this.findByEmail(createAccoutDto.email);
-      const password = createAccoutDto.password
-
+      // TODO replace this with a validation injection
+      // https://gist.github.com/zarv1k/3ce359af1a3b2a7f1d99b4f66a17f1bc
+      const accountExist = await this.findByEmail(createAccountDto.email);
       if (accountExist.state) {
         return {
           state: accountExist.state,
@@ -57,13 +55,14 @@ export class AccountService {
         };
       }
 
+      const password = createAccountDto.password;
       const hash = await bcrypt.hash(password, this.saltOrRounds);
-      createAccoutDto.password = hash
-      createAccoutDto.member_id = memberEntity
-      const result = await this.accountRepository.save(createAccoutDto);
+      createAccountDto.password = hash;
+
+      const result = await this.accountRepository.save(createAccountDto);
 
       await this.awsCognitoService.registerUser(
-        createAccoutDto.email,
+        createAccountDto.email,
         password
       )
 

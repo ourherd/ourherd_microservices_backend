@@ -9,10 +9,6 @@ import { MemberEntity } from "apps/member/src/entity/member.entity";
 
 export class AccountEntity extends AbstractEntity {
 
-  @ManyToOne(() => MemberEntity,(member) => member.account )
-  @JoinColumn({name: "member_id"})
-  member_id: MemberEntity;
-
   @Column({ nullable: true })
   email: string;
 
@@ -25,11 +21,15 @@ export class AccountEntity extends AbstractEntity {
   @Column({ nullable: true })
   default_role: string;
 
-  @OneToMany(type => AccountDeviceEntity, account => account.id)
-  @JoinColumn({name: "account_id"})
-  device: AccountDeviceEntity;
+  // @OneToMany(type => AccountDeviceEntity, account => account.id)
+  // @JoinColumn({name: "account_id"})
+  // device: AccountDeviceEntity;
 
   @Column({ default: false })
   verified: boolean;
+
+  @OneToOne(type => MemberEntity)
+  @JoinColumn({ name: "member_id" })
+  member: MemberEntity
 
 }
