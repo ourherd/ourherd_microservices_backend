@@ -5,7 +5,7 @@ DROP TYPE story_medium;
 CREATE TYPE story_medium AS ENUM ('VIDEO', 'TEXT');
 
 DROP TYPE story_type;
-CREATE TYPE story_type AS ENUM ('VIDEO', 'TEXT_FREE_FORM', 'TEXT_GUIDED');
+CREATE TYPE story_type AS ENUM ('VIDEO_FREE_FORM', 'TEXT_FREE_FORM', 'TEXT_GUIDED', 'VIDEO_ROULETTE', 'TEXT_ROULETTE' );
 
 CREATE TABLE IF NOT EXISTS public.stories
 (
@@ -37,3 +37,10 @@ CREATE TABLE IF NOT EXISTS public.stories
     updated_at timestamp with time zone default now() not null,
     deleted_at timestamptz
 );
+
+ALTER TYPE story_type RENAME VALUE 'VIDEO' TO 'VIDEO_FREE_FORM';
+ALTER TYPE story_type ADD VALUE 'VIDEO_ROULETTE';
+ALTER TYPE story_type ADD VALUE 'TEXT_ROULETTE';
+
+ALTER TYPE story_type RENAME VALUE 'ROULETTE_VIDEO' to 'VIDEO_ROULETTE';
+ALTER TYPE story_type RENAME VALUE 'ROULETTE_TEXT' to 'TEXT_ROULETTE';

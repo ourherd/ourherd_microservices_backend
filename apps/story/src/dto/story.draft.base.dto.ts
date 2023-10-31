@@ -7,7 +7,6 @@ export class StoryDraftBaseDto {
 
   @IsUUID()
   @IsString()
-  @IsOptional()
   @Transform(({ value }) => value = v4())
   public id: string = v4();
 
@@ -16,13 +15,11 @@ export class StoryDraftBaseDto {
   public member_id: string;
 
   @IsString()
-  @IsOptional()
   @IsEnum(StoryStatus)
   @Transform(({ value }) => value = StoryStatus.DRAFT)
   public status: StoryStatus = StoryStatus.DRAFT;
 
   @IsString()
-  @IsOptional()
   @IsEnum(StorySourceType)
   @Transform(({ value }) => value = StorySourceType.OURHERD_APP)
   public source: StorySourceType = StorySourceType.OURHERD_APP;

@@ -6,19 +6,19 @@ import { IServiceResponse } from "@app/rabbit";
 import { StoryDraftTextFreeformDto } from "../dto/story.draft.text-freeform.dto";
 import { StoryEntity } from "../entity/story.entity";
 import { StoryDraftTextGuidedDto } from "../dto/story.draft.text-guided.dto";
+import { StoryDraftVideoDto } from "../dto/story.draft.video.dto";
 
 @Controller()
 export class StoryDraftController {
 
   constructor(private readonly draftService: StoryDraftService) {}
 
-  // @MessagePattern(STORY_MESSAGE_PATTERNS.DRAFT_VIDEO)
-  // async draftVideo (
-  //   @Payload('draftDto') bookmarkDto: PostStoryBookmarkDto):
-  //   Promise<IServiceResponse<StoryBookmarkEntity>> {
-  //
-  //   // return await this.bookmarkService.save(bookmarkDto);
-  // }
+  @MessagePattern(STORY_MESSAGE_PATTERNS.DRAFT_VIDEO)
+  async draftVideo (
+    @Payload('draftDto') draftVideoDto: StoryDraftVideoDto):
+    Promise<IServiceResponse<StoryEntity>> {
+    return await this.draftService.draftVideo(draftVideoDto);
+  }
 
   @MessagePattern(STORY_MESSAGE_PATTERNS.DRAFT_TEXT_GUIDE)
   async draftImageGuide (

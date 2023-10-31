@@ -21,6 +21,9 @@ CREATE TABLE IF NOT EXISTS public.accounts
     CONSTRAINT fk_member FOREIGN KEY(member_id) REFERENCES members(id) ON DELETE CASCADE
 );
 
+ALTER TABLE public.accounts
+    ADD CONSTRAINT fk_account_members FOREIGN KEY (member_id) REFERENCES members (id);
+
 SELECT enum_range(NULL::role_type);
 
 CREATE TABLE IF NOT EXISTS public.account_devices

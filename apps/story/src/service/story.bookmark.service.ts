@@ -18,7 +18,8 @@ export class StoryBookmarkService {
     return await this.createOrCheckBookmark( bookmarkDto );
   }
 
-  private async createOrCheckBookmark ( bookmarkDto: PostStoryBookmarkDto ): Promise<IServiceResponse<StoryBookmarkEntity|null>> {
+  private async createOrCheckBookmark ( bookmarkDto: PostStoryBookmarkDto ):
+      Promise<IServiceResponse<StoryBookmarkEntity|null>> {
 
     let bookmark = await this.bookmarkRepository.findOneBy(
       {

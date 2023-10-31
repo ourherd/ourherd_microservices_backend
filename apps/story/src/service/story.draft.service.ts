@@ -6,6 +6,7 @@ import { IServiceResponse } from "@app/rabbit";
 import { StoryEntity } from "../entity/story.entity";
 import { StoryDraftTextFreeformDto } from "../dto/story.draft.text-freeform.dto";
 import { StoryDraftTextGuidedDto } from "../dto/story.draft.text-guided.dto";
+import { StoryDraftVideoDto } from "../dto/story.draft.video.dto";
 
 @Injectable()
 export class StoryDraftService {
@@ -15,8 +16,17 @@ export class StoryDraftService {
   constructor(
     @InjectRepository(StoryEntity, Database.PRIMARY)  private storyRepository: Repository<StoryEntity>) {}
 
-  async draftGuided ( draftGuidedDto: StoryDraftTextGuidedDto ) : Promise<IServiceResponse<StoryEntity|null>>{
+  async draftVideo ( draftVideoDto: StoryDraftVideoDto ) : Promise<IServiceResponse<StoryEntity|null>>{
+    const draft = await this.storyRepository.create(draftVideoDto);
+    const result = await this.storyRepository.save(draft);
+    return {
+      state: !!result,
+      data: result,
+      message: !!result ? 'CREATED' : 'CREATED_FAILED'
+    }
+  }
 
+  async draftGuided ( draftGuidedDto: StoryDraftTextGuidedDto ) : Promise<IServiceResponse<StoryEntity|null>>{
     const draft = await this.storyRepository.create(draftGuidedDto);
     const result = await this.storyRepository.save(draft);
     return {
@@ -27,7 +37,6 @@ export class StoryDraftService {
   }
 
   async draftFreeForm ( draftFreeFormDto: StoryDraftTextFreeformDto ) : Promise<IServiceResponse<StoryEntity|null>>{
-
     const draft = await this.storyRepository.create(draftFreeFormDto);
     const result = await this.storyRepository.save(draft);
     return {
