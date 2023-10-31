@@ -13,7 +13,8 @@ import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
 import { ClientProxy } from "@nestjs/microservices";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { IGatewayResponse } from "../../common/interface/gateway.interface";
-import { ParseUploadFilePipe } from "@app/common/pipe/parse-upload-file.pipe";
+import { ParseUploadImageFilePipe } from "@app/common/pipe/parse-upload-image-file.pipe";
+import { ParseUploadVideoFilePipe } from "@app/common/pipe/parse-upload-video-file.pipe";
 import { firstValueFrom } from "rxjs";
 import { STORY_MESSAGE_PATTERNS } from "../../../../story/src/constant/story-patterns.constants";
 import { StoryDraftVideoDto } from "../../../../story/src/dto/story.draft.video.dto";
@@ -32,10 +33,10 @@ export class StoryDraftGatewayController {
   constructor(@Inject(RabbitServiceName.STORY) private storyDraftClient: ClientProxy) { }
 
   @Post('/video')
-  @UseInterceptors(FileInterceptor('resource'))
+  @UseInterceptors(FileInterceptor('story_file'))
   async draftVideo (
     draftVideoDto: StoryDraftVideoDto,
-    @UploadedFile(new ParseUploadFilePipe()) resource: Express.Multer.File
+    @UploadedFile(new ParseUploadVideoFilePipe()) resource: Express.Multer.File
   ) {
 
   }

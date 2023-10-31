@@ -5,11 +5,11 @@ import { StoryMedium, StoryType } from "../constant/story.enum";
 
 export class StoryDraftVideoDto extends StoryDraftBaseDto {
 
-  @Transform(({ value }) => value = StoryType.VIDEO )
+  @Transform(({ value }) => value = StoryType.VIDEO_FREE_FORM )
   @IsString()
   @IsOptional()
   @IsEnum(StoryType)
-  readonly story_type: StoryType = StoryType.VIDEO;
+  readonly story_type: StoryType = StoryType.VIDEO_FREE_FORM;
 
   @IsString()
   @IsOptional()
