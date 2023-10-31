@@ -18,6 +18,7 @@ import { AccountPasswordGatewayController } from "./modules/account/account-pass
 import { getEnvPath } from "@app/common/env/env.helper";
 import { JwtStrategy } from '@app/authentication';
 
+import { MailerGatewayController } from "./modules/mailer/mailer-gateway.controller";
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
 @Module({
@@ -34,6 +35,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     }),
 
     RabbitModule.forClientProxy(RabbitServiceName.ACCOUNT),
+    RabbitModule.forClientProxy(RabbitServiceName.EMAIL),
     RabbitModule.forClientProxy(RabbitServiceName.MEMBER),
     RabbitModule.forClientProxy(RabbitServiceName.FEED),
     RabbitModule.forClientProxy(RabbitServiceName.STORY),
@@ -44,6 +46,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
   controllers: [
     AccountGatewayController,
     AccountPasswordGatewayController,
+    MailerGatewayController,
     MemberGatewayController,
     MemberProfileGatewayController,
     FeedGatewayController,

@@ -1,12 +1,18 @@
-import { Controller, Get } from '@nestjs/common';
-import { MailerService } from './mailer.service';
+import { Controller } from '@nestjs/common';
+import { MailerServiceExt } from './mailer.service';
+import { MAILER_MESSAGE_PATTERNS } from './constant/mailer-patterns.constants';
+import { MessagePattern, Payload } from '@nestjs/microservices';
+import { IServiceResponse } from '@app/rabbit';
+import { WelcomeMailerDto } from './dto/welcome.mailer.dto';
 
 @Controller()
 export class MailerController {
-  constructor(private readonly mailerService: MailerService) {}
+  constructor(private readonly mailerService: MailerServiceExt) {}
 
-  @Get()
-  getHello(): string {
-    return this.mailerService.getHello();
+  @MessagePattern(MAILER_MESSAGE_PATTERNS.WELCOME_EMAIL_REQUEST_SENT)
+  async sendMailWelcome(
+    @Payload('welcomeMailerDto') welcomeMailerDto: WelcomeMailerDto): Promise<IServiceResponse<String>> {
+    const mailerResult = this.mailerService.welcomeEmail(welcomeMailerDto)    
+    return mailerResult
   }
 }

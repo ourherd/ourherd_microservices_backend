@@ -57,7 +57,7 @@
     "nest-aws-sdk": "^3.0.1",
     "nestjs-i18n": "^10.2.6",
     "nestjs-s3": "^2.0.1",
-    "nodemailer": "^6.9.6",
+    "nodemailer": "^6.9.7",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
     "pg": "^8.11.0",
