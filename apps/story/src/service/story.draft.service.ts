@@ -16,7 +16,6 @@ export class StoryDraftService {
   constructor(
     @InjectRepository(StoryEntity, Database.PRIMARY)  private storyRepository: Repository<StoryEntity>) {}
 
-
   async draftVideo ( draftVideoDto: StoryDraftVideoDto ) : Promise<IServiceResponse<StoryEntity|null>>{
     const draft = await this.storyRepository.create(draftVideoDto);
     const result = await this.storyRepository.save(draft);
