@@ -7,12 +7,10 @@ export class StoryDraftVideoDto extends StoryDraftBaseDto {
 
   @Transform(({ value }) => value = StoryType.VIDEO_FREE_FORM )
   @IsString()
-  @IsOptional()
   @IsEnum(StoryType)
   readonly story_type: StoryType = StoryType.VIDEO_FREE_FORM;
 
   @IsString()
-  @IsOptional()
   @IsEnum(StoryMedium)
   readonly story_medium: StoryMedium = StoryMedium.VIDEO;
 
