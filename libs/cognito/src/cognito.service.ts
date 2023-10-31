@@ -22,9 +22,6 @@ export class CognitoService {
     email: string,
     password: string
   ) {
-
-    // sign up user with email
-
     const signUpResult = new Promise((resolve, reject) => {
       this.userPool.signUp(
         email,
@@ -40,30 +37,6 @@ export class CognitoService {
         },
       );
     });
-
-    AWS.config.update({
-      'region': process.env.AWS_REGION,
-      'accessKeyId': process.env.AWS_ACCESS_KEY_ID,
-      'secretAccessKey': process.env.AWS_SECRET_ACCESS_KEY
-    });
-    let cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider();
-
-    let parameters = { 
-      UserPoolId : process.env.AWS_COGNITO_USER_POOL_ID,
-      Username : email,
-      UserAttributes : [
-          {
-              'Name': 'email_verified' ,
-              'Value': 'true'
-          },
-      ]}
-      
-    cognitoIdentityServiceProvider.adminUpdateUserAttributes(parameters, function (err, result) {
-        if(err)
-        console.log(err);
-        else
-        console.log("Attribute updated successfully");
-    })
 
     return signUpResult
   }
@@ -188,31 +161,6 @@ export class CognitoService {
           reject(err);
         },
       });
-    });
-  }
-
-  async verifyUser(
-    email: string,
-    confirmationCode: string
-  ) {
-
-    const userData = {
-      Username: email,
-      Pool: this.userPool,
-    };
-
-    const userCognito = new CognitoUser(userData);
-
-    return new Promise((resolve, reject) => {
-      userCognito.confirmRegistration(confirmationCode,
-        true,
-        (err, result) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(result);
-          }
-        })
     });
   }
 
