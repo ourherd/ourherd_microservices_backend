@@ -13,6 +13,6 @@ export class EmailVerificationEntity extends AbstractEntity {
   email: string;
 
   @Column({ nullable: true })
-  emailToken: string;
+  email_token: string;
 
 }

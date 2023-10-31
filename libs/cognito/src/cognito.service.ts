@@ -30,8 +30,10 @@ export class CognitoService {
         null,
         (err, result) => {
           if (!result) {
+            console.log('cognito ---> error ' + JSON.stringify(err));
             reject(err);
           } else {
+            console.log('cognito ---> success ' + JSON.stringify(result.user));
             resolve(result.user);
           }
         },

@@ -1,6 +1,5 @@
-import { BadRequestException, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import * as nodemailer from 'nodemailer';
 import { RegisterAccountDto } from "../dto/register.account.dto";
 import { IServiceResponse } from "@app/rabbit";
 import { AccountEntity } from '../entity/account.entity';
@@ -13,20 +12,22 @@ import { CognitoService } from '@libs/cognito';
 import { TokenAccountDto } from '../dto/token.account.dto';
 import { AuthVerifyUserDto } from '../dto/verify-email.account.dto';
 import { RefreshTokenAccountDto } from '../dto/refresh-token.account.dto';
-import { MemberEntity } from 'apps/member/src/entity/member.entity';
 import { EmailVerificationEntity } from '../entity/email-verification.entity';
 import { v4 } from 'uuid';
+import { plainToClass } from 'class-transformer';
+import { SendMailerDto } from 'apps/mailer/src/dto/send.mailer.dto';
 
 @Injectable()
 export class AccountService {
 
   private saltOrRounds = 10
+  private hourDivide = 6000
 
   constructor(
     @InjectRepository(AccountEntity, Database.PRIMARY) private accountRepository: Repository<AccountEntity>,
     @InjectRepository(EmailVerificationEntity, Database.PRIMARY) private emailVerificationRepository: Repository<EmailVerificationEntity>,
     @Inject(CognitoService) private awsCognitoService: CognitoService
-    ) { }
+  ) { }
 
   async findByEmail(email: string): Promise<IServiceResponse<AccountEntity>> {
 
@@ -36,8 +37,8 @@ export class AccountService {
       }
     );
 
-    if ( account === null ) {
-      console.log('account ---> null ' + JSON.stringify(account) );
+    if (account === null) {
+      console.log('account ---> null ' + JSON.stringify(account));
     }
 
     return {
@@ -70,8 +71,6 @@ export class AccountService {
         createAccountDto.email,
         password
       )
-
-      this.createEmailToken(createAccountDto.email);
 
       return {
         state: !!result,
@@ -116,73 +115,108 @@ export class AccountService {
 
   }
 
-  async createEmailToken(email: string): Promise<boolean> {
-    const emailVerification = await this.emailVerificationRepository.findOneBy({email: email}); 
-    const durationTime = (new Date().getTime() - emailVerification.created_at.getTime()) / 60000;
-    if (emailVerification && ( durationTime < 15 )) {
-      throw new HttpException('LOGIN.EMAIL_SENT_RECENTLY', HttpStatus.INTERNAL_SERVER_ERROR);
-    } else {
-      var emailVerificationModel = await this.emailVerificationRepository.update( 
-        {email: email},
-        { 
-          email: email,
-          emailToken: v4(),
-          created_at: new Date()
+  async createEmailToken(email: string): Promise<IServiceResponse<SendMailerDto>> {
+
+    try {
+
+      const emailVerification = await this.emailVerificationRepository.findOneBy({ email: email });
+
+      const emailVerificationObj = {
+        email: email,
+        email_token: v4(),
+        created_at: new Date()
+      }
+
+      const sendMailObj = {
+        email: email,
+        subject: "Verify Email",
+        html: 'Hi! <br><br> Thanks for your registration<br><br>' +
+          '<a href=' + 'localhost' + ':' + '3020' +
+          '/api/account/email/verify/' + emailVerificationObj.email_token +
+          '>Click here to activate your account</a>'
+      }
+
+
+
+      const sendMailerDto = plainToClass(SendMailerDto, sendMailObj);
+      const emailVerificationEntity = this.emailVerificationRepository.create(emailVerificationObj)
+      if (!!emailVerification === false) {
+        await this.emailVerificationRepository.save(
+          emailVerificationEntity
+        );
+        return {
+          state: true,
+          data: sendMailerDto
         }
-      );
-      return true;
-    }
-  }
+      }
 
-  async sendEmailVerification(email: string): Promise<boolean> {   
-    var model = await this.emailVerificationRepository.findOneBy({ email: email});
+      const durationTime = (new Date().getTime() - emailVerification.created_at.getTime()) / this.hourDivide;
+      if (emailVerification && (durationTime > 48)) {
+        throw new HttpException('ACCOUNT.EMAIL_SENT_RECENTLY', HttpStatus.INTERNAL_SERVER_ERROR);
+      } else {
+        var emailVerificationModel = await this.emailVerificationRepository.update(
+          { email: email },
+          emailVerificationEntity
+        );
+        return {
+          state: true,
+          data: sendMailerDto
+        }
+      }
 
-    if(model && model.emailToken){
-        let transporter = nodemailer.createTransport({
-            host: config.mail.host,
-            port: config.mail.port,
-            secure: config.mail.secure, // true for 465, false for other ports
-            auth: {
-                user: config.mail.user,
-                pass: config.mail.pass
-            }
-        });
-    
-        let mailOptions = {
-          from: '"Company" <' + config.mail.user + '>', 
-          to: email, // list of receivers (separated by ,)
-          subject: 'Verify Email', 
-          text: 'Verify Email', 
-          html: 'Hi! <br><br> Thanks for your registration<br><br>'+
-          '<a href='+ config.host.url + ':' + config.host.port +'/auth/email/verify/'+ model.emailToken + '>Click here to activate your account</a>'  // html body
-        };
-    
-        var sent = await new Promise<boolean>(async function(resolve, reject) {
-          return await transporter.sendMail(mailOptions, async (error, info) => {
-              if (error) {      
-                console.log('Message sent: %s', error);
-                return reject(false);
-              }
-              console.log('Message sent: %s', info.messageId);
-              resolve(true);
-          });      
-        })
-
-        return sent;
-    } else {
-      throw new HttpException('REGISTER.USER_NOT_REGISTERED', HttpStatus.FORBIDDEN);
+    } catch (e) {
+      return {
+        state: true,
+        data: e.name,
+        message: e.message
+      };
     }
   }
 
   async verifyEmail(authVerifyUserDto: AuthVerifyUserDto): Promise<IServiceResponse<UpdateResult>> {
-    let updateResult = null
     try {
 
-      return {
-        state: true,
-        data: updateResult,
-        message: ACCOUNT_MESSAGE_DB_RESPONSE.EMAIL_FOUND
-      };
+      let emailVerif = await this.emailVerificationRepository.findOneBy({
+        email_token: authVerifyUserDto.confirmationCode
+      });
+
+      
+
+      if (!!emailVerif == true && emailVerif.email) {
+
+        const durationTime = (new Date().getTime() - emailVerif.created_at.getTime()) / this.hourDivide;
+
+        if (durationTime > 48) {
+          return {
+            state: false,
+            data: null,
+            message: 'ACCOUNT.VERIFY_TOKEN_EXPIRED'
+          };
+        }
+
+        var accountFromDb = await this.accountRepository.findOneBy({ email: emailVerif.email });
+        if (accountFromDb) {
+          accountFromDb.verified = true
+          var savedUser = await this.accountRepository.update(
+            { email: emailVerif.email },
+            accountFromDb
+          );
+          await this.emailVerificationRepository.remove(emailVerif);
+          return {
+            state: !!savedUser,
+            data: savedUser
+          };
+        }
+      } else {
+
+        return {
+          state: false,
+          data: null,
+          message: 'ACCOUNT.VERIFY_TOKEN_NOT_FOUND'
+        };
+
+      }
+
     } catch (e) {
       return {
         state: true,
