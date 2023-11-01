@@ -54,6 +54,13 @@ export class MailerServiceExt {
   public async sendEmail(sendMailerDto: SendMailerDto): Promise<IServiceResponse<boolean>> {
 
     try {
+
+      if (!!sendMailerDto.email == false) {
+        return {
+          state: false,
+          data: null
+        };
+      }
       let mailOptions = {
         to: sendMailerDto.email,
         from: 'papatpon@batyr.com.au',
