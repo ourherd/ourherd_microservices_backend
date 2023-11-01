@@ -1,14 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
   AuthenticationDetails,
   CognitoRefreshToken,
   CognitoUser,
   CognitoUserPool,
 } from 'amazon-cognito-identity-js';
-import AWS from 'aws-sdk';
+import { COGNITO_SERVICE } from './constant/cognito-patterns.constants';
 
 @Injectable()
 export class CognitoService {
+  private logger = new Logger(COGNITO_SERVICE);
   private userPool: CognitoUserPool;
 
   constructor() {
@@ -30,10 +31,10 @@ export class CognitoService {
         null,
         (err, result) => {
           if (!result) {
-            console.log('cognito ---> error ' + JSON.stringify(err));
+            this.logger.log('cognito ---> error ' + JSON.stringify(err));
             reject(err);
           } else {
-            console.log('cognito ---> success ' + JSON.stringify(result.user));
+            this.logger.log('cognito ---> success ' + JSON.stringify(result.user));
             resolve(result.user);
           }
         },

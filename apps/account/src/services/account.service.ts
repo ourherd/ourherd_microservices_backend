@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { RegisterAccountDto } from "../dto/register.account.dto";
 import { IServiceResponse } from "@app/rabbit";
@@ -6,7 +6,7 @@ import { AccountEntity } from '../entity/account.entity';
 import { Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Database } from '@app/database';
-import { ACCOUNT_MESSAGE_DB_RESPONSE } from '../constant/account-patterns.constants';
+import { ACCOUNT_MESSAGE_DB_RESPONSE, ACCOUNT_MODULE, ACCOUNT_SERVICE } from '../constant/account-patterns.constants';
 import { LoginAccountDto } from '../dto/login.account.dto';
 import { CognitoService } from '@libs/cognito';
 import { TokenAccountDto } from '../dto/token.account.dto';
@@ -20,6 +20,7 @@ import { SendMailerDto } from 'apps/mailer/src/dto/send.mailer.dto';
 @Injectable()
 export class AccountService {
 
+  private logger = new Logger(ACCOUNT_SERVICE);
   private saltOrRounds = 10
   private hourDivide = 6000
 
@@ -38,7 +39,8 @@ export class AccountService {
     );
 
     if (account === null) {
-      console.log('account ---> null ' + JSON.stringify(account));
+      
+      this.logger.log(ACCOUNT_MODULE + ' ---> null: ' + JSON.stringify(account));
     }
 
     return {

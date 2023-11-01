@@ -1,12 +1,14 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { IServiceResponse } from '@app/rabbit';
 import { WelcomeMailerDto } from './dto/welcome.mailer.dto';
 import { SendMailerDto } from './dto/send.mailer.dto';
-import { HTTP_CODE_METADATA } from '@nestjs/common/constants';
+import { MAILER_MODULE, MAILER_SERVICE } from './constant/mailer-patterns.constants';
+
 
 @Injectable()
 export class MailerServiceExt {
+  private logger = new Logger(MAILER_SERVICE);
 
   constructor(private readonly mailerService: MailerService) { }
 
@@ -24,6 +26,7 @@ export class MailerServiceExt {
       var sent = await this.mailerService
         .sendMail(mailOptions)
         .then((success) => {
+          this.logger.log(MAILER_MODULE + ' sent: ' + success);
           return success
         })
         .catch((err) => {
@@ -36,7 +39,7 @@ export class MailerServiceExt {
       };
 
     } catch (err) {
-      console.log("Error:", err);
+      this.logger.log(MAILER_MODULE + ' Error: ' + err);
 
       return {
         state: false,
@@ -69,7 +72,7 @@ export class MailerServiceExt {
           throw new HttpException(err, HttpStatus.BAD_REQUEST);
         });
 
-      console.log('Mailler sent: %s', sent);
+      this.logger.log(MAILER_MODULE + ' sent: ' + sent);
 
       return {
         state: sent,
@@ -77,7 +80,7 @@ export class MailerServiceExt {
       };
     }
     catch (error) {
-      console.log('Mailler sent Error: %s', error);
+      this.logger.log(MAILER_MODULE + ' sent Error: ' + error);
       return {
         state: false,
         data: error.name
