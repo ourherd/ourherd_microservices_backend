@@ -9,7 +9,7 @@ import { AccountEntity } from "./entity/account.entity";
 import { CognitoModule } from "@libs/cognito";
 import { PasswordService } from "./services/password.service";
 import { PasswordController } from "./controllers/password.controller";
-import { EmailVerificationEntity } from "./entity/email-verification.entity";
+import { AccountVerificationEntity } from "./entity/email-verification.entity";
 
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
@@ -19,8 +19,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
       envFilePath: envFilePath
     }),
     DatabaseModule.register(Database.PRIMARY),
-    DatabaseModule.forEntity(Database.PRIMARY, [AccountEntity]),
-    DatabaseModule.forEntity(Database.PRIMARY, [EmailVerificationEntity]),
+    DatabaseModule.forEntity(Database.PRIMARY, [AccountEntity,AccountVerificationEntity]),
     RabbitModule.forServerProxy(RabbitServiceName.ACCOUNT),
     RabbitModule.forClientProxy(RabbitServiceName.MEMBER),
     CognitoModule,

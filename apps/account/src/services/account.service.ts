@@ -12,7 +12,7 @@ import { CognitoService } from '@libs/cognito';
 import { TokenAccountDto } from '../dto/token.account.dto';
 import { AuthVerifyUserDto } from '../dto/verify-email.account.dto';
 import { RefreshTokenAccountDto } from '../dto/refresh-token.account.dto';
-import { EmailVerificationEntity } from '../entity/email-verification.entity';
+import { AccountVerificationEntity } from '../entity/email-verification.entity';
 import { v4 } from 'uuid';
 import { plainToClass } from 'class-transformer';
 import { SendMailerDto } from 'apps/mailer/src/dto/send.mailer.dto';
@@ -25,7 +25,7 @@ export class AccountService {
 
   constructor(
     @InjectRepository(AccountEntity, Database.PRIMARY) private accountRepository: Repository<AccountEntity>,
-    @InjectRepository(EmailVerificationEntity, Database.PRIMARY) private emailVerificationRepository: Repository<EmailVerificationEntity>,
+    @InjectRepository(AccountVerificationEntity, Database.PRIMARY) private accountVerificationRepository: Repository<AccountVerificationEntity>,
     @Inject(CognitoService) private awsCognitoService: CognitoService
   ) { }
 
@@ -139,9 +139,9 @@ export class AccountService {
 
 
       const sendMailerDto = plainToClass(SendMailerDto, sendMailObj);
-      const emailVerificationEntity = this.emailVerificationRepository.create(emailVerificationObj)
+      const emailVerificationEntity = this.accountVerificationRepository.create(emailVerificationObj)
       if (!!emailVerification === false) {
-        await this.emailVerificationRepository.save(
+        await this.accountVerificationRepository.save(
           emailVerificationEntity
         );
         return {
@@ -154,7 +154,7 @@ export class AccountService {
       if (emailVerification && (durationTime > 48)) {
         throw new HttpException('ACCOUNT.EMAIL_SENT_RECENTLY', HttpStatus.INTERNAL_SERVER_ERROR);
       } else {
-        var emailVerificationModel = await this.emailVerificationRepository.update(
+        var emailVerificationModel = await this.accountVerificationRepository.update(
           { email: email },
           emailVerificationEntity
         );
@@ -176,7 +176,7 @@ export class AccountService {
   async verifyEmail(authVerifyUserDto: AuthVerifyUserDto): Promise<IServiceResponse<UpdateResult>> {
     try {
 
-      let emailVerif = await this.emailVerificationRepository.findOneBy({
+      let emailVerif = await this.accountVerificationRepository.findOneBy({
         email_token: authVerifyUserDto.confirmationCode
       });
 
@@ -201,7 +201,7 @@ export class AccountService {
             { email: emailVerif.email },
             accountFromDb
           );
-          await this.emailVerificationRepository.remove(emailVerif);
+          await this.accountVerificationRepository.remove(emailVerif);
           return {
             state: !!savedUser,
             data: savedUser

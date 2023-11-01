@@ -22,7 +22,7 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
             StoryBookmarkEntity,
             AccountEntity,
             AccountDeviceEntity,
-            EmailVerificationEntity
+            AccountVerificationEntity
         ]
     },
     secondary: {
@@ -35,7 +35,7 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
             StoryBookmarkEntity,
             AccountEntity,
             AccountDeviceEntity,
-            EmailVerificationEntity
+            AccountVerificationEntity
         ]
     }
 };
