@@ -1,18 +1,13 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { RegisterAccountDto } from "../dto/register.account.dto";
 import { IServiceResponse } from "@app/rabbit";
 import { AccountEntity } from '../entity/account.entity';
 import { Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Database } from '@app/database';
 import { ACCOUNT_MESSAGE_DB_RESPONSE } from '../constant/account-patterns.constants';
-import { LoginAccountDto } from '../dto/login.account.dto';
 import { CognitoService } from '@libs/cognito';
 import { AuthChangePasswordUserDto } from '../dto/change-password.account.dto';
-import { TokenAccountDto } from '../dto/token.account.dto';
-import { AuthVerifyUserDto } from '../dto/verify-email.account.dto';
-import { RefreshTokenAccountDto } from '../dto/refresh-token.account.dto';
 
 @Injectable()
 export class PasswordService {
