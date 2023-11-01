@@ -1,5 +1,6 @@
 import { Exclude, Expose } from "class-transformer";
 import {
+  IsEmail,
   IsNotEmpty,
   IsString,
   MinLength
@@ -12,6 +13,7 @@ export class SendMailerDto {
   @IsString()
   @MinLength(4)
   @Expose()
+  @IsEmail()
   public email: string;
   
   @Expose()

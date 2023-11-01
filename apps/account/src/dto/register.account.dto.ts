@@ -1,5 +1,5 @@
 import { MemberEntity } from "apps/member/src/entity/member.entity";
-import { IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID, Matches, MinLength } from "class-validator";
+import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID, Matches, MinLength } from "class-validator";
 import { Transform } from "class-transformer";
 import { v4 } from 'uuid';
 
@@ -23,6 +23,7 @@ export class RegisterAccountDto {
   @IsNotEmpty()
   @IsString()
   @MinLength(4)
+  @IsEmail()
   public email: string;
 
   @IsNotEmpty()

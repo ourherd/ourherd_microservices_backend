@@ -1,4 +1,5 @@
 import {
+  IsEmail,
   IsNotEmpty,
   IsString,
   MinLength
@@ -9,6 +10,7 @@ export class WelcomeMailerDto {
   @IsNotEmpty()
   @IsString()
   @MinLength(4)
+  @IsEmail()
   public email: string;
 
 }
