@@ -121,11 +121,18 @@ export class AccountService {
 
     try {
 
-      const emailVerification = await this.emailVerificationRepository.findOneBy({ email: email });
+      const accountEntity = await this.accountRepository.findOneBy({ email: email });
+      
+      if (!!accountEntity == true && accountEntity.verified == true) {
+        throw new HttpException('ACCOUNT.VERIFIED', HttpStatus.OK);
+      }
+
+      const emailVerification = await this.accountVerificationRepository.findOneBy({ email: email });
 
       const emailVerificationObj = {
         email: email,
         email_token: v4(),
+        account: accountEntity,
         created_at: new Date()
       }
 
