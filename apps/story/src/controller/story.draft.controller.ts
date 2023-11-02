@@ -15,7 +15,7 @@ export class StoryDraftController {
 
   @MessagePattern(STORY_MESSAGE_PATTERNS.DRAFT_VIDEO)
   async draftVideo (
-    @Payload('draftDto') draftVideoDto: StoryDraftVideoDto):
+    @Payload('draftVideoDto') draftVideoDto: StoryDraftVideoDto):
     Promise<IServiceResponse<StoryEntity>> {
     return await this.draftService.draftVideo(draftVideoDto);
   }

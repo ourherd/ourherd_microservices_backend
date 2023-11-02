@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS public.stories
     story_type story_type not null,
     story_status story_statuses not null default 'DRAFT',
     source text default 'OURHERD_APP',
+    question_roulette text,
 
     has_hero_statement boolean default false not null,
     hero_statement varchar(255),
