@@ -1,40 +1,32 @@
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { MailerService } from '@nestjs-modules/mailer';
+import { Injectable, Logger } from '@nestjs/common';
 import { IServiceResponse } from '@app/rabbit';
 import { WelcomeMailerDto } from './dto/welcome.mailer.dto';
 import { SendMailerDto } from './dto/send.mailer.dto';
 import { MAILER_MODULE, MAILER_SERVICE } from './constant/mailer-patterns.constants';
-
+import { SendgridService } from './services/sendgrid.service';
 
 @Injectable()
 export class MailerServiceExt {
   private logger = new Logger(MAILER_SERVICE);
+  private fromEmail = 'hello@ourherd.io';
 
-  constructor(private readonly mailerService: MailerService) { }
+  constructor(
+    private readonly sendgridService: SendgridService
+    ) { }
 
   public async welcomeEmail(welcomeMailerDto: WelcomeMailerDto): Promise<IServiceResponse<String>> {
     try {
 
       let mailOptions = {
         to: welcomeMailerDto.email,
-        from: 'papatpon@batyr.com.au',
-        subject: 'Testing Nest Mailermodule with template ✔',
-        template: 'welcome',
-        context: {},
+        from: this.fromEmail,
+        templateId: 'd-efce47c71e544ae19da295c4f83d1667'
       }
 
-      var sent = await this.mailerService
-        .sendMail(mailOptions)
-        .then((success) => {
-          this.logger.log(MAILER_MODULE + ' sent: ' + success);
-          return success
-        })
-        .catch((err) => {
-          throw new HttpException(err, HttpStatus.BAD_REQUEST);
-        });
+      const sent = await this.sendgridService.send(mailOptions);
 
       return {
-        state: sent,
+        state: !!sent,
         data: "SUCCESS"
       };
 
@@ -61,28 +53,24 @@ export class MailerServiceExt {
           data: null
         };
       }
+
+      console.log(sendMailerDto);
+      
+      
       let mailOptions = {
         to: sendMailerDto.email,
-        from: 'papatpon@batyr.com.au',
+        from: this.fromEmail,
         subject: sendMailerDto.subject,
-        text: "",
+        text: "Hello",
         html: sendMailerDto.html,
-        context: {},
       }
 
-      var sent = await this.mailerService
-        .sendMail(mailOptions)
-        .then((success) => {
-          return success
-        })
-        .catch((err) => {
-          throw new HttpException(err, HttpStatus.BAD_REQUEST);
-        });
+      const sent = await this.sendgridService.send(mailOptions);
 
       this.logger.log(MAILER_MODULE + ' sent: ' + sent);
 
       return {
-        state: sent,
+        state: !!sent,
         data: null
       };
     }

@@ -136,13 +136,13 @@ export class AccountService {
         created_at: new Date()
       }
 
+      const verifyLink = '"http://' + process.env.WEBSITE_URL + '/api/account/email/verify/' + emailVerificationObj.email_token + '"'
+
       const sendMailObj = {
         email: email,
         subject: "Verify Email",
         html: 'Hi! <br><br> Thanks for your registration<br><br>' +
-          '<a href=' + 'localhost' + ':' + '3020' +
-          '/api/account/email/verify/' + emailVerificationObj.email_token +
-          '>Click here to activate your account</a>'
+          '<a href='+ verifyLink +'>Click here to activate your account</a>'
       }
 
 
