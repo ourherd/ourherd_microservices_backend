@@ -34,8 +34,8 @@ export class CognitoService {
             this.logger.log('cognito ---> error ' + JSON.stringify(err));
             reject(err);
           } else {
-            this.logger.log('cognito ---> success ' + JSON.stringify(result.user));
-            resolve(result.user);
+            this.logger.log('cognito ---> success ' + JSON.stringify(result));
+            resolve(result);
           }
         },
       );

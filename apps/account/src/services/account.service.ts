@@ -69,11 +69,6 @@ export class AccountService {
 
       const result = await this.accountRepository.save(createAccountDto);
 
-      await this.awsCognitoService.registerUser(
-        createAccountDto.email,
-        password
-      )
-
       return {
         state: !!result,
         data: result,
@@ -108,7 +103,8 @@ export class AccountService {
         message: ACCOUNT_MESSAGE_DB_RESPONSE.EMAIL_FOUND
       };
     } catch (e) {
-      return {
+      this.logger.log(ACCOUNT_MODULE + ' ---> ERROR: ' + e);
+      return {     
         state: false,
         data: e.name,
         message: ACCOUNT_MESSAGE_DB_RESPONSE.NOT_FOUND
@@ -136,7 +132,7 @@ export class AccountService {
         created_at: new Date()
       }
 
-      const verifyLink = '"http://' + process.env.WEBSITE_URL + '/api/account/email/verify/' + emailVerificationObj.email_token + '"'
+      const verifyLink = '"http://' + process.env.WEBSITE_URL + '/api/account/verify/' + emailVerificationObj.email_token + '"'
 
       const sendMailObj = {
         email: email,
@@ -175,7 +171,7 @@ export class AccountService {
 
     } catch (e) {
       return {
-        state: true,
+        state: false,
         data: e.name,
         message: e.message
       };
