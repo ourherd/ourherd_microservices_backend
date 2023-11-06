@@ -4,6 +4,7 @@ import { WelcomeMailerDto } from './dto/welcome.mailer.dto';
 import { SendMailerDto } from './dto/send.mailer.dto';
 import { MAILER_MODULE, MAILER_SERVICE } from './constant/mailer-patterns.constants';
 import { SendgridService } from './services/sendgrid.service';
+import { ClientResponse } from '@sendgrid/mail';
 
 @Injectable()
 export class MailerServiceExt {
@@ -14,7 +15,7 @@ export class MailerServiceExt {
     private readonly sendgridService: SendgridService
     ) { }
 
-  public async welcomeEmail(welcomeMailerDto: WelcomeMailerDto): Promise<IServiceResponse<String>> {
+  public async welcomeEmail(welcomeMailerDto: WelcomeMailerDto): Promise<IServiceResponse<ClientResponse>> {
     try {
 
       let mailOptions = {
@@ -27,7 +28,7 @@ export class MailerServiceExt {
 
       return {
         state: !!sent,
-        data: "SUCCESS"
+        data: sent[0]
       };
 
     } catch (err) {
@@ -43,14 +44,19 @@ export class MailerServiceExt {
 
   }
 
-  public async sendEmail(sendMailerDto: SendMailerDto): Promise<IServiceResponse<boolean>> {
+  public async sendEmail(sendMailerDto: SendMailerDto): Promise<IServiceResponse<ClientResponse>> {
 
     try {
+      
 
       if (!!sendMailerDto.email == false) {
         return {
           state: false,
-          data: null
+          data: {
+            statusCode: 400,
+            body: sendMailerDto,
+            headers: null
+          }
         };
       }
 
@@ -71,7 +77,7 @@ export class MailerServiceExt {
 
       return {
         state: !!sent,
-        data: null
+        data: sent[0]
       };
     }
     catch (error) {
