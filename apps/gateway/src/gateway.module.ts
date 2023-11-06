@@ -6,7 +6,6 @@ import { ConfigModule } from "@nestjs/config";
 import { MulterModule } from "@nestjs/platform-express";
 import multer from "multer";
 import { MemberGatewayController } from "./modules/member/member-gateway.controller";
-import { MemberProfileGatewayController } from "./modules/member/member-profile-gateway.controller";
 import { PassportModule } from '@nestjs/passport';
 import { FeedGatewayController } from './modules/feed/feed-gateway.controller';
 import { ReactionGatewayController } from './modules/reaction/reaction-gateway.controller';
@@ -18,6 +17,7 @@ import { AccountPasswordGatewayController } from "./modules/account/account-pass
 import { getEnvPath } from "@app/common/env/env.helper";
 import { JwtStrategy } from '@app/authentication';
 
+import { MailerGatewayController } from "./modules/mailer/mailer-gateway.controller";
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
 @Module({
@@ -34,6 +34,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     }),
 
     RabbitModule.forClientProxy(RabbitServiceName.ACCOUNT),
+    RabbitModule.forClientProxy(RabbitServiceName.EMAIL),
     RabbitModule.forClientProxy(RabbitServiceName.MEMBER),
     RabbitModule.forClientProxy(RabbitServiceName.FEED),
     RabbitModule.forClientProxy(RabbitServiceName.STORY),
@@ -44,8 +45,8 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
   controllers: [
     AccountGatewayController,
     AccountPasswordGatewayController,
+    MailerGatewayController,
     MemberGatewayController,
-    MemberProfileGatewayController,
     FeedGatewayController,
     ReactionGatewayController,
     StoryBookmarkGatewayController,

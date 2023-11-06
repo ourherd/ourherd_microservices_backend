@@ -1,13 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
   AuthenticationDetails,
   CognitoRefreshToken,
   CognitoUser,
   CognitoUserPool,
 } from 'amazon-cognito-identity-js';
+import { COGNITO_SERVICE } from './constant/cognito-patterns.constants';
 
 @Injectable()
 export class CognitoService {
+  private logger = new Logger(COGNITO_SERVICE);
   private userPool: CognitoUserPool;
 
   constructor() {
@@ -18,11 +20,10 @@ export class CognitoService {
   }
 
   async registerUser(
-    email: string, 
+    email: string,
     password: string
-    ) {
-
-    return new Promise((resolve, reject) => {
+  ) {
+    const signUpResult = new Promise((resolve, reject) => {
       this.userPool.signUp(
         email,
         password,
@@ -30,13 +31,17 @@ export class CognitoService {
         null,
         (err, result) => {
           if (!result) {
+            this.logger.log('cognito ---> error ' + JSON.stringify(err));
             reject(err);
           } else {
-            resolve(result.user);
+            this.logger.log('cognito ---> success ' + JSON.stringify(result));
+            resolve(result);
           }
         },
       );
     });
+
+    return signUpResult
   }
 
   async authenticateUser(
@@ -75,8 +80,8 @@ export class CognitoService {
   }
 
   async changeUserPassword(
-    email: string, 
-    currentPassword: string, 
+    email: string,
+    currentPassword: string,
     newPassword: string
   ) {
 
@@ -138,8 +143,8 @@ export class CognitoService {
   }
 
   async confirmUserPassword(
-    email: string, 
-    confirmationCode: string, 
+    email: string,
+    confirmationCode: string,
     newPassword: string
   ) {
 
@@ -162,33 +167,8 @@ export class CognitoService {
     });
   }
 
-  async verifyUser(
-    email: string, 
-    confirmationCode: string
-  ) {
-
-    const userData = {
-      Username: email,
-      Pool: this.userPool,
-    };
-
-    const userCognito = new CognitoUser(userData); 
-
-    return new Promise((resolve, reject) => {
-      userCognito.confirmRegistration(confirmationCode,
-        true,
-        (err, result) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(result);
-          }
-        })
-    });
-  }
-  
   async refreshToken(
-    email: string, 
+    email: string,
     refreshToken: string
   ) {
 

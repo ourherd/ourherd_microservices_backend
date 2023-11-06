@@ -9,19 +9,19 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
         super({
           jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
           ignoreExpiration: false,
-          _audience: process.env.AWS_COGNITO_COGNITO_CLIENT_ID,
-          issuer: process.env.AWS_COGNITO_AUTHORITY,
+          _audience: process.env.AWS_COGNITO_CLIENT_ID,
+          issuer: process.env.AWS_COGNITO_AUTHORITY + process.env.AWS_COGNITO_USER_POOL_ID ,
           algorithms: ['RS256'],
           secretOrKeyProvider: passportJwtSecret({
             cache: true,
             rateLimit: true,
             jwksRequestsPerMinute: 5,
-            jwksUri: process.env.AWS_COGNITO_AUTHORITY + '/.well-known/jwks.json',
+            jwksUri: process.env.AWS_COGNITO_AUTHORITY + process.env.AWS_COGNITO_USER_POOL_ID + '/.well-known/jwks.json',
           }),
         });
       }
     
       async validate(payload: any) {
-        return { idUser: payload.username, email: payload.email, roles: payload['cognito:groups']};
+        return { id_member: payload.sub, email: payload.email, roles: payload['cognito:groups']};
       }
 }
