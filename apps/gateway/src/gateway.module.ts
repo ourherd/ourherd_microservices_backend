@@ -6,7 +6,6 @@ import { ConfigModule } from "@nestjs/config";
 import { MulterModule } from "@nestjs/platform-express";
 import multer from "multer";
 import { MemberGatewayController } from "./modules/member/member-gateway.controller";
-import { MemberProfileGatewayController } from "./modules/member/member-profile-gateway.controller";
 import { PassportModule } from '@nestjs/passport';
 import { FeedGatewayController } from './modules/feed/feed-gateway.controller';
 import { ReactionGatewayController } from './modules/reaction/reaction-gateway.controller';
@@ -48,7 +47,6 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     AccountPasswordGatewayController,
     MailerGatewayController,
     MemberGatewayController,
-    MemberProfileGatewayController,
     FeedGatewayController,
     ReactionGatewayController,
     StoryBookmarkGatewayController,

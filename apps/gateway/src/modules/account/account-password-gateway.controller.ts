@@ -23,7 +23,7 @@ export class AccountPasswordGatewayController {
   async changePassword(
     @Body() authChangePasswordUserDto: AuthChangePasswordUserDto
   ): Promise<IGatewayResponse> {
-    const { state, data } = await firstValueFrom(
+    const result = await firstValueFrom(
       this.accountClient.send<IServiceResponse<String>, { authChangePasswordUserDto: AuthChangePasswordUserDto }>
         (
           ACCOUNT_MESSAGE_PATTERNS.UPDATE_PASSWORD,
@@ -32,7 +32,7 @@ export class AccountPasswordGatewayController {
           }
         )
     );
-    return { state, data };
+    return result;
   }
 
   @Post('/forgot-password')
@@ -55,7 +55,7 @@ export class AccountPasswordGatewayController {
   async confirmResetPassword(
     @Body() authConfirmPasswordUserDto: AuthConfirmPasswordUserDto
   ): Promise<IGatewayResponse> {
-    const { state, data } = await firstValueFrom(
+    const result = await firstValueFrom(
       this.accountClient.send<IServiceResponse<any>, { authConfirmPasswordUserDto: AuthConfirmPasswordUserDto }>
         (
           ACCOUNT_MESSAGE_PATTERNS.RESET_PASSWORD,
@@ -64,7 +64,7 @@ export class AccountPasswordGatewayController {
           }
         )
     );
-    return { state, data };
+    return result;
   }
 
 }
