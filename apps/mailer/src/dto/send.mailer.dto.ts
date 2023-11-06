@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Exclude, Expose } from "class-transformer";
 import {
+  IsEmail,
   IsNotEmpty,
   IsString,
   MinLength
@@ -13,10 +14,7 @@ export class SendMailerDto {
   @IsString()
   @MinLength(4)
   @Expose()
-  @ApiProperty({
-    description: "recipient email",
-    example: "info@batyr.com.au"
-  })
+  @IsEmail()
   public email: string;
   
   @Expose()

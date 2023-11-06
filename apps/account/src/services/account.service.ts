@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { RegisterAccountDto } from "../dto/register.account.dto";
 import { IServiceResponse } from "@app/rabbit";
@@ -6,13 +6,13 @@ import { AccountEntity } from '../entity/account.entity';
 import { Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Database } from '@app/database';
-import { ACCOUNT_MESSAGE_DB_RESPONSE } from '../constant/account-patterns.constants';
+import { ACCOUNT_MESSAGE_DB_RESPONSE, ACCOUNT_MODULE, ACCOUNT_SERVICE } from '../constant/account-patterns.constants';
 import { LoginAccountDto } from '../dto/login.account.dto';
 import { CognitoService } from '@libs/cognito';
 import { TokenAccountDto } from '../dto/token.account.dto';
 import { AuthVerifyUserDto } from '../dto/verify-email.account.dto';
 import { RefreshTokenAccountDto } from '../dto/refresh-token.account.dto';
-import { EmailVerificationEntity } from '../entity/email-verification.entity';
+import { AccountVerificationEntity } from '../entity/email-verification.entity';
 import { v4 } from 'uuid';
 import { plainToClass } from 'class-transformer';
 import { SendMailerDto } from 'apps/mailer/src/dto/send.mailer.dto';
@@ -20,12 +20,13 @@ import { SendMailerDto } from 'apps/mailer/src/dto/send.mailer.dto';
 @Injectable()
 export class AccountService {
 
+  private logger = new Logger(ACCOUNT_SERVICE);
   private saltOrRounds = 10
   private hourDivide = 6000
 
   constructor(
     @InjectRepository(AccountEntity, Database.PRIMARY) private accountRepository: Repository<AccountEntity>,
-    @InjectRepository(EmailVerificationEntity, Database.PRIMARY) private emailVerificationRepository: Repository<EmailVerificationEntity>,
+    @InjectRepository(AccountVerificationEntity, Database.PRIMARY) private accountVerificationRepository: Repository<AccountVerificationEntity>,
     @Inject(CognitoService) private awsCognitoService: CognitoService
   ) { }
 
@@ -38,7 +39,8 @@ export class AccountService {
     );
 
     if (account === null) {
-      console.log('account ---> null ' + JSON.stringify(account));
+      
+      this.logger.log(ACCOUNT_MODULE + ' ---> null: ' + JSON.stringify(account));
     }
 
     return {
@@ -66,11 +68,6 @@ export class AccountService {
       createAccountDto.password = hash;
 
       const result = await this.accountRepository.save(createAccountDto);
-
-      await this.awsCognitoService.registerUser(
-        createAccountDto.email,
-        password
-      )
 
       return {
         state: !!result,
@@ -106,7 +103,8 @@ export class AccountService {
         message: ACCOUNT_MESSAGE_DB_RESPONSE.EMAIL_FOUND
       };
     } catch (e) {
-      return {
+      this.logger.log(ACCOUNT_MODULE + ' ---> ERROR: ' + e);
+      return {     
         state: false,
         data: e.name,
         message: ACCOUNT_MESSAGE_DB_RESPONSE.NOT_FOUND
@@ -119,29 +117,36 @@ export class AccountService {
 
     try {
 
-      const emailVerification = await this.emailVerificationRepository.findOneBy({ email: email });
+      const accountEntity = await this.accountRepository.findOneBy({ email: email });
+      
+      if (!!accountEntity == true && accountEntity.verified == true) {
+        throw new HttpException('ACCOUNT.VERIFIED', HttpStatus.OK);
+      }
+
+      const emailVerification = await this.accountVerificationRepository.findOneBy({ email: email });
 
       const emailVerificationObj = {
         email: email,
         email_token: v4(),
+        account: accountEntity,
         created_at: new Date()
       }
+
+      const verifyLink = '"http://' + process.env.WEBSITE_URL + '/api/account/verify/' + emailVerificationObj.email_token + '"'
 
       const sendMailObj = {
         email: email,
         subject: "Verify Email",
         html: 'Hi! <br><br> Thanks for your registration<br><br>' +
-          '<a href=' + 'localhost' + ':' + '3020' +
-          '/api/account/email/verify/' + emailVerificationObj.email_token +
-          '>Click here to activate your account</a>'
+          '<a href='+ verifyLink +'>Click here to activate your account</a>'
       }
 
 
 
       const sendMailerDto = plainToClass(SendMailerDto, sendMailObj);
-      const emailVerificationEntity = this.emailVerificationRepository.create(emailVerificationObj)
+      const emailVerificationEntity = this.accountVerificationRepository.create(emailVerificationObj)
       if (!!emailVerification === false) {
-        await this.emailVerificationRepository.save(
+        await this.accountVerificationRepository.save(
           emailVerificationEntity
         );
         return {
@@ -154,7 +159,7 @@ export class AccountService {
       if (emailVerification && (durationTime > 48)) {
         throw new HttpException('ACCOUNT.EMAIL_SENT_RECENTLY', HttpStatus.INTERNAL_SERVER_ERROR);
       } else {
-        var emailVerificationModel = await this.emailVerificationRepository.update(
+        var emailVerificationModel = await this.accountVerificationRepository.update(
           { email: email },
           emailVerificationEntity
         );
@@ -166,7 +171,7 @@ export class AccountService {
 
     } catch (e) {
       return {
-        state: true,
+        state: false,
         data: e.name,
         message: e.message
       };
@@ -176,7 +181,7 @@ export class AccountService {
   async verifyEmail(authVerifyUserDto: AuthVerifyUserDto): Promise<IServiceResponse<UpdateResult>> {
     try {
 
-      let emailVerif = await this.emailVerificationRepository.findOneBy({
+      let emailVerif = await this.accountVerificationRepository.findOneBy({
         email_token: authVerifyUserDto.confirmationCode
       });
 
@@ -201,7 +206,7 @@ export class AccountService {
             { email: emailVerif.email },
             accountFromDb
           );
-          await this.emailVerificationRepository.remove(emailVerif);
+          await this.accountVerificationRepository.remove(emailVerif);
           return {
             state: !!savedUser,
             data: savedUser

@@ -22,18 +22,15 @@ export class PasswordService {
 
     try {
 
-      await this.awsCognitoService.changeUserPassword(
+      const cognitoResult = await this.awsCognitoService.changeUserPassword(
         authChangePasswordUserDto.email,
         authChangePasswordUserDto.currentPassword,
         authChangePasswordUserDto.newPassword,
       )
 
-      let result = null
-      result = this.updatePassword(
+      const result = await this.updatePassword(
         authChangePasswordUserDto.email,
         authChangePasswordUserDto.newPassword
-      ).then(
-        updateRsult => { result = updateRsult }
       )
 
       return {
@@ -43,7 +40,7 @@ export class PasswordService {
     } catch (e) {
       return {
         state: false,
-        data: e.name,
+        data: e,
         message: ACCOUNT_MESSAGE_DB_RESPONSE.NOT_FOUND
       };
     }
@@ -54,19 +51,15 @@ export class PasswordService {
 
     try {
 
-
-      await this.awsCognitoService.confirmUserPassword(
+      const cognitoResult = await this.awsCognitoService.confirmUserPassword(
         authConfirmPasswordUserDto.email,
         authConfirmPasswordUserDto.confirmationCode,
         authConfirmPasswordUserDto.newPassword,
       )
 
-      let result = null
-      this.updatePassword(
+      const result = await this.updatePassword(
         authConfirmPasswordUserDto.email,
         authConfirmPasswordUserDto.newPassword
-      ).then(
-        updateRsult => { result = updateRsult }
       )
 
       return {
@@ -75,8 +68,8 @@ export class PasswordService {
       }
     } catch (e) {
       return {
-        state: true,
-        data: null,
+        state: false,
+        data: e,
         message: ACCOUNT_MESSAGE_DB_RESPONSE.NOT_FOUND
       };
     }
@@ -84,7 +77,7 @@ export class PasswordService {
   }
 
   async updatePassword(email: string, password: string): Promise<UpdateResult> {
-    return await this.accountRepository.update(
+    return this.accountRepository.update(
       {
         email: email
       },

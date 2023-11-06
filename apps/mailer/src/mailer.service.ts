@@ -1,42 +1,38 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { MailerService } from '@nestjs-modules/mailer';
+import { Injectable, Logger } from '@nestjs/common';
 import { IServiceResponse } from '@app/rabbit';
 import { WelcomeMailerDto } from './dto/welcome.mailer.dto';
 import { SendMailerDto } from './dto/send.mailer.dto';
-import { HTTP_CODE_METADATA } from '@nestjs/common/constants';
+import { MAILER_MODULE, MAILER_SERVICE } from './constant/mailer-patterns.constants';
+import { SendgridService } from './services/sendgrid.service';
+import { ClientResponse } from '@sendgrid/mail';
 
 @Injectable()
 export class MailerServiceExt {
+  private logger = new Logger(MAILER_SERVICE);
+  private fromEmail = 'hello@ourherd.io';
 
-  constructor(private readonly mailerService: MailerService) { }
+  constructor(
+    private readonly sendgridService: SendgridService
+    ) { }
 
-  public async welcomeEmail(welcomeMailerDto: WelcomeMailerDto): Promise<IServiceResponse<String>> {
+  public async welcomeEmail(welcomeMailerDto: WelcomeMailerDto): Promise<IServiceResponse<ClientResponse>> {
     try {
 
       let mailOptions = {
         to: welcomeMailerDto.email,
-        from: 'papatpon@batyr.com.au',
-        subject: 'Testing Nest Mailermodule with template ✔',
-        template: 'welcome',
-        context: {},
+        from: this.fromEmail,
+        templateId: 'd-efce47c71e544ae19da295c4f83d1667'
       }
 
-      var sent = await this.mailerService
-        .sendMail(mailOptions)
-        .then((success) => {
-          return success
-        })
-        .catch((err) => {
-          throw new HttpException(err, HttpStatus.BAD_REQUEST);
-        });
+      const sent = await this.sendgridService.send(mailOptions);
 
       return {
-        state: sent,
-        data: "SUCCESS"
+        state: !!sent,
+        data: sent[0]
       };
 
     } catch (err) {
-      console.log("Error:", err);
+      this.logger.log(MAILER_MODULE + ' Error: ' + err);
 
       return {
         state: false,
@@ -48,36 +44,44 @@ export class MailerServiceExt {
 
   }
 
-  public async sendEmail(sendMailerDto: SendMailerDto): Promise<IServiceResponse<boolean>> {
+  public async sendEmail(sendMailerDto: SendMailerDto): Promise<IServiceResponse<ClientResponse>> {
 
     try {
-      let mailOptions = {
-        to: sendMailerDto.email,
-        from: 'papatpon@batyr.com.au',
-        subject: sendMailerDto.subject,
-        text: "",
-        html: sendMailerDto.html,
-        context: {},
+      
+
+      if (!!sendMailerDto.email == false) {
+        return {
+          state: false,
+          data: {
+            statusCode: 400,
+            body: sendMailerDto,
+            headers: null
+          }
+        };
       }
 
-      var sent = await this.mailerService
-        .sendMail(mailOptions)
-        .then((success) => {
-          return success
-        })
-        .catch((err) => {
-          throw new HttpException(err, HttpStatus.BAD_REQUEST);
-        });
+      console.log(sendMailerDto);
+      
+      
+      let mailOptions = {
+        to: sendMailerDto.email,
+        from: this.fromEmail,
+        subject: sendMailerDto.subject,
+        text: "Hello",
+        html: sendMailerDto.html,
+      }
 
-      console.log('Mailler sent: %s', sent);
+      const sent = await this.sendgridService.send(mailOptions);
+
+      this.logger.log(MAILER_MODULE + ' sent: ' + sent);
 
       return {
-        state: sent,
-        data: null
+        state: !!sent,
+        data: sent[0]
       };
     }
     catch (error) {
-      console.log('Mailler sent Error: %s', error);
+      this.logger.log(MAILER_MODULE + ' sent Error: ' + error);
       return {
         state: false,
         data: error.name

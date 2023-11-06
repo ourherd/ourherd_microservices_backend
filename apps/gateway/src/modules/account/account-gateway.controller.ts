@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Param, ParseUUIDPipe, Post } from "@nestjs/common";
+import { Body, Controller, Get, Inject, Logger, Param, Post } from "@nestjs/common";
 import { IGatewayResponse } from '../../common/interface/gateway.interface';
 import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
 import { RegisterAccountDto } from "apps/account/src/dto/register.account.dto";
@@ -14,6 +14,7 @@ import { MemberEntity } from "apps/member/src/entity/member.entity";
 import { MAILER_MESSAGE_PATTERNS } from "apps/mailer/src/constant/mailer-patterns.constants";
 import { SendMailerDto } from "apps/mailer/src/dto/send.mailer.dto";
 import { EmailVerifyTokenDto } from "apps/account/src/dto/email-verify-token.account.dto";
+import { GATEWAY_SERVICE } from "../../constant/gateway-patterns.constants";
 
 @ApiTags('Account Module')
 @ApiBearerAuth()
@@ -22,6 +23,7 @@ import { EmailVerifyTokenDto } from "apps/account/src/dto/email-verify-token.acc
 })
 
 export class AccountGatewayController {
+  private logger = new Logger(GATEWAY_SERVICE);
 
   constructor(
     @Inject(RabbitServiceName.ACCOUNT) private accountClient: ClientProxy,
@@ -46,6 +48,10 @@ export class AccountGatewayController {
         )
     );
 
+    if (resultMember.state == false) {
+      return resultMember;
+    }
+
     // follow the concept of relational entity field
     // https://github.com/typeorm/typeorm/blob/master/docs/one-to-one-relations.md
     createDto.member = resultMember.data
@@ -60,10 +66,14 @@ export class AccountGatewayController {
         )
     );
 
+    if (sendMailerDtoResult.state == false) {
+      return sendMailerDtoResult;
+    }
+
     let sendMailerDtoData = sendMailerDtoResult.data
 
     let resultSendMail = await firstValueFrom(
-      this.emailClient.send<IServiceResponse<boolean>, { sendMailerDtoData: SendMailerDto }>
+      this.emailClient.send<IServiceResponse<String>, { sendMailerDtoData: SendMailerDto }>
         (
           MAILER_MESSAGE_PATTERNS.EMAIL_SENT,
           {
@@ -72,7 +82,7 @@ export class AccountGatewayController {
         )
     );
 
-    return sendMailerDtoResult;
+    return resultSendMail;
   }
 
   @Get('/verify/:token')
@@ -112,10 +122,14 @@ export class AccountGatewayController {
         )
     );
 
+    if (sendMailerDtoResult.state == false) {
+      return sendMailerDtoResult;
+    }
+
     let sendMailerDtoData = sendMailerDtoResult.data
 
     let resultSendMail = await firstValueFrom(
-      this.emailClient.send<IServiceResponse<boolean>, { sendMailerDtoData: SendMailerDto }>
+      this.emailClient.send<IServiceResponse<String>, { sendMailerDtoData: SendMailerDto }>
         (
           MAILER_MESSAGE_PATTERNS.EMAIL_SENT,
           {
@@ -123,7 +137,7 @@ export class AccountGatewayController {
           }
         )
     );
-    return sendMailerDtoResult;
+    return resultSendMail;
   }
 
   @Post('/login')

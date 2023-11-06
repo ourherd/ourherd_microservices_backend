@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import {
+  IsEmail,
   IsNotEmpty,
   IsString,
   MinLength
@@ -10,10 +11,7 @@ export class WelcomeMailerDto {
   @IsNotEmpty()
   @IsString()
   @MinLength(4)
-  @ApiProperty({
-    description: "recipient email",
-    example: "info@batyr.com.au"
-  })
+  @IsEmail()
   public email: string;
 
 }
