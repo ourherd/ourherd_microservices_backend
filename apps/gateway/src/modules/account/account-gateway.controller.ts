@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Logger, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, Inject, Logger, Param, ParseUUIDPipe, Post } from "@nestjs/common";
 import { IGatewayResponse } from '../../common/interface/gateway.interface';
 import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
 import { RegisterAccountDto } from "apps/account/src/dto/register.account.dto";
