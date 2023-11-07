@@ -16,15 +16,13 @@ export class StorageService {
         private s3Service: ResourceS3AwsService ) { }
 
     async create(
-      storageDto: CreateStorageResourceDto,
-      file: Buffer
+      storageDto: CreateStorageResourceDto
    ): Promise<IServiceResponse<StorageResourceEntity>> {
 
       let result;
       const resource = this.storageRepository.create(_.omit(storageDto, ['file']));
 
-      const { state, data: { key } } =
-          await this.s3Service.upload(storageDto, file)
+      const { state, data: { key } } = await this.s3Service.upload(storageDto)
 
       if ( state === true ) {
           resource.media_resource_path = key;

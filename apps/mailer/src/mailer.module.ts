@@ -1,10 +1,19 @@
 import { Module } from '@nestjs/common';
 import { MailerController } from './mailer.controller';
-import { MailerService } from './mailer.service';
+import { MailerServiceExt } from './mailer.service';
+import { RabbitModule, RabbitServiceName } from '@app/rabbit';
+import { SendgridService } from './services/sendgrid.service';
+import { MailService } from '@sendgrid/mail';
 
 @Module({
-  imports: [],
+  imports: [
+    RabbitModule.forServerProxy(RabbitServiceName.EMAIL),
+  ],
   controllers: [MailerController],
-  providers: [MailerService],
+  providers: [
+    MailerServiceExt,
+    SendgridService,
+    MailService
+  ],
 })
-export class MailerModule {}
+export class MailerModuleExt {}

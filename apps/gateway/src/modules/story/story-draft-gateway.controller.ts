@@ -56,7 +56,6 @@ export class StoryDraftGatewayController {
     @Body() draftVideoDto: StoryDraftVideoDto,
     @UploadedFile() story_resource: Express.Multer.File
   ) : Promise<IGatewayResponse> {
-
     const { state: storyState, data: storyData } = await firstValueFrom(
       this.storyService.send<IServiceResponse<StoryEntity>, { draftVideoDto: StoryDraftVideoDto }>
       (
@@ -79,8 +78,7 @@ export class StoryDraftGatewayController {
             driver: StorageResourceDriverType.S3,
             story_id: storyData.id,
             id: v4(),
-          },
-          file: story_resource.buffer
+          }
         }
       )
     );
@@ -89,7 +87,6 @@ export class StoryDraftGatewayController {
 
   @Post('/text-guided')
   async draftTextGuided ( @Body() draftGuidedDto: StoryDraftTextGuidedDto ) : Promise<IGatewayResponse>  {
-
     const { state, data } = await firstValueFrom(
       this.storyService.send<IServiceResponse<StoryEntity>, { draftGuidedDto: StoryDraftTextGuidedDto }>
       (

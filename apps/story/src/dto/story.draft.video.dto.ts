@@ -17,5 +17,4 @@ export class StoryDraftVideoDto extends StoryDraftBaseDto {
   @Allow()
   story_resource: Express.Multer.File
 
-
 }

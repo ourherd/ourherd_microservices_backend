@@ -14,9 +14,9 @@ export class StorageController {
 
   @MessagePattern(STORAGE_MESSAGE_PATTERNS.CREATE)
   async createStorageFile(
-    @Payload('storageDto') storageDto: CreateStorageResourceDto, file: Buffer):
+    @Payload('storageDto') storageDto: CreateStorageResourceDto):
     Promise<IServiceResponse<StorageResourceEntity>> {
 
-    return await this.storageService.create(storageDto, file);
+    return await this.storageService.create(storageDto);
   }
 }

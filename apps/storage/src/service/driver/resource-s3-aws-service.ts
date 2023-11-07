@@ -3,10 +3,8 @@ import { ConfigService } from "@nestjs/config";
 import { CreateStorageResourceDto } from "../../dto/create-storage-resource.dto";
 // import { v4 } from "uuid";
 import { StorageResourceRoute, StorageResourceType } from "../../interface/storage-resource.interface";
-import {  PutObjectCommand,
-  PutObjectCommandInput,
-  PutObjectCommandOutput,
-  S3Client } from "@aws-sdk/client-s3";
+import { PutObjectCommand, PutObjectCommandInput, PutObjectCommandOutput, S3Client } from "@aws-sdk/client-s3";
+import { IServiceResponse } from "@app/rabbit";
 
 @Injectable()
 export class ResourceS3AwsService {
@@ -27,7 +25,7 @@ export class ResourceS3AwsService {
     });
   }
 
-  async upload( storageDto: CreateStorageResourceDto, file: Buffer ): Promise<string> {
+  async upload( storageDto: CreateStorageResourceDto ): Promise<IServiceResponse<any>>  {
 
     const key = this.s3_media_key (storageDto.type, storageDto.id);
     const bucket = this.configService.get<string>('S3_BUCKET');
@@ -38,7 +36,7 @@ export class ResourceS3AwsService {
       Key:  key,
       ContentType: storageDto.file.mimetype,
       ACL: 'public-read',
-      ContentLength: file.length
+      ContentLength: storageDto.file.stream.readableLength
     };
 
     try {
@@ -66,7 +64,7 @@ export class ResourceS3AwsService {
       case StorageResourceType.STORY_VIDEO:
         return `${StorageResourceRoute.ROUTE_STORY_VIDEO}/${resource}/original.vid`
       case  StorageResourceType.STORY_IMAGE:
-        return `${StorageResourceRoute.ROUTE_STORY_IMAGE}/${resource}/original.png`
+        return `${StorageResourceRoute.ROUTE_STORY_IMAGE}/${resource}/original.jpg`
       default:
         return StorageResourceRoute.NO_ROUTE_STORY
     }

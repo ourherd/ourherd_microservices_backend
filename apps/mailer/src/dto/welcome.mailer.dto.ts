@@ -6,17 +6,12 @@ import {
   MinLength
 } from "class-validator";
 
-export class LoginAccountDto {
+export class WelcomeMailerDto {
 
   @IsNotEmpty()
   @IsString()
   @MinLength(4)
   @IsEmail()
   public email: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @ApiProperty()
-  public password: string;
 
 }

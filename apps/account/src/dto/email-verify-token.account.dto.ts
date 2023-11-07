@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsString } from 'class-validator';
 
-export class AuthVerifyUserDto {
+export class EmailVerifyTokenDto {
   @IsEmail()
   @ApiProperty({
     description: "user email for matching account information",
@@ -11,8 +11,8 @@ export class AuthVerifyUserDto {
 
   @IsString()
   @ApiProperty({
-    description: "for receiving token code from verify link",
+    description: "token for sending email to user in link",
     example: "b10aee82-5393-4517-8025-6deb707fa453"
   })
-  confirmationCode: string;
+  token: string;
 }

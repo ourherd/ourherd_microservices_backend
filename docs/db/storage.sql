@@ -14,7 +14,6 @@ CREATE TABLE IF NOT EXISTS public.storage_resources
     media_captions_path text,
 
     driver varchar(255),
-
     created_at timestamp with time zone default now() not null,
     updated_at timestamp with time zone default now() not null,
     deleted_at timestamp,

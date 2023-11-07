@@ -1,7 +1,7 @@
 import { Body, Controller, Inject, Post } from "@nestjs/common";
 import { IGatewayResponse } from '../../common/interface/gateway.interface';
 import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { firstValueFrom } from "rxjs";
 import { ACCOUNT_MESSAGE_PATTERNS } from "../../../../account/src/constant/account-patterns.constants";
 import { ClientProxy } from "@nestjs/microservices";
@@ -9,7 +9,7 @@ import { AuthChangePasswordUserDto } from "apps/account/src/dto/change-password.
 import { AuthForgotPasswordUserDto } from "apps/account/src/dto/reset-forget-password.dto";
 import { AuthConfirmPasswordUserDto } from "apps/account/src/dto/reset-confirm-password.dto";
 
-@ApiTags('Password Gateway')
+@ApiTags('Password Module')
 @Controller({
   path: '/password'
 })
@@ -20,10 +20,12 @@ export class AccountPasswordGatewayController {
     @Inject(RabbitServiceName.ACCOUNT) private accountClient: ClientProxy) { }
 
   @Post('/change-password')
+  @ApiOperation({ summary: 'Change password' })
+  @ApiResponse({ status: 200, description: "input current password and input new password" })
   async changePassword(
     @Body() authChangePasswordUserDto: AuthChangePasswordUserDto
   ): Promise<IGatewayResponse> {
-    const { state, data } = await firstValueFrom(
+    const result = await firstValueFrom(
       this.accountClient.send<IServiceResponse<String>, { authChangePasswordUserDto: AuthChangePasswordUserDto }>
         (
           ACCOUNT_MESSAGE_PATTERNS.UPDATE_PASSWORD,
@@ -32,10 +34,12 @@ export class AccountPasswordGatewayController {
           }
         )
     );
-    return { state, data };
+    return result;
   }
 
   @Post('/forgot-password')
+  @ApiOperation({ summary: 'request reset password' })
+  @ApiResponse({ status: 200, description: "input email and generate code for reset password from aws cognito" })
   async requestResetPassword(
     @Body() authForgotPasswordUserDto: AuthForgotPasswordUserDto
   ): Promise<IGatewayResponse> {
@@ -52,10 +56,12 @@ export class AccountPasswordGatewayController {
   }
 
   @Post('/confirm-password')
+  @ApiOperation({ summary: 'confirm request reset password' })
+  @ApiResponse({ status: 200, description: "input otp from email and input new password" })
   async confirmResetPassword(
     @Body() authConfirmPasswordUserDto: AuthConfirmPasswordUserDto
   ): Promise<IGatewayResponse> {
-    const { state, data } = await firstValueFrom(
+    const result = await firstValueFrom(
       this.accountClient.send<IServiceResponse<any>, { authConfirmPasswordUserDto: AuthConfirmPasswordUserDto }>
         (
           ACCOUNT_MESSAGE_PATTERNS.RESET_PASSWORD,
@@ -64,7 +70,7 @@ export class AccountPasswordGatewayController {
           }
         )
     );
-    return { state, data };
+    return result;
   }
 
 }
