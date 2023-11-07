@@ -4,8 +4,6 @@ export const ACCOUNT_MODULE = 'ACCOUNT MODULE';
 export const ACCOUNT_MESSAGE_PATTERNS = {
   REGISTER: 'account.create',
   VERIFY: 'account.verify',
-  VERIFY_ACCOUNT: 'account.verify-account',
-  RESEND_VERIFY: 'account.resend-verify',
   LOGIN: 'account.login',
   REFRESH_TOKEN: 'account.refresh',
   UPDATE: 'account.update',

@@ -2,6 +2,8 @@ export const MEMBER_SERVICE = 'MEMBER SERVICE';
 export const MEMBER_MODULE = 'MEMBER MODULE';
 
 export const MEMBER_MESSAGE_PATTERNS = {
+  VERIFY_ACCOUNT: 'member.verify-account',
+  RESEND_VERIFY: 'member.resend-verify',
   CREATE: 'member.create',
   FIND_ALL: 'member.findall',
   FIND_BY_ID: 'member.findbyid',

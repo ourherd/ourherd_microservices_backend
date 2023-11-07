@@ -20,10 +20,6 @@ export class RegisterAccountDto {
   public id: string = v4();
 
   @ApiProperty()
-  @IsOptional()
-  public member: MemberEntity
-
-  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   @MinLength(4)

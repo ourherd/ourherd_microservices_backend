@@ -7,6 +7,7 @@ import { ConfigModule } from "@nestjs/config";
 import { Database, DatabaseModule } from "@app/database";
 import { getEnvPath } from "@app/common/env/env.helper";
 import { CognitoModule } from "@libs/cognito";
+import { MemberVerificationEntity } from "./entity/member-verification.entity";
 
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
@@ -17,7 +18,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     }),
 
     DatabaseModule.register(Database.PRIMARY),
-    DatabaseModule.forEntity(Database.PRIMARY, [MemberEntity]),
+    DatabaseModule.forEntity(Database.PRIMARY, [MemberEntity, MemberVerificationEntity]),
     RabbitModule.forServerProxy(RabbitServiceName.MEMBER),
     CognitoModule,
   ],

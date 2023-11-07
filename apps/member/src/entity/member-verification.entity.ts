@@ -1,19 +1,19 @@
 import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
 import { AbstractEntity } from '@app/database/base/base.entity';
-import { AccountEntity } from "./account.entity";
+import { MemberEntity } from "./member.entity";
 
 @Entity({
-  name: 'account_verifications'
+  name: 'member_verifications'
 })
 
-export class AccountVerificationEntity extends AbstractEntity {
+export class MemberVerificationEntity extends AbstractEntity {
 
   @Column({ nullable: true })
   email: string;
 
-  @ManyToOne(() => AccountEntity)
-  @JoinColumn({ name: "account_id" })
-  account: AccountEntity
+  @ManyToOne(() => MemberEntity)
+  @JoinColumn({ name: "member_id" })
+  member: MemberEntity
 
   @Column({ nullable: true })
   email_token: string;
