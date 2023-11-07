@@ -9,8 +9,6 @@ import { StoryEntity } from 'apps/story/src/entity/story.entity';
 import { StoryBookmarkEntity } from 'apps/story/src/entity/story.bookmark.entity';
 import { StorageResourceEntity } from "../../../../apps/storage/src/entity/storage-resource.entity";
 import { AccountVerificationEntity } from 'apps/account/src/entity/email-verification.entity';
-// import { AccountEntity } from 'apps/account/src/entity/account.entity';
-// import { AuthRequestEntity } from "apps/auth/src/entity/auth-request.entity";
 
 export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string, entities: EntityClassOrSchema[] }> = {
     primary: {
