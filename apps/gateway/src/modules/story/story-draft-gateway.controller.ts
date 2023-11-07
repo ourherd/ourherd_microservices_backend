@@ -31,7 +31,7 @@ import { STORAGE_MESSAGE_PATTERNS } from "../../../../storage/src/constant/stora
 import { v4 } from "uuid";
 
 
-@ApiTags('Story Draft Module')
+@ApiTags('Story Create Gateway')
 @Controller({
   path: '/story'
 })
@@ -78,9 +78,9 @@ export class StoryDraftGatewayController {
             type: StorageResourceType.STORY_VIDEO,
             driver: StorageResourceDriverType.S3,
             story_id: storyData.id,
-            id: v4()
+            id: v4(),
           },
-          ot_file: story_resource.buffer
+          file: story_resource.buffer
         }
       )
     );

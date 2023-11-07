@@ -26,12 +26,10 @@ export class StorageService {
       const { state, data: { key } } =
           await this.s3Service.upload(storageDto, file)
 
-      console.log(JSON.stringify(resource));
-
-      if (state) {
-        resource.media_resource_path = key;
-        resource.resource_type = storageDto.type;
-        result = await this.storageRepository.save(resource);
+      if ( state === true ) {
+          resource.media_resource_path = key;
+          resource.resource_type = storageDto.type;
+          result = await this.storageRepository.save(resource);
       }
 
       return {
