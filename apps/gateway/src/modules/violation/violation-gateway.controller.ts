@@ -1,30 +1,32 @@
 import { Body, Controller, Inject, Post } from "@nestjs/common";
-import { REACTION_MESSAGE_PATTERNS } from "apps/feed/src/constant/reaction-patterns.constants";
-import { ApiTags } from "@nestjs/swagger";
+import { VIOLATION_MESSAGE_PATTERNS } from "apps/feed/src/constant/violation-patterns.constants";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
 import { firstValueFrom } from "rxjs";
 import { ClientProxy } from "@nestjs/microservices";
-import { PostReactionDto } from "../../../../feed/src/dto/post.reaction.dto";
+import { PostViolationDto } from "../../../../feed/src/dto/post.violation.dto";
 import { IGatewayResponse } from "../../common/interface/gateway.interface";
-import { ReactionEntity } from "../../../../feed/src/entity/reaction.entity";
+import { ViolationEntity } from "../../../../feed/src/entity/violation.entity";
 
-@ApiTags('Reaction Module')
+@ApiTags('Report Violation Gateway')
 @Controller({
-  path: '/reaction'
+  path: '/story/report'
 })
 
-export class ReactionGatewayController {
+export class ViolationGatewayController {
 
-  constructor(@Inject(RabbitServiceName.FEED) private reactionClient: ClientProxy) { }
+  constructor(@Inject(RabbitServiceName.FEED) private violationClient: ClientProxy) { }
 
   @Post('/')
-  async reactToStory ( @Body() reactionDto: PostReactionDto,) : Promise<IGatewayResponse> {
+  @ApiOperation({ summary: 'Violation Report Story' })
+  @ApiResponse({ status: 201, description: 'Member report violation story' })
+  async reportViolationStory ( @Body() violationDto: PostViolationDto,) : Promise<IGatewayResponse> {
     const { state, data } = await firstValueFrom(
-      this.reactionClient.send<IServiceResponse<ReactionEntity>, { reactionDto: PostReactionDto }>
+      this.violationClient.send<IServiceResponse<ViolationEntity>, { violationDto: PostViolationDto }>
       (
-        REACTION_MESSAGE_PATTERNS.REACT,
+        VIOLATION_MESSAGE_PATTERNS.REPORT,
         {
-          reactionDto
+          violationDto
         }
       )
     );
