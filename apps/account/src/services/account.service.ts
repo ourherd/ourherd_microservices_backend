@@ -39,7 +39,6 @@ export class AccountService {
     );
 
     if (account === null) {
-      
       this.logger.log(ACCOUNT_MODULE + ' ---> null: ' + JSON.stringify(account));
     }
 
@@ -55,6 +54,7 @@ export class AccountService {
       // TODO replace this with a validation injection
       // https://gist.github.com/zarv1k/3ce359af1a3b2a7f1d99b4f66a17f1bc
       const accountExist = await this.findByEmail(createAccountDto.email);
+      this.logger.log(ACCOUNT_MODULE + ' ---> null: ' + JSON.stringify(accountExist));
       if (accountExist.state) {
         return {
           state: accountExist.state,
@@ -68,6 +68,11 @@ export class AccountService {
       createAccountDto.password = hash;
 
       const result = await this.accountRepository.save(createAccountDto);
+      this.logger.log(ACCOUNT_MODULE + ' ---> result: ' + JSON.stringify({
+        state: !!result,
+        data: result,
+        message: ACCOUNT_MESSAGE_DB_RESPONSE.CREATED
+      }));
 
       return {
         state: !!result,
@@ -104,7 +109,7 @@ export class AccountService {
       };
     } catch (e) {
       this.logger.log(ACCOUNT_MODULE + ' ---> ERROR: ' + e);
-      return {     
+      return {
         state: false,
         data: e.name,
         message: ACCOUNT_MESSAGE_DB_RESPONSE.NOT_FOUND
@@ -118,7 +123,7 @@ export class AccountService {
     try {
 
       const accountEntity = await this.accountRepository.findOneBy({ email: email });
-      
+
       if (!!accountEntity == true && accountEntity.verified == true) {
         throw new HttpException('ACCOUNT.VERIFIED', HttpStatus.OK);
       }
@@ -140,8 +145,6 @@ export class AccountService {
         html: 'Hi! <br><br> Thanks for your registration<br><br>' +
           '<a href='+ verifyLink +'>Click here to activate your account</a>'
       }
-
-
 
       const sendMailerDto = plainToClass(SendMailerDto, sendMailObj);
       const emailVerificationEntity = this.accountVerificationRepository.create(emailVerificationObj)
@@ -185,7 +188,7 @@ export class AccountService {
         email_token: authVerifyUserDto.confirmationCode
       });
 
-      
+
 
       if (!!emailVerif == true && emailVerif.email) {
 
