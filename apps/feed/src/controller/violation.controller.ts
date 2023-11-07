@@ -1,20 +1,20 @@
 import { Controller, Logger } from "@nestjs/common";
-import { ReactionService } from "../service/reaction.service";
+import { ViolationService } from "../service/violation.service";
 import { MessagePattern, Payload } from "@nestjs/microservices";
-import { REACTION_MESSAGE_PATTERNS } from "../constant/reaction-patterns.constants";
-import { PostReactionDto } from "../dto/post.reaction.dto";
 import { IServiceResponse } from "@app/rabbit";
-import { ReactionEntity } from "../entity/reaction.entity";
+import { PostViolationDto } from "../dto/post.violation.dto";
+import { ViolationEntity } from "../entity/violation.entity";
+import { VIOLATION_MESSAGE_PATTERNS } from "../constant/violation-patterns.constants";
 
 @Controller()
-export class ReactionController {
+export class ViolationController {
 
-  constructor(private readonly reactionService: ReactionService) {}
-  logger = new Logger(ReactionService.name);
+  constructor(private readonly violationService: ViolationService) {}
+  logger = new Logger(ViolationController.name);
 
-  @MessagePattern(REACTION_MESSAGE_PATTERNS.REACT)
+  @MessagePattern(VIOLATION_MESSAGE_PATTERNS.REPORT)
   async reaction (
-    @Payload('reactionDto') reactionDto: PostReactionDto): Promise<IServiceResponse<ReactionEntity>> {
-    return await this.reactionService.reactionToStory(reactionDto);
+    @Payload('violationDto') violationDto: PostViolationDto): Promise<IServiceResponse<ViolationEntity>> {
+    return await this.violationService.reportViolationStory(violationDto);
   }
 }
