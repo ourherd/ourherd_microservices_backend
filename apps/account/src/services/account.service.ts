@@ -1,32 +1,25 @@
-import { HttpException, HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { RegisterAccountDto } from "../dto/register.account.dto";
 import { IServiceResponse } from "@app/rabbit";
 import { AccountEntity } from '../entity/account.entity';
-import { Repository, UpdateResult } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Database } from '@app/database';
 import { ACCOUNT_MESSAGE_DB_RESPONSE, ACCOUNT_MODULE, ACCOUNT_SERVICE } from '../constant/account-patterns.constants';
 import { LoginAccountDto } from '../dto/login.account.dto';
 import { CognitoService } from '@libs/cognito';
 import { TokenAccountDto } from '../dto/token.account.dto';
-import { AuthVerifyUserDto } from '../dto/verify-email.account.dto';
 import { RefreshTokenAccountDto } from '../dto/refresh-token.account.dto';
-import { AccountVerificationEntity } from '../entity/email-verification.entity';
-import { v4 } from 'uuid';
-import { plainToClass } from 'class-transformer';
-import { SendMailerDto } from 'apps/mailer/src/dto/send.mailer.dto';
 
 @Injectable()
 export class AccountService {
 
   private logger = new Logger(ACCOUNT_SERVICE);
   private saltOrRounds = 10
-  private hourDivide = 6000
 
   constructor(
     @InjectRepository(AccountEntity, Database.PRIMARY) private accountRepository: Repository<AccountEntity>,
-    @InjectRepository(AccountVerificationEntity, Database.PRIMARY) private accountVerificationRepository: Repository<AccountVerificationEntity>,
     @Inject(CognitoService) private awsCognitoService: CognitoService
   ) { }
 
@@ -63,6 +56,14 @@ export class AccountService {
         };
       }
 
+      const cognitoResult = await this.awsCognitoService.registerUser(
+        createAccountDto.email,
+        createAccountDto.password
+      )
+
+      // get uuid from cognito and use for generating member item
+      createAccountDto.id = cognitoResult['userSub']
+
       const password = createAccountDto.password;
       const hash = await bcrypt.hash(password, this.saltOrRounds);
       createAccountDto.password = hash;
@@ -81,6 +82,7 @@ export class AccountService {
       };
 
     } catch (e) {
+      this.logger.error("Create Account",e)
       return {
         state: false,
         data: e.name
@@ -118,6 +120,7 @@ export class AccountService {
 
   }
 
+<<<<<<< HEAD
   async createEmailToken(email: string): Promise<IServiceResponse<SendMailerDto>> {
 
     try {

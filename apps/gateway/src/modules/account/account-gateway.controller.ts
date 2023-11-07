@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Logger, Param, ParseUUIDPipe, Post } from "@nestjs/common";
+import { Body, Controller, Inject, Logger, Post } from "@nestjs/common";
 import { IGatewayResponse } from '../../common/interface/gateway.interface';
 import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
 import { RegisterAccountDto } from "apps/account/src/dto/register.account.dto";
@@ -7,14 +7,12 @@ import { firstValueFrom } from "rxjs";
 import { ACCOUNT_MESSAGE_PATTERNS } from "../../../../account/src/constant/account-patterns.constants";
 import { ClientProxy } from "@nestjs/microservices";
 import { LoginAccountDto } from "apps/account/src/dto/login.account.dto";
-import { AuthVerifyUserDto } from "apps/account/src/dto/verify-email.account.dto";
 import { MEMBER_MESSAGE_PATTERNS } from "apps/member/src/constant/member-patterns.constants";
 import { RefreshTokenAccountDto } from "apps/account/src/dto/refresh-token.account.dto";
-import { MemberEntity } from "apps/member/src/entity/member.entity";
 import { MAILER_MESSAGE_PATTERNS } from "apps/mailer/src/constant/mailer-patterns.constants";
 import { SendMailerDto } from "apps/mailer/src/dto/send.mailer.dto";
-import { EmailVerifyTokenDto } from "apps/account/src/dto/email-verify-token.account.dto";
 import { GATEWAY_SERVICE } from "../../constant/gateway-patterns.constants";
+import { AccountEntity } from "apps/account/src/entity/account.entity";
 
 @ApiTags('Account Module')
 @ApiBearerAuth()
@@ -38,26 +36,8 @@ export class AccountGatewayController {
     @Body() createDto: RegisterAccountDto
   ): Promise<IGatewayResponse> {
 
-    const resultMember = await firstValueFrom(
-      this.memberClient.send<IServiceResponse<MemberEntity>, { createDto: RegisterAccountDto }>
-        (
-          MEMBER_MESSAGE_PATTERNS.CREATE,
-          {
-            createDto
-          }
-        )
-    );
-
-    if (resultMember.state == false) {
-      return resultMember;
-    }
-
-    // follow the concept of relational entity field
-    // https://github.com/typeorm/typeorm/blob/master/docs/one-to-one-relations.md
-    createDto.member = resultMember.data
-
-    let sendMailerDtoResult = await firstValueFrom(
-      this.accountClient.send<IServiceResponse<SendMailerDto>, { createDto: RegisterAccountDto }>
+    let accountEntityResult = await firstValueFrom(
+      this.accountClient.send<IServiceResponse<AccountEntity>, { createDto: RegisterAccountDto }>
         (
           ACCOUNT_MESSAGE_PATTERNS.REGISTER,
           {
@@ -66,11 +46,28 @@ export class AccountGatewayController {
         )
     );
 
-    if (sendMailerDtoResult.state == false) {
-      return sendMailerDtoResult;
+    if (accountEntityResult.state === false) {
+      return accountEntityResult;
     }
 
-    let sendMailerDtoData = sendMailerDtoResult.data
+    // transfer uuid from cognito to generate member
+    createDto.id = accountEntityResult.data.id
+
+    const resultMember = await firstValueFrom(
+      this.memberClient.send<IServiceResponse<SendMailerDto>, { createDto: RegisterAccountDto }>
+        (
+          MEMBER_MESSAGE_PATTERNS.CREATE,
+          {
+            createDto
+          }
+        )
+    );
+
+    if (resultMember.state === false) {
+      return resultMember;
+    }    
+
+    const sendMailerDtoData = resultMember.data
 
     let resultSendMail = await firstValueFrom(
       this.emailClient.send<IServiceResponse<String>, { sendMailerDtoData: SendMailerDto }>
@@ -82,61 +79,6 @@ export class AccountGatewayController {
         )
     );
 
-    return resultSendMail;
-  }
-
-  @Get('/verify/:token')
-  @ApiOperation({ summary: 'Verify Token' })
-  @ApiResponse({ status: 200, description: "user verify pass & token isn't expired" })
-  async verify(
-    @Param('token', ParseUUIDPipe) token: string
-  ): Promise<IGatewayResponse> {
-    let authVerifyUserDto = new AuthVerifyUserDto()
-    authVerifyUserDto.confirmationCode = token
-    const response = await firstValueFrom(
-      this.accountClient.send<IServiceResponse<any>, { authVerifyUserDto: AuthVerifyUserDto }>
-        (
-          ACCOUNT_MESSAGE_PATTERNS.VERIFY_ACCOUNT,
-          {
-            authVerifyUserDto
-          }
-        )
-    );
-    return response;
-
-  }
-
-  @Post('/resend-verification')
-  @ApiOperation({ summary: 'Resend verification code' })
-  @ApiResponse({ status: 200, description: "generate new token and resend email with verify link again" })
-  async sendEmailVerification(
-    @Body() emailVerifyTokenDto: EmailVerifyTokenDto
-  ): Promise<IGatewayResponse> {
-    const sendMailerDtoResult = await firstValueFrom(
-      this.accountClient.send<IServiceResponse<SendMailerDto>, { emailVerifyTokenDto: EmailVerifyTokenDto }>
-        (
-          ACCOUNT_MESSAGE_PATTERNS.RESEND_VERIFY,
-          {
-            emailVerifyTokenDto
-          }
-        )
-    );
-
-    if (sendMailerDtoResult.state == false) {
-      return sendMailerDtoResult;
-    }
-
-    let sendMailerDtoData = sendMailerDtoResult.data
-
-    let resultSendMail = await firstValueFrom(
-      this.emailClient.send<IServiceResponse<String>, { sendMailerDtoData: SendMailerDto }>
-        (
-          MAILER_MESSAGE_PATTERNS.EMAIL_SENT,
-          {
-            sendMailerDtoData
-          }
-        )
-    );
     return resultSendMail;
   }
 
