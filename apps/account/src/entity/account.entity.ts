@@ -25,11 +25,4 @@ export class AccountEntity extends AbstractEntity {
   // @JoinColumn({name: "account_id"})
   // device: AccountDeviceEntity;
 
-  @Column({ default: false })
-  verified: boolean;
-
-  @OneToOne(type => MemberEntity)
-  @JoinColumn({ name: "member_id" })
-  member: MemberEntity
-
 }

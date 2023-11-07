@@ -3,7 +3,7 @@ CREATE TYPE member_status AS ENUM ('ACTIVATED', 'INACTIVATED', 'BANNED');
 
 CREATE TABLE IF NOT EXISTS public.members
 (
-    id uuid  default gen_random_uuid() not null constraint member_pkey primary key,
+    id uuid  default gen_random_uuid() not null primary key references accounts (id),
     email text, -- I will be moving this out of members profile
     display_name text,
 
@@ -26,3 +26,6 @@ CREATE TABLE IF NOT EXISTS public.members
     deleted_at timestamptz
 
 );
+
+ALTER TABLE public.members
+    ADD CONSTRAINT fk_member_account foreign key (id) references accounts (id) deferrable initially deferred;

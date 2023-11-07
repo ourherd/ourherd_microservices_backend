@@ -99,10 +99,6 @@ export class MemberEntity extends AbstractEntity {
   // @OneToMany(() => AccountEntity, (user) => user.member_id)
   // account: AccountEntity
 
-  // @OneToOne(() => AccountEntity, (account) => account.member, { cascade: true })
-  // @JoinColumn()
-  // account: AccountEntity;
-
   // @OneToOne(() => User, (user) => user.profile)
   // user: User;
 
