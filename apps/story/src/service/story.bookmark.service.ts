@@ -39,7 +39,13 @@ export class StoryBookmarkService {
     }
 
     this.logger.log ('Remove bookmark story --> '+ bookmarkDto.story_id );
-    return await this.bookmarkRepository.remove( bookmark );
+    const remove =  await this.bookmarkRepository.remove( bookmark );
+
+    return {
+      state: !!remove,
+      data: remove,
+      message: !!remove ? 'REMOVED' : 'REMOVED_FAILED'
+    }
 
   }
 

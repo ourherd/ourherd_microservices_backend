@@ -1,6 +1,7 @@
-import { ApiTags } from "@nestjs/swagger";
+import { ApiTags, ApiConsumes } from "@nestjs/swagger";
 import {
   Body,
+  Req,
   Controller,
   Inject,
   Post,
@@ -13,7 +14,6 @@ import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
 import { ClientProxy } from "@nestjs/microservices";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { IGatewayResponse } from "../../common/interface/gateway.interface";
-import { ParseUploadImageFilePipe } from "@app/common/pipe/parse-upload-image-file.pipe";
 import { ParseUploadVideoFilePipe } from "@app/common/pipe/parse-upload-video-file.pipe";
 import { firstValueFrom } from "rxjs";
 import { STORY_MESSAGE_PATTERNS } from "../../../../story/src/constant/story-patterns.constants";
@@ -21,32 +21,74 @@ import { StoryDraftVideoDto } from "../../../../story/src/dto/story.draft.video.
 import { StoryDraftTextFreeformDto } from "../../../../story/src/dto/story.draft.text-freeform.dto";
 import { StoryDraftTextGuidedDto } from "../../../../story/src/dto/story.draft.text-guided.dto";
 import { StoryEntity } from "../../../../story/src/entity/story.entity";
+import { StorageResourceEntity } from "../../../../storage/src/entity/storage-resource.entity";
+import { CreateStorageResourceDto } from "../../../../storage/src/dto/create-storage-resource.dto";
+import {
+  StorageResourceDriverType,
+  StorageResourceType
+} from "../../../../storage/src/interface/storage-resource.interface";
+import { STORAGE_MESSAGE_PATTERNS } from "../../../../storage/src/constant/storage-patterns.constant";
+import { v4 } from "uuid";
 
 
-@ApiTags('Story Draft Module')
+@ApiTags('Story Create Gateway')
 @Controller({
   path: '/story'
 })
+@UsePipes(
+  new ValidationPipe({
+    whitelist: true,
+    transform: true,
+  }),
+)
 
 export class StoryDraftGatewayController {
 
-  constructor(@Inject(RabbitServiceName.STORY) private storyDraftClient: ClientProxy) { }
+  constructor(
+    @Inject(RabbitServiceName.STORY) private storyService: ClientProxy,
+     @Inject(RabbitServiceName.STORAGE) private storageService: ClientProxy
+  ) { }
 
   @Post('/video')
-  @UseInterceptors(FileInterceptor('story_file'))
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('story_resource'))
   async draftVideo (
-    draftVideoDto: StoryDraftVideoDto,
-    @UploadedFile(new ParseUploadVideoFilePipe()) resource: Express.Multer.File
-  ) {
+    @Body() draftVideoDto: StoryDraftVideoDto,
+    @UploadedFile() story_resource: Express.Multer.File
+  ) : Promise<IGatewayResponse> {
+    const { state: storyState, data: storyData } = await firstValueFrom(
+      this.storyService.send<IServiceResponse<StoryEntity>, { draftVideoDto: StoryDraftVideoDto }>
+      (
+        STORY_MESSAGE_PATTERNS.DRAFT_VIDEO,
+        {
+          draftVideoDto
+        }
+      )
+    );
 
+    const { state, data } = await firstValueFrom(
+      this.storageService.send<IServiceResponse<StorageResourceEntity>,
+        { storageDto: CreateStorageResourceDto }>
+      (
+        STORAGE_MESSAGE_PATTERNS.CREATE,
+        {
+          storageDto: {
+            file: story_resource,
+            type: StorageResourceType.STORY_VIDEO,
+            driver: StorageResourceDriverType.S3,
+            story_id: storyData.id,
+            id: v4(),
+          }
+        }
+      )
+    );
+    return { state, data };
   }
 
   @Post('/text-guided')
-  @UsePipes(new ValidationPipe({ transform: true }))
-  async draftTextGuided ( @Body() draftGuidedDto: StoryDraftTextGuidedDto )  : Promise<IGatewayResponse>  {
-
+  async draftTextGuided ( @Body() draftGuidedDto: StoryDraftTextGuidedDto ) : Promise<IGatewayResponse>  {
     const { state, data } = await firstValueFrom(
-      this.storyDraftClient.send<IServiceResponse<StoryEntity>, { draftGuidedDto: StoryDraftTextGuidedDto }>
+      this.storyService.send<IServiceResponse<StoryEntity>, { draftGuidedDto: StoryDraftTextGuidedDto }>
       (
        STORY_MESSAGE_PATTERNS.DRAFT_TEXT_GUIDE,
         {
@@ -59,11 +101,10 @@ export class StoryDraftGatewayController {
   }
 
   @Post('/text-freeform')
-  @UsePipes(new ValidationPipe({ transform: true }))
   async draftTextFreeForm ( @Body() draftFreeFormDto: StoryDraftTextFreeformDto ) : Promise<IGatewayResponse>  {
 
     const { state, data } = await firstValueFrom(
-      this.storyDraftClient.send<IServiceResponse<StoryEntity>, { draftFreeFormDto: StoryDraftTextFreeformDto }>
+      this.storyService.send<IServiceResponse<StoryEntity>, { draftFreeFormDto: StoryDraftTextFreeformDto }>
       (
         STORY_MESSAGE_PATTERNS.DRAFT_TEXT_FREE_FORM,
         {
