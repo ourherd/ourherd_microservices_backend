@@ -1,9 +1,7 @@
-import { IsEnum, IsOptional, IsString, IsUUID } from "class-validator";
+import { IsString, IsUUID } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import { ReactionType } from "./../entity/reaction.entity"
-import { Transform } from "class-transformer";
 
-export class PostReactionDto {
+export class PostViolationDto {
 
   @ApiProperty({
     description: "Member ID",
@@ -22,13 +20,10 @@ export class PostReactionDto {
   public story_id: string;
 
   @ApiProperty({
-    description: "List of all reactions",
-    enum: ReactionType,
-    isArray: false,
+    description: "Reason to report the story",
+    example: 'its off topic'
   })
-  @IsOptional()
-  @Transform(({ value }) => value.toString().toUpperCase())
-  @IsEnum(ReactionType)
-  public reaction_type?: ReactionType = ReactionType.LOVE;
+  @IsString()
+  public reason: string;
 
 }

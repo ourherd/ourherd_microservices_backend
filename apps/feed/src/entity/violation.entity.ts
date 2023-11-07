@@ -2,36 +2,28 @@ import { Column, Entity } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
 import { AbstractEntity } from "@app/database/base/base.entity";
 
-export enum ReactionType {
-  LOVE = "LOVE",
-  CLAP = "CLAP",
-  LIKE = "LIKE",
-  SMILE = "SMILE",
-  SUPPORT = "SUPPORT",
-  STRENGTH = "STRENGTH"
-}
-
 @Entity({
-  name: 'reactions'
+  name: 'story_violations'
 })
 
-export class ReactionEntity extends AbstractEntity {
+export class ViolationEntity extends AbstractEntity {
 
-  @ApiProperty()
+  @ApiProperty({
+    description: "Member ID",
+    example: '9322c384-fd8e-4a13-80cd-1cbd1ef95ba8'
+  })
   @Column({ nullable: false })
   member_id: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: "Story ID",
+    example: '116dcaf4-c1ea-4218-b6b4-e4fd95a3c28e'
+  })
   @Column({ nullable: false })
   story_id: string;
 
-  @ApiProperty({
-    enum: ReactionType
-  })
-  @Column({
-    type: "enum",
-    enum: ReactionType,
-    default: ReactionType.LOVE
-  })
-  reaction_type: ReactionType;
+  @ApiProperty()
+  @Column({ nullable: false })
+  reason: string;
+
 }
