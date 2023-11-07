@@ -1,14 +1,14 @@
-export const REACTION_SERVICE = 'REACTION SERVICE';
-export const REACTION_MODULE = 'REACTION MODULE';
+export const VIOLATION_SERVICE = 'REACTION SERVICE';
+export const VIOLATION_MODULE = 'REACTION MODULE';
 
-export const REACTION_MESSAGE_PATTERNS = {
-  REACT: 'reaction.react'
+export const VIOLATION_MESSAGE_PATTERNS = {
+  REPORT: 'violation.report'
 }
 
-export const REACTION_MESSAGE_DB_RESPONSE = {
-  CREATED: 'reaction.created',
-  CREATED_FAILED: 'reaction.create-failed',
-  CHANGED: 'reaction.changed',
-  FOUND: 'reaction.with-story-found',
-  NOT_FOUND: 'reaction.with-story-not-found',
+export const VIOLATION_MESSAGE_DB_RESPONSE = {
+  CREATED: 'violation.created',
+  CREATED_FAILED: 'violation.create-failed',
+  CHANGED: 'violation.changed',
+  FOUND: 'violation.with-story-found',
+  NOT_FOUND: 'violation.with-story-not-found',
 }
