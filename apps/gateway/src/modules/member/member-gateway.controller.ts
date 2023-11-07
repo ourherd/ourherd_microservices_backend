@@ -111,7 +111,7 @@ export class MemberGatewayController {
         )
     );
 
-    if (sendMailerDtoResult.state == false) {
+    if (sendMailerDtoResult.state === false) {
       return sendMailerDtoResult;
     }
 

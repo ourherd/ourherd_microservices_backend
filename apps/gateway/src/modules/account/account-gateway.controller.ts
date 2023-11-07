@@ -46,7 +46,7 @@ export class AccountGatewayController {
         )
     );
 
-    if (accountEntityResult.state == false) {
+    if (accountEntityResult.state === false) {
       return accountEntityResult;
     }
 
@@ -63,7 +63,7 @@ export class AccountGatewayController {
         )
     );
 
-    if (resultMember.state == false) {
+    if (resultMember.state === false) {
       return resultMember;
     }    
 
