@@ -39,6 +39,7 @@ export class MemberService {
         createDto.password
       )
 
+      // get uuid from cognito and use for generating member item
       createDto.id = cognitoResult['userSub']
 
       const member = this.memberRepository.create(createDto);
