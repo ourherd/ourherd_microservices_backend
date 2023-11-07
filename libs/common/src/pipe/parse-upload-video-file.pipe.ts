@@ -1,4 +1,12 @@
-import { ArgumentMetadata, FileTypeValidator, Injectable, MaxFileSizeValidator, ParseFilePipe, PipeTransform } from "@nestjs/common";
+import {
+    ArgumentMetadata,
+    FileTypeValidator,
+    Injectable,
+    MaxFileSizeValidator,
+    ParseFilePipe,
+    PipeTransform
+} from "@nestjs/common";
+
 import { AVAILABLE_UPLOAD_VIDEO_FILE_MIMES, MAX_UPLOAD_FILE_VIDEO_SIZE } from "../constant/upload.constant";
 
 @Injectable()
@@ -18,5 +26,4 @@ export class ParseUploadVideoFilePipe implements PipeTransform {
             ]
         }).transform(value);
     }
-
 }

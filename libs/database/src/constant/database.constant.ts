@@ -8,8 +8,8 @@ import { ReactionEntity } from 'apps/feed/src/entity/reaction.entity';
 import { StoryEntity } from 'apps/story/src/entity/story.entity';
 import { StoryBookmarkEntity } from 'apps/story/src/entity/story.bookmark.entity';
 import { MemberVerificationEntity } from 'apps/member/src/entity/member-verification.entity';
-// import { AccountEntity } from 'apps/account/src/entity/account.entity';
-// import { AuthRequestEntity } from "apps/auth/src/entity/auth-request.entity";
+import { StorageResourceEntity } from "../../../../apps/storage/src/entity/storage-resource.entity";
+import { AccountVerificationEntity } from 'apps/account/src/entity/email-verification.entity';
 
 export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string, entities: EntityClassOrSchema[] }> = {
     primary: {
@@ -22,6 +22,7 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
             StoryBookmarkEntity,
             AccountEntity,
             AccountDeviceEntity,
+            StorageResourceEntity,
             MemberVerificationEntity
         ]
     },
@@ -29,13 +30,14 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
         type: 'postgres',
         env: 'SECONDARY',
         entities: [
-            MemberEntity,
-            ReactionEntity,
-            StoryEntity,
-            StoryBookmarkEntity,
-            AccountEntity,
-            AccountDeviceEntity,
-            MemberVerificationEntity
+          MemberEntity,
+          ReactionEntity,
+          StoryEntity,
+          StoryBookmarkEntity,
+          AccountEntity,
+          AccountDeviceEntity,
+          StorageResourceEntity,
+          MemberVerificationEntity
         ]
     }
 };

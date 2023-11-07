@@ -16,7 +16,6 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     ConfigModule.forRoot({
       envFilePath: envFilePath
     }),
-
     DatabaseModule.register(Database.PRIMARY),
     DatabaseModule.forEntity(Database.PRIMARY, [MemberEntity, MemberVerificationEntity]),
     RabbitModule.forServerProxy(RabbitServiceName.MEMBER),
