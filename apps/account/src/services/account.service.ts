@@ -32,6 +32,7 @@ export class AccountService {
     );
 
     if (account === null) {
+
       this.logger.log(ACCOUNT_MODULE + ' ---> null: ' + JSON.stringify(account));
     }
 
@@ -47,7 +48,6 @@ export class AccountService {
       // TODO replace this with a validation injection
       // https://gist.github.com/zarv1k/3ce359af1a3b2a7f1d99b4f66a17f1bc
       const accountExist = await this.findByEmail(createAccountDto.email);
-      this.logger.log(ACCOUNT_MODULE + ' ---> null: ' + JSON.stringify(accountExist));
       if (accountExist.state) {
         return {
           state: accountExist.state,
@@ -69,11 +69,6 @@ export class AccountService {
       createAccountDto.password = hash;
 
       const result = await this.accountRepository.save(createAccountDto);
-      this.logger.log(ACCOUNT_MODULE + ' ---> result: ' + JSON.stringify({
-        state: !!result,
-        data: result,
-        message: ACCOUNT_MESSAGE_DB_RESPONSE.CREATED
-      }));
 
       return {
         state: !!result,
@@ -114,124 +109,6 @@ export class AccountService {
       return {
         state: false,
         data: e.name,
-        message: ACCOUNT_MESSAGE_DB_RESPONSE.NOT_FOUND
-      };
-    }
-
-  }
-
-<<<<<<< HEAD
-  async createEmailToken(email: string): Promise<IServiceResponse<SendMailerDto>> {
-
-    try {
-
-      const accountEntity = await this.accountRepository.findOneBy({ email: email });
-
-      if (!!accountEntity == true && accountEntity.verified == true) {
-        throw new HttpException('ACCOUNT.VERIFIED', HttpStatus.OK);
-      }
-
-      const emailVerification = await this.accountVerificationRepository.findOneBy({ email: email });
-
-      const emailVerificationObj = {
-        email: email,
-        email_token: v4(),
-        account: accountEntity,
-        created_at: new Date()
-      }
-
-      const verifyLink = '"http://' + process.env.WEBSITE_URL + '/api/account/verify/' + emailVerificationObj.email_token + '"'
-
-      const sendMailObj = {
-        email: email,
-        subject: "Verify Email",
-        html: 'Hi! <br><br> Thanks for your registration<br><br>' +
-          '<a href='+ verifyLink +'>Click here to activate your account</a>'
-      }
-
-      const sendMailerDto = plainToClass(SendMailerDto, sendMailObj);
-      const emailVerificationEntity = this.accountVerificationRepository.create(emailVerificationObj)
-      if (!!emailVerification === false) {
-        await this.accountVerificationRepository.save(
-          emailVerificationEntity
-        );
-        return {
-          state: true,
-          data: sendMailerDto
-        }
-      }
-
-      const durationTime = (new Date().getTime() - emailVerification.created_at.getTime()) / this.hourDivide;
-      if (emailVerification && (durationTime > 48)) {
-        throw new HttpException('ACCOUNT.EMAIL_SENT_RECENTLY', HttpStatus.INTERNAL_SERVER_ERROR);
-      } else {
-        var emailVerificationModel = await this.accountVerificationRepository.update(
-          { email: email },
-          emailVerificationEntity
-        );
-        return {
-          state: true,
-          data: sendMailerDto
-        }
-      }
-
-    } catch (e) {
-      return {
-        state: false,
-        data: e.name,
-        message: e.message
-      };
-    }
-  }
-
-  async verifyEmail(authVerifyUserDto: AuthVerifyUserDto): Promise<IServiceResponse<UpdateResult>> {
-    try {
-
-      let emailVerif = await this.accountVerificationRepository.findOneBy({
-        email_token: authVerifyUserDto.confirmationCode
-      });
-
-
-
-      if (!!emailVerif == true && emailVerif.email) {
-
-        const durationTime = (new Date().getTime() - emailVerif.created_at.getTime()) / this.hourDivide;
-
-        if (durationTime > 48) {
-          return {
-            state: false,
-            data: null,
-            message: 'ACCOUNT.VERIFY_TOKEN_EXPIRED'
-          };
-        }
-
-        var accountFromDb = await this.accountRepository.findOneBy({ email: emailVerif.email });
-        if (accountFromDb) {
-          accountFromDb.verified = true
-          var savedUser = await this.accountRepository.update(
-            { email: emailVerif.email },
-            accountFromDb
-          );
-          await this.accountVerificationRepository.remove(emailVerif);
-          return {
-            state: !!savedUser,
-            data: savedUser
-          };
-        }
-      } else {
-
-        return {
-          state: false,
-          data: null,
-          message: 'ACCOUNT.VERIFY_TOKEN_NOT_FOUND'
-        };
-
-      }
-
-    } catch (e) {
-      return {
-        state: true,
-        data: null,
         message: ACCOUNT_MESSAGE_DB_RESPONSE.NOT_FOUND
       };
     }
