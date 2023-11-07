@@ -1,11 +1,18 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsString } from 'class-validator';
 
 export class RefreshTokenAccountDto {
 
   @IsEmail()
+  @ApiProperty({
+  })
   email: string;
 
   @IsString()
+  @ApiProperty({
+    description: "jwt refresh token from aws cognito | db after authen pass",
+    example: "eyJraWQiOiJzNWJnU1lhUmdYMFBQdmNmZ1A5XC82b0xXK1M5b2xRWWhSRUQxVXd1Q2Q5WT0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJlMGM1NDI1OS0wZDg2LTQzOGYtODA0NS05YzkwNDE0Yzk3NzEiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLmFwLXNvdXRoZWFzdC0yLmFtYXpvbmF3cy5jb21cL2FwLXNvdXRoZWFzdC0yX2hUMkJFY21pdiIsImNvZ25pdG86dXNlcm5hbWUiOiJlMGM1NDI1OS0wZDg2LTQzOGYtODA0NS05YzkwNDE0Yzk3NzEiLCJvcmlnaW5fanRpIjoiNmJiMWVjZDktZTIxZC00MTE4LTgyNjYtY2RiNTk2ZjVmYmQ1IiwiYXVkIjoiNWtrcW04NTJyZzRja2Zub2VtMXBydTFtZTYiLCJldmVudF9pZCI6ImExZmUzYTgyLTBlNGItNGYyNS1hMDNiLTFjNGQwZDYxZTQzYSIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNjk4NzM5Nzk5LCJleHAiOjE2OTg3NDMzOTksImlhdCI6MTY5ODczOTc5OSwianRpIjoiZjE3YmJlNmQtZjg3MS00MTdkLWFjYWMtMzgzMjRmMzUzMmY5IiwiZW1haWwiOiJwYXBhdHBvbi5kQGdtYWlsLmNvbSJ9.olm0W90SQ-GK1nNKR22mmQ5dvdKsPpneTqOhXjwAFwJbpPtBM85EnLYAGd0v_SzwquV1YbDzfX5zNSIR_rXJtuopu1sdU9HFxl3QID-CmLIp9uECDWEEOHBkcrJ4_wvlgZnhqjHroMl22e8YxQ-cqfFLRYrQZM7VZlrqJD9f1wrHWkE4pM-O7wA6Q8KTUTWCEqLEEHJQmrYSR6kQpEnNiHCm-aV7dTfKt_tNPiZKHO5esUwTkYJ7zPL3USVR30xYNG5ZuyBsOuJQdPGoOYBEm_E4l6m8NFo8qqergX0wzqQQCQ7DoCE8kymTR5DrBp576XW3uzX6_rPOm7OxDBkN3A"
+  })
   refreshToken: string;
 
 }

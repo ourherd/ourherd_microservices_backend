@@ -1,3 +1,4 @@
+import { ApiProperty } from "@nestjs/swagger";
 import {
   IsEmail,
   IsNotEmpty,
@@ -15,6 +16,7 @@ export class LoginAccountDto {
 
   @IsNotEmpty()
   @IsString()
+  @ApiProperty()
   public password: string;
 
 }

@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Inject, Logger, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, Inject, Logger, Param, ParseUUIDPipe, Post } from "@nestjs/common";
 import { IGatewayResponse } from '../../common/interface/gateway.interface';
 import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
 import { RegisterAccountDto } from "apps/account/src/dto/register.account.dto";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { firstValueFrom } from "rxjs";
 import { ACCOUNT_MESSAGE_PATTERNS } from "../../../../account/src/constant/account-patterns.constants";
 import { ClientProxy } from "@nestjs/microservices";
@@ -16,7 +16,8 @@ import { SendMailerDto } from "apps/mailer/src/dto/send.mailer.dto";
 import { EmailVerifyTokenDto } from "apps/account/src/dto/email-verify-token.account.dto";
 import { GATEWAY_SERVICE } from "../../constant/gateway-patterns.constants";
 
-@ApiTags('Account Gateway')
+@ApiTags('Account Module')
+@ApiBearerAuth()
 @Controller({
   path: '/account'
 })
@@ -31,6 +32,8 @@ export class AccountGatewayController {
   ) { }
 
   @Post('/register')
+  @ApiOperation({ summary: 'Register Account' })
+  @ApiResponse({ status: 200, description: 'user register success' })
   async register(
     @Body() createDto: RegisterAccountDto
   ): Promise<IGatewayResponse> {
@@ -83,8 +86,10 @@ export class AccountGatewayController {
   }
 
   @Get('/verify/:token')
+  @ApiOperation({ summary: 'Verify Token' })
+  @ApiResponse({ status: 200, description: "user verify pass & token isn't expired" })
   async verify(
-    @Param('token') token
+    @Param('token', ParseUUIDPipe) token: string
   ): Promise<IGatewayResponse> {
     let authVerifyUserDto = new AuthVerifyUserDto()
     authVerifyUserDto.confirmationCode = token
@@ -102,6 +107,8 @@ export class AccountGatewayController {
   }
 
   @Post('/resend-verification')
+  @ApiOperation({ summary: 'Resend verification code' })
+  @ApiResponse({ status: 200, description: "generate new token and resend email with verify link again" })
   async sendEmailVerification(
     @Body() emailVerifyTokenDto: EmailVerifyTokenDto
   ): Promise<IGatewayResponse> {
@@ -134,6 +141,8 @@ export class AccountGatewayController {
   }
 
   @Post('/login')
+  @ApiOperation({ summary: 'Login' })
+  @ApiResponse({ status: 200, description: "check password & email with aws cognito service & provide accessToken, refreshToken" })
   async login(
     @Body() loginDto: LoginAccountDto
   ): Promise<IGatewayResponse> {
@@ -150,6 +159,8 @@ export class AccountGatewayController {
   }
 
   @Post('/refresh')
+  @ApiOperation({ summary: 'refresh token' })
+  @ApiResponse({ status: 200, description: "user input refresh token for regenerate token again" })
   async refreshToken(
     @Body() refreshTokenAccountDto: RefreshTokenAccountDto
   ): Promise<IGatewayResponse> {
