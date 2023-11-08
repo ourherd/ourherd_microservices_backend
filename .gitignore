@@ -41,4 +41,3 @@ envs/*.env
 envs
 /envs
 **/*.env
-envs/development.env
