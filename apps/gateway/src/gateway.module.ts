@@ -4,9 +4,11 @@ import { RabbitModule, RabbitServiceName } from "@app/rabbit";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { MulterModule } from "@nestjs/platform-express";
-import multer from "multer";
-import { MemberGatewayController } from "./modules/member/member-gateway.controller";
 import { PassportModule } from '@nestjs/passport';
+import multer from "multer";
+
+import { MemberGatewayController } from "./modules/member/member-gateway.controller";
+import { MemberVerificationGatewayController } from "./modules/member/member-verification-gateway.controller";
 import { FeedGatewayController } from './modules/feed/feed-gateway.controller';
 import { ReactionGatewayController } from './modules/reaction/reaction-gateway.controller';
 import { ViolationGatewayController } from './modules/violation/violation-gateway.controller';
@@ -49,6 +51,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     AccountPasswordGatewayController,
     MailerGatewayController,
     MemberGatewayController,
+    MemberVerificationGatewayController,
     FeedGatewayController,
     ReactionGatewayController,
     StoryBookmarkGatewayController,
