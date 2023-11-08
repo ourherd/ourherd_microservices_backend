@@ -8,7 +8,7 @@ import { firstValueFrom } from "rxjs";
 import { StoryBookmarkEntity } from "../../../../story/src/entity/story.bookmark.entity";
 import { BOOKMARK_MESSAGE_PATTERNS } from "../../../../story/src/constant/story-patterns.constants";
 
-@ApiTags('Story Bookmark Module')
+@ApiTags('Story Bookmark Gateway')
 @Controller({
   path: '/bookmark'
 })

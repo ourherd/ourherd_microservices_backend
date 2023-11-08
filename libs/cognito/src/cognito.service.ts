@@ -6,16 +6,17 @@ import {
   CognitoUserPool,
 } from 'amazon-cognito-identity-js';
 import { COGNITO_SERVICE } from './constant/cognito-patterns.constants';
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class CognitoService {
-  private logger = new Logger(COGNITO_SERVICE);
-  private userPool: CognitoUserPool;
+  protected logger = new Logger(COGNITO_SERVICE);
+  protected userPool: CognitoUserPool;
 
-  constructor() {
+  constructor(private configService: ConfigService) {
     this.userPool = new CognitoUserPool({
-      UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
-      ClientId: process.env.AWS_COGNITO_CLIENT_ID,
+      UserPoolId: this.configService.get('AWS_COGNITO_USER_POOL_ID'),
+      ClientId: this.configService.get('AWS_COGNITO_CLIENT_ID'),
     });
   }
 
@@ -40,7 +41,7 @@ export class CognitoService {
         },
       );
     });
-
+    console.log(JSON.stringify(signUpResult));
     return signUpResult
   }
 

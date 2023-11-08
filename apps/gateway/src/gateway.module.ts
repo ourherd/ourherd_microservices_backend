@@ -9,6 +9,7 @@ import { MemberGatewayController } from "./modules/member/member-gateway.control
 import { PassportModule } from '@nestjs/passport';
 import { FeedGatewayController } from './modules/feed/feed-gateway.controller';
 import { ReactionGatewayController } from './modules/reaction/reaction-gateway.controller';
+import { ViolationGatewayController } from './modules/violation/violation-gateway.controller';
 import { StoryBookmarkGatewayController } from "./modules/story/story-bookmark-gateway.controller";
 import { StoryDraftGatewayController } from "./modules/story/story-draft-gateway.controller";
 import { AccountGatewayController } from "./modules/account/account-gateway.controller";
@@ -51,7 +52,8 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     FeedGatewayController,
     ReactionGatewayController,
     StoryBookmarkGatewayController,
-    StoryDraftGatewayController
+    StoryDraftGatewayController,
+    ViolationGatewayController
   ],
   providers: [JwtStrategy],
 })

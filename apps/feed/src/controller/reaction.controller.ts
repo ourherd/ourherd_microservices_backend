@@ -10,7 +10,7 @@ import { ReactionEntity } from "../entity/reaction.entity";
 export class ReactionController {
 
   constructor(private readonly reactionService: ReactionService) {}
-  logger = new Logger(ReactionService.name);
+  logger = new Logger(ReactionController.name);
 
   @MessagePattern(REACTION_MESSAGE_PATTERNS.REACT)
   async reaction (
