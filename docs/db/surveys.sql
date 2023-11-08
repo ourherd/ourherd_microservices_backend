@@ -20,41 +20,62 @@ CREATE TABLE IF NOT EXISTS public.surveys
 );
 
 
-CREATE TABLE IF NOT EXISTS public.survey_questions
-(
-    id uuid default gen_random_uuid() not null constraint survey_question_pkey primary key,
-    survey_id uuid,
-    question_text text,
-    description text,
-    question_type varchar(255),  -- 1 to 5 / 1 to 7
-    version int default 1,
-    created_at timestamp with time zone default now() not null,
-    updated_at timestamp with time zone default now() not null,
-    deleted_at timestamp
-);
+-- CREATE TABLE IF NOT EXISTS public.survey_questions
+-- (
+--     id uuid default gen_random_uuid() not null constraint survey_question_pkey primary key,
+--     survey_id uuid,
+--     question_text text,
+--     description text,
+--     question_type varchar(255),  -- 1 to 5 / 1 to 7
+--     version int default 1,
+--     created_at timestamp with time zone default now() not null,
+--     updated_at timestamp with time zone default now() not null,
+--     deleted_at timestamp
+-- );
 
-CREATE TABLE IF NOT EXISTS public.survey_members
+CREATE TYPE survey_status AS ENUM ('INCOMPLETE', 'COMPLETED', 'ARCHIVED');
+
+CREATE TABLE IF NOT EXISTS public.survey_member_instances
 (
-    id uuid default gen_random_uuid() not null constraint survey_question_pkey primary key,
-    survey_id uuid,
-    member_id uuid,
+    id uuid default gen_random_uuid() not null constraint survey_member_instances_pkey primary key, -- 82727
+    survey_id uuid not null, -- DQ5_MEMBER = 23 | SHORT_SURVEY
+    member_id uuid not null, -- member id
     full_name varchar(255),
-    consent boolean default false,
-    question_text text,
-    "status" varchar(255),
+    consent boolean DEFAULT false,
+    "status" survey_status DEFAULT 'INCOMPLETE',
 
     created_at timestamp with time zone default now() not null,
     updated_at timestamp with time zone default now() not null,
     deleted_at timestamp
 );
 
-CREATE TABLE IF NOT EXISTS public.survey_responses
+ALTER TABLE public.survey_member_instances
+    ADD CONSTRAINT fk_survey_instances_members foreign key(member_id) references members(id);
+
+CREATE TABLE IF NOT EXISTS public.survey_single_responses
 (
-    id uuid default gen_random_uuid() not null constraint survey_question_pkey primary key,
-    survey_member_id uuid,
+    id uuid default gen_random_uuid() not null constraint survey_member_instances_pkey primary key,
+    survey_member_instance_id uuid, -- 82727
+    question_number varchar(2), --  1
+    question_name varchar(255), -- how happy are you?
+    question_response varchar(255), -- 5
+    created_at timestamp with time zone default now() not null,
+    updated_at timestamp with time zone default now() not null,
+    deleted_at timestamp
+);
+
+
+CREATE TABLE IF NOT EXISTS public.survey_final_responses
+(
+    id uuid default gen_random_uuid() not null constraint survey_final_responses_pkey primary key,
+    survey_member_instance_id uuid not NULL,
     question_number varchar(2),
     question_name varchar(255),
+    question_response varchar(255),
     created_at timestamp with time zone default now() not null,
     updated_at timestamp with time zone default now() not null,
     deleted_at timestamp
 );
+
+ALTER TABLE public.survey_final_responses
+    ADD CONSTRAINT fk_survey_final_survey_instance foreign key(survey_member_instance_id) references survey_member_instances(id);
