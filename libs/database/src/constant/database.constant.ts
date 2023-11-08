@@ -9,7 +9,6 @@ import { StoryEntity } from 'apps/story/src/entity/story.entity';
 import { StoryBookmarkEntity } from 'apps/story/src/entity/story.bookmark.entity';
 import { MemberVerificationEntity } from 'apps/member/src/entity/member-verification.entity';
 import { StorageResourceEntity } from "../../../../apps/storage/src/entity/storage-resource.entity";
-import { AccountVerificationEntity } from 'apps/account/src/entity/email-verification.entity';
 import { ViolationEntity } from "../../../../apps/feed/src/entity/violation.entity";
 
 export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string, entities: EntityClassOrSchema[] }> = {
@@ -24,7 +23,6 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
             AccountEntity,
             AccountDeviceEntity,
             StorageResourceEntity,
-            AccountVerificationEntity,
             ViolationEntity,
             MemberVerificationEntity
         ]
@@ -40,7 +38,6 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
           AccountEntity,
           AccountDeviceEntity,
           StorageResourceEntity,
-          AccountVerificationEntity,
           ViolationEntity,
           MemberVerificationEntity
         ]
