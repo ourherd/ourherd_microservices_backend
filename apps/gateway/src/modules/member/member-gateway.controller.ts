@@ -14,7 +14,7 @@ import { SendMailerDto } from "apps/mailer/src/dto/send.mailer.dto";
 import { MAILER_MESSAGE_PATTERNS } from "apps/mailer/src/constant/mailer-patterns.constants";
 import { VerifyUserDto } from "apps/member/src/dto/verify-email.member.dto";
 import { CurrentMember } from "@app/authentication/decorator/member.decorator";
-import { Role } from "../../../../account/src/interface/role.interface";
+import { Role } from "@app/authentication/constant/roles.enum"
 import { Auth } from "@app/authentication";
 
 @ApiTags('Member Module')
