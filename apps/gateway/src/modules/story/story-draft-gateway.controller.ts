@@ -89,11 +89,7 @@ export class StoryDraftGatewayController {
     @Body() draftGuidedDto: StoryDraftTextGuidedDto )
     : Promise<IGatewayResponse>  {
     const { state, data } = await firstValueFrom(
-      this.storyService.send<IServiceResponse<StoryEntity>, {
-        member_id: string,
-        draftGuidedDto: StoryDraftTextGuidedDto
-      }>
-
+      this.storyService.send<IServiceResponse<StoryEntity>, { draftGuidedDto: StoryDraftTextGuidedDto }>
       (
        STORY_MESSAGE_PATTERNS.DRAFT_TEXT_GUIDE,
         {
