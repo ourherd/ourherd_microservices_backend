@@ -28,18 +28,42 @@ export class SurveyService {
       return {
         state: false,
         data: null,
-        message: "SURVEY.SURVEY_ID_EXISTING"
+        message: SURVEY_MESSAGE_DB_RESPONSE.ID_EXISTING
       }
     }
 
-    const surveyCreatedData = await this.surveyMemberInstanceEntity.create(createDto)
+    const surveyCreatedData = this.surveyMemberInstanceEntity.create(createDto)
     const surveySavedData = await this.surveyMemberInstanceEntity.save(surveyCreatedData)
-
 
     return {
       state: !!surveySavedData,
       data: surveySavedData,
       message: SURVEY_MESSAGE_DB_RESPONSE.CREATED
+    }
+  }
+  
+  async submitSurveyInstance(createDto: CreateSurveyInstanceDto): Promise<IServiceResponse<SurveyMemberInstanceEntity>> {
+
+    const surveyMemberInstance = await this.surveyMemberInstanceEntity.findOneBy(
+      {
+        survey_id: createDto.survey_id
+      }
+    );
+
+    if (!!surveyMemberInstance === false) {
+      return {
+        state: false,
+        data: null,
+        message: SURVEY_MESSAGE_DB_RESPONSE.NOT_FOUND
+      }
+    }
+    
+    
+
+    return {
+      state: !!surveyMemberInstance,
+      data: surveyMemberInstance,
+      message: SURVEY_MESSAGE_DB_RESPONSE.SUBMITED
     }
   }
 }

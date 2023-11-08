@@ -3,22 +3,22 @@ import { AbstractEntity } from '@app/database/base/base.entity';
 import { SURVEY_STATUS } from "../constant/survey-patterns.constants";
 
 @Entity({
-  name: 'survey_member_instances'
+  name: 'survey_final_responses'
 })
 
-export class SurveyMemberInstanceEntity extends AbstractEntity {
+export class SurveyFinalResponseEntity extends AbstractEntity {
 
   @Column({ nullable: false })
-  survey_id: string;
+  survey_member_instance_id: string;
 
   @Column({ nullable: false })
-  member_id: string;
+  question_number: string;
 
   @Column({ nullable: true })
-  full_name: string;
+  question_name: string;
 
   @Column({ nullable: true })
-  consent: boolean;
+  question_response: boolean;
 
   @Column({ 
     nullable: true, 

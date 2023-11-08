@@ -26,3 +26,15 @@
     @Body() updateDto: UpdateMemberDto,
     @CurrentUser() userInfo,
 ```
+
+* `@CurrentUser['id_member']` - `Get user info from Auth (User together with Role | Auth otherwise not working)`
+  
+
+```js
+@Patch('/:id')
+  @Roles(Role.ADMIN)
+  async updateProfile(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateDto: UpdateMemberDto,
+    @CurrentUser('id_member') userInfo,
+```
