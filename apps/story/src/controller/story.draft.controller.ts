@@ -21,7 +21,7 @@ export class StoryDraftController {
   }
 
   @MessagePattern(STORY_MESSAGE_PATTERNS.DRAFT_TEXT_GUIDE)
-  async draftImageGuide (
+  async draftTextGuide (
     @Payload('draftGuidedDto') draftGuidedDto: StoryDraftTextGuidedDto):
     Promise<IServiceResponse<StoryEntity>> {
 
