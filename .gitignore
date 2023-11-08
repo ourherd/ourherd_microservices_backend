@@ -40,4 +40,4 @@ lerna-debug.log*
 /envs/*.env
 envs
 /envs
-**/.env
+**/*.env
