@@ -8,12 +8,14 @@ import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { firstValueFrom } from "rxjs";
 import { MEMBER_MESSAGE_PATTERNS, MEMBER_SERVICE } from "../../../../member/src/constant/member-patterns.constants";
 import { ClientProxy } from "@nestjs/microservices";
-import { CreateMemberDto } from "../../../../member/src/dto/create-member.dto";
 import { UpdateMemberDto } from "../../../../member/src/dto/update-member.dto";
 import { EmailVerifyTokenDto } from "apps/member/src/dto/email-verify-token.account.dto";
 import { SendMailerDto } from "apps/mailer/src/dto/send.mailer.dto";
 import { MAILER_MESSAGE_PATTERNS } from "apps/mailer/src/constant/mailer-patterns.constants";
 import { VerifyUserDto } from "apps/member/src/dto/verify-email.member.dto";
+import { CurrentMember } from "@app/authentication/decorator/member.decorator";
+import { Role } from "../../../../account/src/interface/role.interface";
+import { Auth } from "@app/authentication";
 
 @ApiTags('Member Module')
 @Controller({
@@ -40,24 +42,12 @@ export class MemberGatewayController {
     return { state, data };
   }
 
-  @Post('/')
-  async createProfile ( @Body() createDto: CreateMemberDto) : Promise<IGatewayResponse> {
-
-    const { state, data } = await firstValueFrom(
-      this.memberClient.send<IServiceResponse<MemberEntity>, { createDto: CreateMemberDto }>
-      (
-        MEMBER_MESSAGE_PATTERNS.CREATE,
-        {
-          createDto
-        }
-      )
-    );
-    return { state, data };
-  };
-
-  @Patch('/:id')
+  @Patch('/')
+  @Auth()
+  @ApiOperation({ summary: 'Update Profile' })
+  @ApiResponse({ status: 204, description: "Update first name, birthday, etc" })
   async updateProfile(
-    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentMember ('id_member') id: string,
     @Body() updateDto: UpdateMemberDto
   ) : Promise<IGatewayResponse> {
 
@@ -81,7 +71,7 @@ export class MemberGatewayController {
     @Param('token', ParseUUIDPipe) token: string
   ): Promise<IGatewayResponse> {
     let verifyUserDto = new VerifyUserDto()
-    this.logger.log(verifyUserDto.confirmationCode)
+
     const response = await firstValueFrom(
       this.memberClient.send<IServiceResponse<any>, { verifyUserDto: VerifyUserDto }>
         (

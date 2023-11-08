@@ -1,9 +1,9 @@
-import { Column, Entity, JoinColumn, OneToOne } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany } from "typeorm";
 
 import { AbstractEntity } from "@app/database/base/base.entity";
-import { AccountEntity } from "apps/account/src/entity/account.entity";
 import { IsEnum, IsOptional } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
+import { MemberVerificationEntity } from "./member-verification.entity";
 
 export enum MemberStatus {
   ACTIVATED = 'ACTIVATED',
@@ -96,10 +96,7 @@ export class MemberEntity extends AbstractEntity {
   @Column({ nullable: true })
   sequence_identity: string;
 
-  // @OneToMany(() => AccountEntity, (user) => user.member_id)
-  // account: AccountEntity
-
-  // @OneToOne(() => User, (user) => user.profile)
-  // user: User;
+  // @OneToMany(() => MemberVerificationEntity, verification => verification.member )
+  // verification: MemberVerificationEntity;
 
 }

@@ -1,7 +1,5 @@
-import { Column, Entity, OneToOne, JoinColumn, OneToMany, ManyToOne } from "typeorm";
-import { AbstractEntity } from '@app/database/base/base.entity';
-import { AccountDeviceEntity } from './account.device.entity'
-import { MemberEntity } from "apps/member/src/entity/member.entity";
+import { Column, Entity } from "typeorm";
+import { AbstractEntity } from "@app/database/base/base.entity";
 
 @Entity({
   name: 'accounts'

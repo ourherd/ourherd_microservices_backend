@@ -23,7 +23,7 @@ SELECT enum_range(NULL::role_type);
 CREATE TABLE IF NOT EXISTS public.account_devices
 (
     id uuid default gen_random_uuid() not null constraint account_device_pkey primary key,
-    account_id uuid NOT NULL constraint account_device_member_id_fkey references "account" on update restrict on delete restrict,
+    account_id uuid NOT NULL constraint account_device_member_id_fkey references "accounts" on update restrict on delete restrict,
     device_id text,
     device_type text
 );
