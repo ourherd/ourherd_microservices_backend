@@ -8,22 +8,22 @@ import { ClientProxy } from "@nestjs/microservices";
 import { WelcomeMailerDto } from "apps/mailer/src/dto/welcome.mailer.dto";
 import { MAILER_MESSAGE_PATTERNS } from "apps/mailer/src/constant/mailer-patterns.constants";
 
-@ApiTags('Mailer Module')
+@ApiTags('Mailer Gateway')
 @Controller({
   path: '/mailer'
 })
 
 export class MailerGatewayController {
 
-  constructor( 
+  constructor(
     @Inject(RabbitServiceName.EMAIL) private mailerClient: ClientProxy,
     ) { }
 
   @Post('/welcomeMail')
   @ApiOperation({ summary: 'send welcome eamil' })
   @ApiResponse({ status: 200, description: "send email from email template for welcoming new member" })
-  async welcomeEmail ( 
-    @Body() welcomeMailerDto: WelcomeMailerDto 
+  async welcomeEmail (
+    @Body() welcomeMailerDto: WelcomeMailerDto
     ): Promise<IGatewayResponse> {
     const { state, data } = await firstValueFrom(
       this.mailerClient.send<IServiceResponse<AccountEntity>, { welcomeMailerDto: WelcomeMailerDto}>

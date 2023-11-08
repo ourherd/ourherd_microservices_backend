@@ -1,7 +1,6 @@
-import { ApiTags, ApiConsumes } from "@nestjs/swagger";
+import { ApiConsumes, ApiTags } from "@nestjs/swagger";
 import {
   Body,
-  Req,
   Controller,
   Inject,
   Post,
@@ -14,7 +13,6 @@ import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
 import { ClientProxy } from "@nestjs/microservices";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { IGatewayResponse } from "../../common/interface/gateway.interface";
-import { ParseUploadVideoFilePipe } from "@app/common/pipe/parse-upload-video-file.pipe";
 import { firstValueFrom } from "rxjs";
 import { STORY_MESSAGE_PATTERNS } from "../../../../story/src/constant/story-patterns.constants";
 import { StoryDraftVideoDto } from "../../../../story/src/dto/story.draft.video.dto";
@@ -29,6 +27,7 @@ import {
 } from "../../../../storage/src/interface/storage-resource.interface";
 import { STORAGE_MESSAGE_PATTERNS } from "../../../../storage/src/constant/storage-patterns.constant";
 import { v4 } from "uuid";
+import { CurrentMember } from "@app/authentication";
 
 
 @ApiTags('Story Create Gateway')
@@ -86,23 +85,30 @@ export class StoryDraftGatewayController {
   }
 
   @Post('/text-guided')
-  async draftTextGuided ( @Body() draftGuidedDto: StoryDraftTextGuidedDto ) : Promise<IGatewayResponse>  {
+  async draftTextGuided (
+    @Body() draftGuidedDto: StoryDraftTextGuidedDto )
+    : Promise<IGatewayResponse>  {
     const { state, data } = await firstValueFrom(
-      this.storyService.send<IServiceResponse<StoryEntity>, { draftGuidedDto: StoryDraftTextGuidedDto }>
+      this.storyService.send<IServiceResponse<StoryEntity>, {
+        member_id: string,
+        draftGuidedDto: StoryDraftTextGuidedDto
+      }>
+
       (
        STORY_MESSAGE_PATTERNS.DRAFT_TEXT_GUIDE,
         {
           draftGuidedDto
         }
       )
+
     );
 
     return { state, data };
   }
 
   @Post('/text-freeform')
-  async draftTextFreeForm ( @Body() draftFreeFormDto: StoryDraftTextFreeformDto ) : Promise<IGatewayResponse>  {
-
+  async draftTextFreeForm ( @Body() draftFreeFormDto: StoryDraftTextFreeformDto )
+    :Promise<IGatewayResponse>  {
     const { state, data } = await firstValueFrom(
       this.storyService.send<IServiceResponse<StoryEntity>, { draftFreeFormDto: StoryDraftTextFreeformDto }>
       (
@@ -113,7 +119,6 @@ export class StoryDraftGatewayController {
       )
     );
     return { state, data };
-
   }
 
 }

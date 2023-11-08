@@ -14,7 +14,7 @@ import { SendMailerDto } from "apps/mailer/src/dto/send.mailer.dto";
 import { GATEWAY_SERVICE } from "../../constant/gateway-patterns.constants";
 import { AccountEntity } from "apps/account/src/entity/account.entity";
 
-@ApiTags('Account Module')
+@ApiTags('Account Gateway')
 @ApiBearerAuth()
 @Controller({
   path: '/account'
@@ -65,7 +65,7 @@ export class AccountGatewayController {
 
     if (resultMember.state === false) {
       return resultMember;
-    }    
+    }
 
     const sendMailerDtoData = resultMember.data
 

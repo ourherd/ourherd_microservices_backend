@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Logger, Param, ParseUUIDPipe, Patch, Post, Query } from "@nestjs/common";
+import { Body, Controller, Get, Inject, Logger, Patch, Query } from "@nestjs/common";
 import { IGatewayResponse } from "../../common/interface/gateway.interface";
 import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
 import { IPagination } from "@app/common";
@@ -9,15 +9,10 @@ import { firstValueFrom } from "rxjs";
 import { MEMBER_MESSAGE_PATTERNS, MEMBER_SERVICE } from "../../../../member/src/constant/member-patterns.constants";
 import { ClientProxy } from "@nestjs/microservices";
 import { UpdateMemberDto } from "../../../../member/src/dto/update-member.dto";
-import { EmailVerifyTokenDto } from "apps/member/src/dto/email-verify-token.account.dto";
-import { SendMailerDto } from "apps/mailer/src/dto/send.mailer.dto";
-import { MAILER_MESSAGE_PATTERNS } from "apps/mailer/src/constant/mailer-patterns.constants";
-import { VerifyUserDto } from "apps/member/src/dto/verify-email.member.dto";
 import { CurrentMember } from "@app/authentication/decorator/member.decorator";
-import { Role } from "@app/authentication/constant/roles.enum"
 import { Auth } from "@app/authentication";
 
-@ApiTags('Member Module')
+@ApiTags('Member Gateway')
 @Controller({
   path: '/member'
 })

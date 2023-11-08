@@ -8,7 +8,7 @@ import { PostViolationDto } from "../../../../feed/src/dto/post.violation.dto";
 import { IGatewayResponse } from "../../common/interface/gateway.interface";
 import { ViolationEntity } from "../../../../feed/src/entity/violation.entity";
 
-@ApiTags('Report Violation Gateway')
+@ApiTags('Story Report Violation Gateway')
 @Controller({
   path: '/story/report'
 })

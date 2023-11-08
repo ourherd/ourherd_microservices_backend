@@ -10,7 +10,7 @@ import { EmailVerifyTokenDto } from "../../../../member/src/dto/email-verify-tok
 import { SendMailerDto } from "../../../../mailer/src/dto/send.mailer.dto";
 import { MAILER_MESSAGE_PATTERNS } from "../../../../mailer/src/constant/mailer-patterns.constants";
 
-@ApiTags('Member Email Gateway')
+@ApiTags('Member Verification Gateway')
 @Controller({
   path: '/member/verification'
 })
