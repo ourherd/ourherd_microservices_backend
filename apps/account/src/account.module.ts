@@ -20,7 +20,6 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     DatabaseModule.register(Database.PRIMARY),
     DatabaseModule.forEntity(Database.PRIMARY, [AccountEntity]),
     RabbitModule.forServerProxy(RabbitServiceName.ACCOUNT),
-    RabbitModule.forClientProxy(RabbitServiceName.MEMBER),
     CognitoModule,
   ],
   controllers: [AccountController, PasswordController],
