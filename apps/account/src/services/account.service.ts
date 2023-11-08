@@ -32,7 +32,7 @@ export class AccountService {
     );
 
     if (account === null) {
-      
+
       this.logger.log(ACCOUNT_MODULE + ' ---> null: ' + JSON.stringify(account));
     }
 
@@ -106,7 +106,7 @@ export class AccountService {
       };
     } catch (e) {
       this.logger.log(ACCOUNT_MODULE + ' ---> ERROR: ' + e);
-      return {     
+      return {
         state: false,
         data: e.name,
         message: ACCOUNT_MESSAGE_DB_RESPONSE.NOT_FOUND
