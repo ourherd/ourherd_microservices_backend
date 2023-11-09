@@ -1,24 +1,17 @@
 import { IsNotEmpty, IsOptional, IsString, IsUUID } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
+import { SurveyFinalResponseEntity } from "../entities/survey-final-responses.entity";
 
-export class CreateSurveyInstanceDto {
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsUUID()
-  public survey_id: string;
+export class SubmitSurveyFinalDto {
 
   @ApiProperty()
   @IsNotEmpty()
   @IsUUID()
-  public member_id: string;
+  public survey_instance_id: string;
 
   @ApiProperty()
-  @IsString()
-  public full_name: string;
-
-  @IsOptional()
+  @IsNotEmpty()
   @ApiProperty()
-  public consent?: boolean;
+  public data: SurveyFinalResponseEntity[];
 
 }

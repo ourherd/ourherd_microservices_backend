@@ -34,6 +34,13 @@ CREATE TABLE IF NOT EXISTS public.surveys
 -- );
 
 CREATE TYPE survey_status AS ENUM ('INCOMPLETE', 'COMPLETED', 'ARCHIVED');
+CREATE TYPE survey_type AS ENUM (
+    'DQ5_MEMBER_STORY',
+    'LONG_SURVEY_ONBOARDING',
+    'SHORT_SURVEY_ONBOARDING',
+    'WELLBEING_TODAY',
+    'LOOKOUT_FOR_YOUR_MATE'
+    );
 
 CREATE TABLE IF NOT EXISTS public.survey_member_instances
 (
@@ -43,6 +50,7 @@ CREATE TABLE IF NOT EXISTS public.survey_member_instances
     full_name varchar(255),
     consent boolean DEFAULT false,
     "status" survey_status DEFAULT 'INCOMPLETE',
+    "type" survey_type NOT NULL,
 
     created_at timestamp with time zone default now() not null,
     updated_at timestamp with time zone default now() not null,
@@ -69,9 +77,10 @@ CREATE TABLE IF NOT EXISTS public.survey_final_responses
 (
     id uuid default gen_random_uuid() not null constraint survey_final_responses_pkey primary key,
     survey_member_instance_id uuid not NULL,
-    question_number varchar(2),
+    question_number varchar(2) not null,
     question_name varchar(255),
     question_response varchar(255),
+    question_response_scale integer not null,
     created_at timestamp with time zone default now() not null,
     updated_at timestamp with time zone default now() not null,
     deleted_at timestamp

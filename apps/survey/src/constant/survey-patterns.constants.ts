@@ -9,6 +9,7 @@ export enum SURVEY_STATUS {
 
 export const SURVEY_MESSAGE_PATTERNS = {
   CREATE: 'survey.create',
+  SUBMIT: 'survey.submit',
 }
 
 export const SURVEY_MESSAGE_DB_RESPONSE = {

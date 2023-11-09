@@ -40,6 +40,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     RabbitModule.forClientProxy(RabbitServiceName.FEED),
     RabbitModule.forClientProxy(RabbitServiceName.STORY),
     RabbitModule.forClientProxy(RabbitServiceName.STORAGE),
+    RabbitModule.forClientProxy(RabbitServiceName.SURVEY),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     // AuthenticationModule.register(),
     // PolicyModule,
