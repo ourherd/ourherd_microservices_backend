@@ -31,11 +31,6 @@ export class AccountService {
       }
     );
 
-    if (account === null) {
-
-      this.logger.log(ACCOUNT_MODULE + ' ---> null: ' + JSON.stringify(account));
-    }
-
     return {
       state: !!account,
       data: account,
