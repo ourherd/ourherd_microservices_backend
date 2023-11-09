@@ -11,4 +11,6 @@ export const REACTION_MESSAGE_DB_RESPONSE = {
   CHANGED: 'reaction.changed',
   FOUND: 'reaction.with-story-found',
   NOT_FOUND: 'reaction.with-story-not-found',
+  REMOVED: 'reaction.with-story-remove',
+  REMOVED_FAILED: 'reaction.with-story-remove-failed',
 }

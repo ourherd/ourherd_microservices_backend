@@ -20,8 +20,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
           }),
         });
       }
-    
+
       async validate(payload: any) {
-        return { id_member: payload.sub, email: payload.email, roles: payload['cognito:groups']};
+        return { member_id: payload.sub, email: payload.email, roles: payload['cognito:groups']};
       }
 }

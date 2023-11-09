@@ -30,11 +30,24 @@ export class ReactionService {
         if (reactionDto.reaction_type === reaction.reaction_type ) {
 
           this.logger.log ('REMOVE reaction on story type DTO --> ' + JSON.stringify(reactionDto) );
-          return await this.reactionRepository.remove( reaction );
+          const result = await this.reactionRepository.remove( reaction );
+          return {
+            state: !!result,
+            data: result,
+            message: !!result ? REACTION_MESSAGE_DB_RESPONSE.REMOVED
+              : REACTION_MESSAGE_DB_RESPONSE.REMOVED_FAILED
+          }
+
         } else {
 
           this.logger.log ('UPDATE reaction on story type DTO --> ' + JSON.stringify(reactionDto) );
-          return await this.reactionRepository.update( { id: reaction.id }, reactionDto );
+          const update = await this.reactionRepository.update( { id: reaction.id }, reactionDto );
+          return {
+            state: !!update,
+            data: reaction,
+            message: !!reaction ? REACTION_MESSAGE_DB_RESPONSE.CHANGED
+              : REACTION_MESSAGE_DB_RESPONSE.NOT_FOUND
+          }
         }
     } else {
       this.logger.log ('CREATE reaction on story type DTO --> ' + JSON.stringify(reactionDto) );

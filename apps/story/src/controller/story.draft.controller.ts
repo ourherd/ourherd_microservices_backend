@@ -15,25 +15,28 @@ export class StoryDraftController {
 
   @MessagePattern(STORY_MESSAGE_PATTERNS.DRAFT_VIDEO)
   async draftVideo (
+    @Payload('member_id') member_id: string,
     @Payload('draftVideoDto') draftVideoDto: StoryDraftVideoDto):
     Promise<IServiceResponse<StoryEntity>> {
-    return await this.draftService.draftVideo(draftVideoDto);
+    return await this.draftService.saveStory( member_id, draftVideoDto );
   }
 
   @MessagePattern(STORY_MESSAGE_PATTERNS.DRAFT_TEXT_GUIDE)
   async draftTextGuide (
+    @Payload('member_id') member_id: string,
     @Payload('draftGuidedDto') draftGuidedDto: StoryDraftTextGuidedDto):
     Promise<IServiceResponse<StoryEntity>> {
 
-    return await this.draftService.draftGuided(draftGuidedDto);
+    return await this.draftService.saveStory( member_id, draftGuidedDto );
   }
 
   @MessagePattern(STORY_MESSAGE_PATTERNS.DRAFT_TEXT_FREE_FORM)
   async draftFreeForm (
+    @Payload('member_id') member_id: string,
     @Payload('draftFreeFormDto') draftFreeFormDto: StoryDraftTextFreeformDto):
     Promise<IServiceResponse<StoryEntity>> {
 
-    return await this.draftService.draftFreeForm( draftFreeFormDto );
+    return await this.draftService.saveStory( member_id, draftFreeFormDto );
   }
 
 

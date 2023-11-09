@@ -15,6 +15,6 @@ export class StoryDraftVideoDto extends StoryDraftBaseDto {
   readonly story_medium: StoryMedium = StoryMedium.VIDEO;
 
   @Allow()
-  story_resource: Express.Multer.File
+  public story_resource: Express.Multer.File
 
 }

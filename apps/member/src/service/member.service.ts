@@ -63,8 +63,8 @@ export class MemberService {
 
   }
 
-  async update(id: string, updateDto: UpdateMemberDto): Promise<IServiceResponse<MemberEntity>> {
-    const { state, data: member } = await this.findById(id);
+  async update(member_id: string, updateDto: UpdateMemberDto): Promise<IServiceResponse<MemberEntity>> {
+    const { state, data: member } = await this.findById(member_id);
 
     if (state) {
       Object.assign(member, updateDto);

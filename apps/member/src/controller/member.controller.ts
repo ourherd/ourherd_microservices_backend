@@ -32,10 +32,10 @@ export class MemberController {
 
   @MessagePattern(MEMBER_MESSAGE_PATTERNS.UPDATE)
   async updateMember(
-    @Payload('id') id: string,
+    @Payload('member_id') member_id: string,
     @Payload('updateDto') updateDto: UpdateMemberDto
   ): Promise<IServiceResponse<MemberEntity>> {
-    return await this.memberService.update(id, updateDto);
+    return await this.memberService.update(member_id, updateDto);
   }
 
   // Only admin

@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS public.accounts
     deleted_at timestamptz
 );
 
+
 SELECT enum_range(NULL::role_type);
 
 CREATE TABLE IF NOT EXISTS public.account_devices

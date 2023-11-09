@@ -42,15 +42,15 @@ export class MemberGatewayController {
   @ApiOperation({ summary: 'Update Profile' })
   @ApiResponse({ status: 204, description: "Update first name, birthday, etc" })
   async updateProfile(
-    @CurrentMember ('id_member') id: string,
+    @CurrentMember ('member_id') member_id: string,
     @Body() updateDto: UpdateMemberDto
   ) : Promise<IGatewayResponse> {
 
     const { state, data } = await firstValueFrom(
-      this.memberClient.send<IServiceResponse<MemberEntity>, { id: string, updateDto: UpdateMemberDto }>(
+      this.memberClient.send<IServiceResponse<MemberEntity>, { member_id: string, updateDto: UpdateMemberDto }>(
         MEMBER_MESSAGE_PATTERNS.UPDATE,
         {
-          id,
+          member_id,
           updateDto
         }
       )

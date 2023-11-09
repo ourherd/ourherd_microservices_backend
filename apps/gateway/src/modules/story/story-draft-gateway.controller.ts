@@ -27,7 +27,7 @@ import {
 } from "../../../../storage/src/interface/storage-resource.interface";
 import { STORAGE_MESSAGE_PATTERNS } from "../../../../storage/src/constant/storage-patterns.constant";
 import { v4 } from "uuid";
-import { CurrentMember } from "@app/authentication";
+import { Auth, CurrentMember } from "@app/authentication";
 
 
 @ApiTags('Story Create Gateway')
@@ -48,18 +48,23 @@ export class StoryDraftGatewayController {
      @Inject(RabbitServiceName.STORAGE) private storageService: ClientProxy
   ) { }
 
+
   @Post('/video')
+  @Auth()
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('story_resource'))
   async draftVideo (
+    @CurrentMember('member_id') member_id: string,
     @Body() draftVideoDto: StoryDraftVideoDto,
     @UploadedFile() story_resource: Express.Multer.File
   ) : Promise<IGatewayResponse> {
+
     const { state: storyState, data: storyData } = await firstValueFrom(
-      this.storyService.send<IServiceResponse<StoryEntity>, { draftVideoDto: StoryDraftVideoDto }>
+      this.storyService.send<IServiceResponse<StoryEntity>, {member_id: string, draftVideoDto: StoryDraftVideoDto }>
       (
         STORY_MESSAGE_PATTERNS.DRAFT_VIDEO,
         {
+          member_id,
           draftVideoDto
         }
       )
@@ -85,35 +90,34 @@ export class StoryDraftGatewayController {
   }
 
   @Post('/text-guided')
+  @Auth()
   async draftTextGuided (
+    @CurrentMember('member_id') member_id: string,
     @Body() draftGuidedDto: StoryDraftTextGuidedDto )
     : Promise<IGatewayResponse>  {
     const { state, data } = await firstValueFrom(
-      this.storyService.send<IServiceResponse<StoryEntity>, {
-        member_id: string,
-        draftGuidedDto: StoryDraftTextGuidedDto
-      }>
-
+      this.storyService.send<IServiceResponse<StoryEntity>,
+        { member_id: string, draftGuidedDto: StoryDraftTextGuidedDto }>
       (
-       STORY_MESSAGE_PATTERNS.DRAFT_TEXT_GUIDE,
-        {
-          draftGuidedDto
-        }
-      )
-
+          STORY_MESSAGE_PATTERNS.DRAFT_TEXT_GUIDE, { member_id, draftGuidedDto })
     );
-
     return { state, data };
   }
 
+
   @Post('/text-freeform')
-  async draftTextFreeForm ( @Body() draftFreeFormDto: StoryDraftTextFreeformDto )
+  @Auth()
+  async draftTextFreeForm (
+    @CurrentMember('member_id') member_id: string,
+    @Body() draftFreeFormDto: StoryDraftTextFreeformDto )
     :Promise<IGatewayResponse>  {
     const { state, data } = await firstValueFrom(
-      this.storyService.send<IServiceResponse<StoryEntity>, { draftFreeFormDto: StoryDraftTextFreeformDto }>
+      this.storyService.send<IServiceResponse<StoryEntity>,
+        { member_id: string, draftFreeFormDto: StoryDraftTextFreeformDto }>
       (
         STORY_MESSAGE_PATTERNS.DRAFT_TEXT_FREE_FORM,
         {
+          member_id,
           draftFreeFormDto
         }
       )
