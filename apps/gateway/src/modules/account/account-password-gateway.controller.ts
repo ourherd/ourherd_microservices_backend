@@ -9,7 +9,7 @@ import { AuthChangePasswordUserDto } from "apps/account/src/dto/change-password.
 import { AuthForgotPasswordUserDto } from "apps/account/src/dto/reset-forget-password.dto";
 import { AuthConfirmPasswordUserDto } from "apps/account/src/dto/reset-confirm-password.dto";
 
-@ApiTags('Password Module')
+@ApiTags('Account Password Gateway')
 @Controller({
   path: '/password'
 })

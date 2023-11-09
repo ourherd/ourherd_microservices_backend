@@ -60,7 +60,6 @@ export class AccountService {
         createAccountDto.email,
         createAccountDto.password
       )
-
       // get uuid from cognito and use for generating member item
       createAccountDto.id = cognitoResult['userSub']
 
