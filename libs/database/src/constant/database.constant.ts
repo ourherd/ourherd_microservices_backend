@@ -11,12 +11,15 @@ import { MemberVerificationEntity } from 'apps/member/src/entity/member-verifica
 import { StorageResourceEntity } from "../../../../apps/storage/src/entity/storage-resource.entity";
 import { SurveyMemberInstanceEntity } from 'apps/survey/src/entities/survey-member-instances.entity';
 import { ViolationEntity } from "../../../../apps/feed/src/entity/violation.entity";
+import { SurveyFinalResponseEntity } from 'apps/survey/src/entities/survey-final-responses.entity';
 
 export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string, entities: EntityClassOrSchema[] }> = {
     primary: {
         type: 'postgres',
         env: 'PRIMARY',
         entities: [
+            SurveyMemberInstanceEntity,
+            SurveyFinalResponseEntity,
             MemberEntity,
             ReactionEntity,
             StoryEntity,
@@ -34,17 +37,19 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
         type: 'postgres',
         env: 'SECONDARY',
         entities: [
-          MemberEntity,
-          ReactionEntity,
-          StoryEntity,
-          StoryBookmarkEntity,
-          AccountEntity,
-          AccountDeviceEntity,
-          StorageResourceEntity,
-          MemberVerificationEntity,
-          SurveyMemberInstanceEntity,
-          ViolationEntity,
-          MemberVerificationEntity
+            SurveyMemberInstanceEntity,
+            SurveyFinalResponseEntity,
+            MemberEntity,
+            ReactionEntity,
+            StoryEntity,
+            StoryBookmarkEntity,
+            AccountEntity,
+            AccountDeviceEntity,
+            StorageResourceEntity,
+            MemberVerificationEntity,
+            SurveyMemberInstanceEntity,
+            ViolationEntity,
+            MemberVerificationEntity
         ]
     }
 };
