@@ -7,7 +7,7 @@ export class SubmitSurveyFinalDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsUUID()
-  public survey_instance_id: string;
+  public survey_member_instance_id: string;
 
   @ApiProperty()
   @IsNotEmpty()

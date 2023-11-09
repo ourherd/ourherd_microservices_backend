@@ -4,10 +4,13 @@ import { SurveyMemberInstanceEntity } from './entities/survey-member-instances.e
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Database } from '@app/database';
-import { CreateSurveyInstanceDto } from './dto/create-survey-instance.survey.dto';
-import { SURVEY_MESSAGE_DB_RESPONSE, SURVEY_SERVICE, SURVEY_STATUS } from './constant/survey-patterns.constants';
+import { CreateDQ5SurveyInstanceDto } from './dto/create-DQ5-survey-instance.survey.dto';
+import { SURVEY_MESSAGE_DB_RESPONSE, SURVEY_SERVICE, SURVEY_STATIC_STATUS, SURVEY_STATUS } from './constant/survey-patterns.constants';
 import { SurveyFinalResponseEntity } from './entities/survey-final-responses.entity';
 import { SubmitSurveyFinalDto } from './dto/submit-survey-final.survey.dto';
+import { SurveyEntity } from './entities/survey.entity';
+import { CreateLongBoardingSurveyInstanceDto } from './dto/create-Long-Boarding-survey-instance.survey.dto';
+import { CreateShortBoardingSurveyInstanceDto } from './dto/create-Short-Boarding-survey-instance.survey.dto';
 
 @Injectable()
 export class SurveyService {
@@ -18,47 +21,76 @@ export class SurveyService {
     private surveyMemberInstanceRepo: Repository<SurveyMemberInstanceEntity>,
     @InjectRepository(SurveyFinalResponseEntity, Database.PRIMARY)
     private surveyFinalResponseRepo: Repository<SurveyFinalResponseEntity>,
+    @InjectRepository(SurveyEntity, Database.PRIMARY)
+    private surveyRepo: Repository<SurveyEntity>,
   ) { }
 
   async createSurveyMemberInstance(
-    createDto: CreateSurveyInstanceDto,
+    createDto: CreateDQ5SurveyInstanceDto|CreateLongBoardingSurveyInstanceDto|CreateShortBoardingSurveyInstanceDto,
     id_member: string
-    ): Promise<IServiceResponse<SurveyMemberInstanceEntity>> {
+  ): Promise<IServiceResponse<SurveyMemberInstanceEntity>> {
 
     try {
-      
-      const surveyMemberInstance = await this.surveyMemberInstanceRepo.findOneBy(
+
+      const survey = await this.surveyRepo.findOneBy(
         {
-          survey_id: createDto.survey_id
+          id: createDto.survey_id,
+          status: SURVEY_STATIC_STATUS.ACTIVE
         }
-        );
-        
-        if (!!surveyMemberInstance === true) {
-          return {
-            state: false,
-            data: null,
-            message: SURVEY_MESSAGE_DB_RESPONSE.ID_EXISTING
-          }
-        }
+      );
 
-        createDto.member_id = id_member
-        
-        const surveyCreatedData = this.surveyMemberInstanceRepo.create(createDto)
-        const surveySavedData = await this.surveyMemberInstanceRepo.save(surveyCreatedData)
-        
-        return {
-          state: !!surveySavedData,
-          data: surveySavedData,
-          message: SURVEY_MESSAGE_DB_RESPONSE.CREATED
-        }
-      } catch (error) {
+      console.log(
+        JSON.stringify(survey),
+        JSON.stringify(createDto),
+      );
+      
 
+      if (!!survey === false) {
         return {
           state: false,
-          data: error
+          data: null,
+          message: SURVEY_MESSAGE_DB_RESPONSE.NOT_FOUND
         }
-
+      } else if (survey.type !== createDto.type) {
+        return {
+          state: false,
+          data: null,
+          message: SURVEY_MESSAGE_DB_RESPONSE.INCORRECT_TYPE
+        }
       }
+
+      const surveyMemberInstance = await this.surveyMemberInstanceRepo.findOneBy(
+        {
+          id: createDto.id
+        }
+      );
+
+      if (!!surveyMemberInstance === true) {
+        return {
+          state: false,
+          data: null,
+          message: SURVEY_MESSAGE_DB_RESPONSE.ID_EXISTING
+        }
+      }
+
+      createDto.member_id = id_member
+
+      const surveyCreatedData = this.surveyMemberInstanceRepo.create(createDto)
+      const surveySavedData = await this.surveyMemberInstanceRepo.save(surveyCreatedData)
+
+      return {
+        state: !!surveySavedData,
+        data: surveySavedData,
+        message: SURVEY_MESSAGE_DB_RESPONSE.CREATED
+      }
+    } catch (error) {
+      this.logger.error("createSurveyMemberInstance: ", error)
+      return {
+        state: false,
+        data: error
+      }
+
+    }
   }
 
   async submitSurveyInstance(submitFinalDto: SubmitSurveyFinalDto): Promise<IServiceResponse<SurveyMemberInstanceEntity>> {
@@ -67,7 +99,7 @@ export class SurveyService {
 
       const surveyMemberInstance = await this.surveyMemberInstanceRepo.findOneBy(
         {
-          survey_id: submitFinalDto.survey_instance_id
+          survey_id: submitFinalDto.survey_member_instance_id
         }
       );
 
@@ -81,7 +113,7 @@ export class SurveyService {
 
       await this.surveyMemberInstanceRepo.update(
         {
-          survey_id: submitFinalDto.survey_instance_id
+          survey_id: submitFinalDto.survey_member_instance_id
         },
         {
           status: SURVEY_STATUS.COMPLETED
@@ -100,12 +132,12 @@ export class SurveyService {
       }
 
     } catch (error) {
-      
+      this.logger.error("submitSurveyInstance: ", error)
       return {
         state: false,
         data: error
       }
-    
+
     }
   }
 }

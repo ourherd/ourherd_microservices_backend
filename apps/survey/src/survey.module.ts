@@ -7,6 +7,7 @@ import { RabbitModule, RabbitServiceName } from '@app/rabbit';
 import { ConfigModule } from '@nestjs/config';
 import { getEnvPath } from '@app/common/env/env.helper';
 import { SurveyFinalResponseEntity } from './entities/survey-final-responses.entity';
+import { SurveyEntity } from './entities/survey.entity';
 
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 @Module({
@@ -16,6 +17,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     }),
     DatabaseModule.register(Database.PRIMARY),
     DatabaseModule.forEntity(Database.PRIMARY, [
+      SurveyEntity,
       SurveyMemberInstanceEntity,
       SurveyFinalResponseEntity
     ]),

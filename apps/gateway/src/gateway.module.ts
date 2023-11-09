@@ -19,6 +19,7 @@ import { getEnvPath } from "@app/common/env/env.helper";
 import { JwtStrategy } from '@app/authentication';
 
 import { MailerGatewayController } from "./modules/mailer/mailer-gateway.controller";
+import { SurveyGatewayController } from "./modules/survey/survey-gateway.controller";
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
 @Module({
@@ -46,6 +47,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     // PolicyModule,
   ],
   controllers: [
+    SurveyGatewayController,
     AccountGatewayController,
     AccountPasswordGatewayController,
     MailerGatewayController,

@@ -5,13 +5,27 @@
 ---- WELLBEING_TODAY
 ---- LOOKOUT_FOR_YOUR_MATE
 
+CREATE TYPE survey_type AS ENUM (
+    'DQ5_MEMBER_STORY',
+    'LONG_SURVEY_ONBOARDING',
+    'SHORT_SURVEY_ONBOARDING',
+    'WELLBEING_TODAY',
+    'LOOKOUT_FOR_YOUR_MATE'
+    );
+
+CREATE TYPE survey_static_status AS ENUM (
+    'ACTIVE',
+    'INACTIVE'
+    );
+
 CREATE TABLE IF NOT EXISTS public.surveys
 (
     id uuid default gen_random_uuid() not null constraint survey_pkey primary key,
     name varchar(255),
     description text,
     version int,
-    status varchar(255),
+    "type" survey_type NOT NULL,
+    "status" survey_static_status NOT NULL DEFAULT 'ACTIVE',
     document_file json,
     document_url varchar(255),
     created_at timestamp with time zone default now() not null,
@@ -34,13 +48,6 @@ CREATE TABLE IF NOT EXISTS public.surveys
 -- );
 
 CREATE TYPE survey_status AS ENUM ('INCOMPLETE', 'COMPLETED', 'ARCHIVED');
-CREATE TYPE survey_type AS ENUM (
-    'DQ5_MEMBER_STORY',
-    'LONG_SURVEY_ONBOARDING',
-    'SHORT_SURVEY_ONBOARDING',
-    'WELLBEING_TODAY',
-    'LOOKOUT_FOR_YOUR_MATE'
-    );
 
 CREATE TABLE IF NOT EXISTS public.survey_member_instances
 (
@@ -51,12 +58,13 @@ CREATE TABLE IF NOT EXISTS public.survey_member_instances
     consent boolean DEFAULT false,
     "status" survey_status DEFAULT 'INCOMPLETE',
     "type" survey_type NOT NULL,
-
     created_at timestamp with time zone default now() not null,
     updated_at timestamp with time zone default now() not null,
     deleted_at timestamp
 );
 
+ALTER TABLE public.survey_member_instances
+    ADD CONSTRAINT fk_survey_instances_survey foreign key(survey_id) references surveys(id);
 ALTER TABLE public.survey_member_instances
     ADD CONSTRAINT fk_survey_instances_members foreign key(member_id) references members(id);
 
@@ -71,7 +79,6 @@ CREATE TABLE IF NOT EXISTS public.survey_single_responses
     updated_at timestamp with time zone default now() not null,
     deleted_at timestamp
 );
-
 
 CREATE TABLE IF NOT EXISTS public.survey_final_responses
 (
