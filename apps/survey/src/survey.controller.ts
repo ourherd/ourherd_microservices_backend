@@ -6,8 +6,8 @@ import { CreateDQ5SurveyInstanceDto } from './dto/create-DQ5-survey-instance.sur
 import { SurveyMemberInstanceEntity } from './entities/survey-member-instances.entity';
 import { IServiceResponse } from '@app/rabbit';
 import { SubmitSurveyFinalDto } from './dto/submit-survey-final.survey.dto';
-import { CreateLongBoardingSurveyInstanceDto } from './dto/create-Long-Boarding-survey-instance.survey.dto';
-import { CreateShortBoardingSurveyInstanceDto } from './dto/create-Short-Boarding-survey-instance.survey.dto';
+import { CreateLongOnBoardingSurveyInstanceDto } from './dto/create-Long-Boarding-survey-instance.survey.dto';
+import { CreateShortOnBoardingSurveyInstanceDto } from './dto/create-Short-Boarding-survey-instance.survey.dto';
 
 @Controller()
 export class SurveyController {
@@ -27,7 +27,7 @@ export class SurveyController {
   
   @MessagePattern(SURVEY_MESSAGE_PATTERNS.CREATE_LONG)
   async createSurveyLongInstance(
-    @Payload('createDto') createSurveyInstanceDto: CreateLongBoardingSurveyInstanceDto,
+    @Payload('createDto') createSurveyInstanceDto: CreateLongOnBoardingSurveyInstanceDto,
     @Payload('id_member') id_member: string
   ): Promise<IServiceResponse<SurveyMemberInstanceEntity>> {
     const surveyCreateResult = this.surveyService.createSurveyMemberInstance(
@@ -39,7 +39,7 @@ export class SurveyController {
   
   @MessagePattern(SURVEY_MESSAGE_PATTERNS.CREATE_SHORT)
   async createSurveyShortInstance(
-    @Payload('createDto') createSurveyInstanceDto: CreateShortBoardingSurveyInstanceDto,
+    @Payload('createDto') createSurveyInstanceDto: CreateShortOnBoardingSurveyInstanceDto,
     @Payload('id_member') id_member: string
   ): Promise<IServiceResponse<SurveyMemberInstanceEntity>> {
     const surveyCreateResult = this.surveyService.createSurveyMemberInstance(

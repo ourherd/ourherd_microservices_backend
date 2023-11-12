@@ -9,8 +9,8 @@ import { SURVEY_MESSAGE_DB_RESPONSE, SURVEY_SERVICE, SURVEY_STATIC_STATUS, SURVE
 import { SurveyFinalResponseEntity } from './entities/survey-final-responses.entity';
 import { SubmitSurveyFinalDto } from './dto/submit-survey-final.survey.dto';
 import { SurveyEntity } from './entities/survey.entity';
-import { CreateLongBoardingSurveyInstanceDto } from './dto/create-Long-Boarding-survey-instance.survey.dto';
-import { CreateShortBoardingSurveyInstanceDto } from './dto/create-Short-Boarding-survey-instance.survey.dto';
+import { CreateLongOnBoardingSurveyInstanceDto } from './dto/create-Long-Boarding-survey-instance.survey.dto';
+import { CreateShortOnBoardingSurveyInstanceDto } from './dto/create-Short-Boarding-survey-instance.survey.dto';
 
 @Injectable()
 export class SurveyService {
@@ -26,7 +26,7 @@ export class SurveyService {
   ) { }
 
   async createSurveyMemberInstance(
-    createDto: CreateDQ5SurveyInstanceDto|CreateLongBoardingSurveyInstanceDto|CreateShortBoardingSurveyInstanceDto,
+    createDto: CreateDQ5SurveyInstanceDto|CreateLongOnBoardingSurveyInstanceDto|CreateShortOnBoardingSurveyInstanceDto,
     id_member: string
   ): Promise<IServiceResponse<SurveyMemberInstanceEntity>> {
 

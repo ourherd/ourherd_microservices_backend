@@ -1,24 +1,9 @@
 import { IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { SURVEY_TYPE } from "../constant/survey-patterns.constants";
-import { Transform } from "class-transformer";
+import { AbstractSurveyDto } from "./base-survey.dto";
 
-export class CreateDQ5SurveyInstanceDto {
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsUUID()
-  public id: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsUUID()
-  public survey_id: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsUUID()
-  public member_id: string;
+export class CreateDQ5SurveyInstanceDto extends AbstractSurveyDto {
 
   @IsNotEmpty()
   @ApiProperty()
