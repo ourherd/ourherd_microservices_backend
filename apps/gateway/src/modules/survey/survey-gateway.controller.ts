@@ -10,8 +10,8 @@ import { CreateDQ5SurveyInstanceDto } from "apps/survey/src/dto/create-DQ5-surve
 import { SurveyMemberInstanceEntity } from "apps/survey/src/entities/survey-member-instances.entity";
 import { Auth, CurrentUser } from "@app/authentication";
 import { SubmitSurveyFinalDto } from "apps/survey/src/dto/submit-survey-final.survey.dto";
-import { CreateLongBoardingSurveyInstanceDto } from "apps/survey/src/dto/create-Long-Boarding-survey-instance.survey.dto";
-import { CreateShortBoardingSurveyInstanceDto } from "apps/survey/src/dto/create-Short-Boarding-survey-instance.survey.dto";
+import { CreateLongOnBoardingSurveyInstanceDto } from "apps/survey/src/dto/create-Long-Boarding-survey-instance.survey.dto";
+import { CreateShortOnBoardingSurveyInstanceDto } from "apps/survey/src/dto/create-Short-Boarding-survey-instance.survey.dto";
 
 @ApiTags('Survey Module')
 @ApiBearerAuth()
@@ -26,7 +26,7 @@ export class SurveyGatewayController {
     @Inject(RabbitServiceName.SURVEY) private surveyClient: ClientProxy,
   ) { }
 
-  @Post('/instance/dq5')
+  @Post('/start/dq5')
   @Auth()
   @ApiOperation({ summary: 'Create Survey Instance DQ5' })
   @ApiResponse({ status: 200, description: 'create success' })
@@ -52,18 +52,18 @@ export class SurveyGatewayController {
     return createSurveyResult;
   }
   
-  @Post('/instance/long-onboarding')
+  @Post('/start/long-onboarding')
   @Auth()
   @ApiOperation({ summary: 'Create Survey Instance Long Survey' })
   @ApiResponse({ status: 200, description: 'create success' })
   async createSurveyLongInstance(
-    @Body() createDto: CreateLongBoardingSurveyInstanceDto,
+    @Body() createDto: CreateLongOnBoardingSurveyInstanceDto,
     @CurrentUser('id_member') id_member: string
   ): Promise<IGatewayResponse> {
 
     let createSurveyResult = await firstValueFrom(
       this.surveyClient.send<IServiceResponse<SurveyMemberInstanceEntity>, { 
-        createDto: CreateLongBoardingSurveyInstanceDto ,
+        createDto: CreateLongOnBoardingSurveyInstanceDto ,
         id_member: string
       }>
         (
@@ -78,18 +78,18 @@ export class SurveyGatewayController {
     return createSurveyResult;
   }
   
-  @Post('/instance/short-onboarding')
+  @Post('/start/short-onboarding')
   @Auth()
   @ApiOperation({ summary: 'Create Survey Instance Short Survey' })
   @ApiResponse({ status: 200, description: 'create success' })
   async createSurveyShortInstance(
-    @Body() createDto: CreateShortBoardingSurveyInstanceDto,
+    @Body() createDto: CreateShortOnBoardingSurveyInstanceDto,
     @CurrentUser('id_member') id_member: string
   ): Promise<IGatewayResponse> {
 
     let createSurveyResult = await firstValueFrom(
       this.surveyClient.send<IServiceResponse<SurveyMemberInstanceEntity>, { 
-        createDto: CreateShortBoardingSurveyInstanceDto ,
+        createDto: CreateShortOnBoardingSurveyInstanceDto ,
         id_member: string
       }>
         (
