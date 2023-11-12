@@ -1,22 +1,21 @@
 import { Body, Controller, Inject, Post } from "@nestjs/common";
-import { REACTION_MESSAGE_PATTERNS } from "apps/feed/src/constant/reaction-patterns.constants";
+import { REACTION_MESSAGE_PATTERNS } from "apps/story/src/constant/reaction-patterns.constants";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
 import { firstValueFrom } from "rxjs";
 import { ClientProxy } from "@nestjs/microservices";
-import { PostReactionDto } from "../../../../feed/src/dto/post.reaction.dto";
+import { PostReactionDto } from "../../../../story/src/dto/reaction/post.reaction.dto";
 import { IGatewayResponse } from "../../common/interface/gateway.interface";
-import { ReactionEntity } from "../../../../feed/src/entity/reaction.entity";
+import { ReactionEntity } from "../../../../story/src/entity/reaction/reaction.entity";
 import { Auth, CurrentMember } from "@app/authentication";
 
 @ApiTags('Story Reaction Gateway')
 @Controller({
   path: '/story/reaction'
 })
-
 export class ReactionGatewayController {
 
-  constructor(@Inject(RabbitServiceName.FEED) private reactionClient: ClientProxy) { }
+  constructor(@Inject(RabbitServiceName.STORY) private reactionClient: ClientProxy) { }
 
   @Post('/')
   @Auth()

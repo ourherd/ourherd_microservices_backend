@@ -7,9 +7,9 @@ import { BookmarkEntity } from "../entity/bookmark/bookmark.entity";
 import { PostStoryBookmarkDto } from "../dto/bookmark/post.story.bookmark.dto";
 
 @Injectable()
-export class StoryBookmarkService {
+export class BookmarkService {
 
-  private readonly logger = new Logger(StoryBookmarkService.name)
+  private readonly logger = new Logger(BookmarkService.name)
   constructor(
     @InjectRepository(BookmarkEntity, Database.PRIMARY)  private bookmarkRepository: Repository<BookmarkEntity>) {}
 

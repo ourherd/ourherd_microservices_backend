@@ -1,7 +1,7 @@
 import { StoryDraftBaseDto } from "./story.draft.base.dto";
 import { IsEnum, IsNotEmpty, IsOptional, IsString, MaxLength, maxLength, MinLength, minLength } from "class-validator";
 import { Transform } from "class-transformer";
-import { StoryMedium, StoryType } from "../constant/story.enum";
+import { StoryMedium, StoryType } from "../../constant/story.enum";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class StoryDraftTextGuidedDto extends StoryDraftBaseDto {

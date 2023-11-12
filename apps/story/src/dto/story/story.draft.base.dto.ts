@@ -2,7 +2,7 @@ import { IsEnum, IsString, IsUUID, IsOptional, IsEmpty } from "class-validator";
 import { Transform } from "class-transformer";
 
 import { v4 } from "uuid";
-import { StorySourceType, StoryStatus } from "../constant/story.enum";
+import { StorySourceType, StoryStatus } from "../../constant/story.enum";
 
 export class StoryDraftBaseDto {
 

@@ -3,10 +3,10 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Database } from "@app/database";
 import { Repository } from "typeorm";
 import { IServiceResponse } from "@app/rabbit";
-import { StoryEntity } from "../entity/story.entity";
-import { StoryDraftTextFreeformDto } from "../dto/story.draft.text-freeform.dto";
-import { StoryDraftTextGuidedDto } from "../dto/story.draft.text-guided.dto";
-import { StoryDraftVideoDto } from "../dto/story.draft.video.dto";
+import { StoryEntity } from "../entity/story/story.entity";
+import { StoryDraftTextFreeformDto } from "../dto/story/story.draft.text-freeform.dto";
+import { StoryDraftTextGuidedDto } from "../dto/story/story.draft.text-guided.dto";
+import { StoryDraftVideoDto } from "../dto/story/story.draft.video.dto";
 import { STORY_MESSAGE_DB_RESPONSE } from "../constant/story-patterns.constants";
 
 @Injectable()

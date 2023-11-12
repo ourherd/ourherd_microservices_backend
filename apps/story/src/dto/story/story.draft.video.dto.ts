@@ -1,7 +1,7 @@
 import { IsEnum, IsOptional, IsString, Allow } from "class-validator";
 import { StoryDraftBaseDto } from "./story.draft.base.dto";
 import { Transform } from "class-transformer";
-import { StoryMedium, StoryType } from "../constant/story.enum";
+import { StoryMedium, StoryType } from "../../constant/story.enum";
 
 export class StoryDraftVideoDto extends StoryDraftBaseDto {
 

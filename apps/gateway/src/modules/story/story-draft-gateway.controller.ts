@@ -15,10 +15,10 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { IGatewayResponse } from "../../common/interface/gateway.interface";
 import { firstValueFrom } from "rxjs";
 import { STORY_MESSAGE_PATTERNS } from "../../../../story/src/constant/story-patterns.constants";
-import { StoryDraftVideoDto } from "../../../../story/src/dto/story.draft.video.dto";
-import { StoryDraftTextFreeformDto } from "../../../../story/src/dto/story.draft.text-freeform.dto";
-import { StoryDraftTextGuidedDto } from "../../../../story/src/dto/story.draft.text-guided.dto";
-import { StoryEntity } from "../../../../story/src/entity/story.entity";
+import { StoryDraftVideoDto } from "../../../../story/src/dto/story/story.draft.video.dto";
+import { StoryDraftTextFreeformDto } from "../../../../story/src/dto/story/story.draft.text-freeform.dto";
+import { StoryDraftTextGuidedDto } from "../../../../story/src/dto/story/story.draft.text-guided.dto";
+import { StoryEntity } from "../../../../story/src/entity/story/story.entity";
 import { StorageResourceEntity } from "../../../../storage/src/entity/storage-resource.entity";
 import { CreateStorageResourceDto } from "../../../../storage/src/dto/create-storage-resource.dto";
 import {

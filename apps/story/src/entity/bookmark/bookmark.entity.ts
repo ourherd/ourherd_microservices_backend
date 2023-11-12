@@ -5,7 +5,7 @@ import { ApiProperty } from "@nestjs/swagger";
 @Entity({
   name: 'story_bookmarks'
 })
-export class StoryBookmarkEntity extends AbstractEntity {
+export class BookmarkEntity extends AbstractEntity {
 
   @ApiProperty()
   @Column({ nullable: false })

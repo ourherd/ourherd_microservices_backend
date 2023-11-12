@@ -1,6 +1,3 @@
-export const VIOLATION_SERVICE = 'REACTION SERVICE';
-export const VIOLATION_MODULE = 'REACTION MODULE';
-
 export const VIOLATION_MESSAGE_PATTERNS = {
   REPORT: 'violation.report'
 }

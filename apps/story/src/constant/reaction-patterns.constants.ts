@@ -1,6 +1,3 @@
-export const REACTION_SERVICE = 'REACTION SERVICE';
-export const REACTION_MODULE = 'REACTION MODULE';
-
 export const REACTION_MESSAGE_PATTERNS = {
   REACT: 'reaction.react'
 }

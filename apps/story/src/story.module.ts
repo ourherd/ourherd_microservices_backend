@@ -1,19 +1,25 @@
-import { Module } from '@nestjs/common';
-import { StoryController } from './controller/story.controller';
-import { StoryBookmarkController } from './controller/story.bookmark.controller';
-import { StoryDraftController } from "./controller/story.draft.controller";
-import { StoryService } from './service/story.service';
-import { StoryBookmarkService } from './service/story.bookmark.service';
-import { StoryDraftService } from './service/story.draft.service';
-import { RabbitModule, RabbitServiceName } from '@app/rabbit';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Database, DatabaseModule } from '@app/database';
-import { StoryEntity } from "./entity/story.entity";
-import { StorySettingEntity } from "./entity/story.setting.entity";
-import { StoryResourceEntity } from "./entity/story.resource.entity";
-import { StoryBookmarkEntity } from "./entity/story.bookmark.entity";
+import { Module } from "@nestjs/common";
+import { RabbitModule, RabbitServiceName } from "@app/rabbit";
+import { ConfigModule } from "@nestjs/config";
+import { Database, DatabaseModule } from "@app/database";
+import { StoryController } from "./controller/story/story.controller";
+import { StoryDraftController } from "./controller/story/story.draft.controller";
+import { BookmarkController } from "./controller/bookmark/bookmark.controller";
+import { ReactionController } from "./controller/reaction/reaction.controller";
+import { ViolationController } from "./controller/violation/violation.controller";
+import { StoryService } from "./service/story.service";
+import { StoryDraftService } from "./service/story.draft.service";
+import { BookmarkService } from "./service/bookmark.service";
+import { ReactionService } from "./service/reaction.service";
+import { ViolationService } from "./service/violation.service";
+import { StoryEntity } from "./entity/story/story.entity";
+import { StorySettingEntity } from "./entity/story/story.setting.entity";
+import { StoryResourceEntity } from "./entity/story/story.resource.entity";
+import { BookmarkEntity } from "./entity/bookmark/bookmark.entity";
+import { ReactionEntity } from "./entity/reaction/reaction.entity";
+import { ViolationEntity } from "./entity/violation/violation.entity";
 
-import { getEnvPath } from '@app/common/env/env.helper';
+import { getEnvPath } from "@app/common/env/env.helper";
 
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
@@ -27,12 +33,27 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
       StoryEntity,
       StorySettingEntity,
       StoryResourceEntity,
-      StoryBookmarkEntity
+      BookmarkEntity,
+      ReactionEntity,
+      ViolationEntity
     ]),
     RabbitModule.forServerProxy(RabbitServiceName.STORY)
   ],
-  controllers: [StoryController, StoryDraftController,  StoryBookmarkController],
-  providers: [StoryService, StoryDraftService, StoryBookmarkService],
+  controllers: [
+    StoryController,
+    StoryDraftController,
+    BookmarkController,
+    ReactionController,
+    ViolationController,
+  ],
+  providers: [
+    StoryService,
+    StoryDraftService,
+    BookmarkService,
+    ReactionService,
+    ViolationService
+  ],
 })
 
 export class StoryModule {}
+

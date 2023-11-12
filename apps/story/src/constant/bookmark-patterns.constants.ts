@@ -1,16 +1,16 @@
-export const REACTION_SERVICE = 'REACTION SERVICE';
-export const REACTION_MODULE = 'REACTION MODULE';
+export const BOOKMARK_SERVICE = 'BOOKMARK SERVICE';
+export const BOOKMARK_MODULE = 'BOOKMARK MODULE';
 
-export const REACTION_MESSAGE_PATTERNS = {
+export const BOOKMARK_MESSAGE_PATTERNS = {
   REACT: 'reaction.react'
 }
 
-export const REACTION_MESSAGE_DB_RESPONSE = {
-  CREATED: 'reaction.created',
-  CREATED_FAILED: 'reaction.create-failed',
-  CHANGED: 'reaction.changed',
-  FOUND: 'reaction.with-story-found',
-  NOT_FOUND: 'reaction.with-story-not-found',
-  REMOVED: 'reaction.with-story-remove',
-  REMOVED_FAILED: 'reaction.with-story-remove-failed',
+export const BOOKMARK_MESSAGE_DB_RESPONSE = {
+  CREATED: 'bookmark.created',
+  CREATED_FAILED: 'bookmark.create-failed',
+  CHANGED: 'bookmark.changed',
+  FOUND: 'bookmark.with-story-found',
+  NOT_FOUND: 'bookmark.with-story-not-found',
+  REMOVED: 'bookmark.with-story-remove',
+  REMOVED_FAILED: 'bookmark.with-story-remove-failed',
 }

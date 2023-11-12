@@ -1,6 +1,6 @@
 import { IsEnum, IsOptional, IsString, IsUUID } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
-import { ReactionType } from "./../entity/reaction.entity"
+import { ReactionType } from "../../entity/reaction/reaction.entity"
 import { Transform, Exclude } from "class-transformer";
 
 export class PostReactionDto {

@@ -13,7 +13,7 @@ import { Auth, CurrentMember } from "@app/authentication";
 @Controller({
   path: '/story/bookmark'
 })
-export class StoryBookmarkGatewayController {
+export class BookmarkGatewayController {
 
   constructor(@Inject(RabbitServiceName.STORY) private storyBookmarkClient: ClientProxy) { }
 

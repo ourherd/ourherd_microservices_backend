@@ -26,7 +26,7 @@ export class MemberController {
   async createMember(
     @Payload('createDto') createDto: CreateMemberDto) {
     await this.memberService.create(createDto);
-    const sendMailerDto = this.mailService.sentEmailToken(memberCreateResult.data.email);
+    //const sendMailerDto = this.mailService.sentEmailToken(memberCreateResult.data.email);
     // return sendMailerDto;
   }
 
