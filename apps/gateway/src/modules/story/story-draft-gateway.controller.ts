@@ -1,4 +1,4 @@
-import { ApiConsumes, ApiTags } from "@nestjs/swagger";
+import { ApiConsumes, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import {
   Body,
   Controller,
@@ -9,12 +9,14 @@ import {
   UsePipes,
   ValidationPipe
 } from "@nestjs/common";
+import { firstValueFrom } from "rxjs";
+import { Auth, CurrentMember } from "@app/authentication";
 import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
 import { ClientProxy } from "@nestjs/microservices";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { IGatewayResponse } from "../../common/interface/gateway.interface";
-import { firstValueFrom } from "rxjs";
 import { STORY_MESSAGE_PATTERNS } from "../../../../story/src/constant/story-patterns.constants";
+import { STORAGE_MESSAGE_PATTERNS } from "../../../../storage/src/constant/storage-patterns.constant";
 import { StoryDraftVideoDto } from "../../../../story/src/dto/story/story.draft.video.dto";
 import { StoryDraftTextFreeformDto } from "../../../../story/src/dto/story/story.draft.text-freeform.dto";
 import { StoryDraftTextGuidedDto } from "../../../../story/src/dto/story/story.draft.text-guided.dto";
@@ -25,10 +27,7 @@ import {
   StorageResourceDriverType,
   StorageResourceType
 } from "../../../../storage/src/interface/storage-resource.interface";
-import { STORAGE_MESSAGE_PATTERNS } from "../../../../storage/src/constant/storage-patterns.constant";
 import { v4 } from "uuid";
-import { Auth, CurrentMember } from "@app/authentication";
-
 
 @ApiTags('Story Create Gateway')
 @Controller({
@@ -51,6 +50,8 @@ export class StoryDraftGatewayController {
 
   @Post('/video')
   @Auth()
+  @ApiOperation({ summary: 'Story Draft (Video Free Form)' })
+  @ApiResponse({ status: 201, description: 'Create new Story as draft (Video Free Form)' })
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('story_resource'))
   async draftVideo (
@@ -69,7 +70,7 @@ export class StoryDraftGatewayController {
         }
       )
     );
-
+    //TODO refactor this and move it into saga
     const { state, data } = await firstValueFrom(
       this.storageService.send<IServiceResponse<StorageResourceEntity>,
         { storageDto: CreateStorageResourceDto }>
@@ -91,6 +92,8 @@ export class StoryDraftGatewayController {
 
   @Post('/text-guided')
   @Auth()
+  @ApiOperation({ summary: 'Story Draft (Guided Text)' })
+  @ApiResponse({ status: 201, description: 'Create new Story as draft (Guided Text)' })
   async draftTextGuided (
     @CurrentMember('member_id') member_id: string,
     @Body() draftGuidedDto: StoryDraftTextGuidedDto )
@@ -107,6 +110,8 @@ export class StoryDraftGatewayController {
 
   @Post('/text-freeform')
   @Auth()
+  @ApiOperation({ summary: 'Story Draft (Free Form Text)' })
+  @ApiResponse({ status: 201, description: 'Create new Story as draft (Free Form Text) ' })
   async draftTextFreeForm (
     @CurrentMember('member_id') member_id: string,
     @Body() draftFreeFormDto: StoryDraftTextFreeformDto )

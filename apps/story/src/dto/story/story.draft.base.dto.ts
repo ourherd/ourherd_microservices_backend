@@ -1,5 +1,5 @@
 import { IsEnum, IsString, IsUUID, IsOptional, IsEmpty } from "class-validator";
-import { Transform } from "class-transformer";
+import { Transform, Exclude } from "class-transformer";
 
 import { v4 } from "uuid";
 import { StorySourceType, StoryStatus } from "../../constant/story.enum";
@@ -11,10 +11,7 @@ export class StoryDraftBaseDto {
   @Transform(({ value }) => value = v4())
   public id: string = v4();
 
-  @IsUUID()
-  @IsString()
-  @IsOptional()
-  @IsEmpty()
+  @Exclude()
   public member_id: string;
 
   @IsString()
