@@ -22,9 +22,9 @@ export class MemberGatewayController {
   logger = new Logger(MEMBER_SERVICE);
   constructor(
     @Inject(RabbitServiceName.MEMBER) private memberClient: ClientProxy,
-    @Inject(RabbitServiceName.EMAIL) private emailClient: ClientProxy
   ) { }
 
+  @Auth()
   @Get('/')
   async getMembers ( @Query() findDto: FindMemberDto ): Promise<IGatewayResponse<IPagination<MemberEntity>>> {
     const { state, data } = await firstValueFrom(

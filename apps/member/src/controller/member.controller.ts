@@ -2,7 +2,7 @@ import { Controller, Get, HttpStatus } from '@nestjs/common';
 import { ApiResponse, ApiOperation } from '@nestjs/swagger';
 import { MemberService } from '../service/member.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { MEMBER_MESSAGE_PATTERNS } from '../constant/member-patterns.constants';
+import { MEMBER_EVENT_PATTERNS, MEMBER_MESSAGE_PATTERNS } from "../constant/member-patterns.constants";
 import { MemberEntity } from '../entity/member.entity';
 import { CreateMemberDto } from '../dto/create-member.dto';
 import { UpdateMemberDto } from '../dto/update-member.dto';
@@ -19,15 +19,15 @@ import { MemberMailService } from "../service/member.mail.service";
 export class MemberController {
   constructor(
     private readonly memberService: MemberService,
-    private readonly mailService: MemberMailService,
+    // private readonly mailService: MemberMailService,
   ) {}
 
-  @MessagePattern(MEMBER_MESSAGE_PATTERNS.CREATE)
+  @MessagePattern(MEMBER_EVENT_PATTERNS.CREATED)
   async createMember(
-    @Payload('createDto') createDto: CreateMemberDto): Promise<IServiceResponse<SendMailerDto>> {
-    const memberCreateResult = await this.memberService.create(createDto);
+    @Payload('createDto') createDto: CreateMemberDto) {
+    await this.memberService.create(createDto);
     const sendMailerDto = this.mailService.sentEmailToken(memberCreateResult.data.email);
-    return sendMailerDto;
+    // return sendMailerDto;
   }
 
   @MessagePattern(MEMBER_MESSAGE_PATTERNS.UPDATE)

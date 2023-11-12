@@ -2,7 +2,6 @@ import { Module } from "@nestjs/common";
 import { AccountController } from "./controllers/account.controller";
 import { AccountService } from "./services/account.service";
 import { RabbitModule, RabbitServiceName } from "@app/rabbit";
-import { MailSengridModule } from "@app/mail/mail.sengrid.module";
 import { ConfigModule } from "@nestjs/config";
 import { Database, DatabaseModule } from "@app/database";
 import { getEnvPath } from "@app/common/env/env.helper";
@@ -25,9 +24,9 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     RabbitModule.forClientProxy(RabbitServiceName.MEMBER),
     RabbitModule.forClientProxy(RabbitServiceName.MAILER),
     CognitoModule,
-    MailSengridModule,
+    // MailSengridModule,
   ],
-  controllers: [AccountController, PasswordController, AccountCreatedSaga],
+  controllers: [AccountController, PasswordController],
   providers: [AccountService, PasswordService, AccountCreatedSaga],
 })
 

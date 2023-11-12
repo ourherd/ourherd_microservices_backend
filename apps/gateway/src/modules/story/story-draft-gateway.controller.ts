@@ -60,7 +60,7 @@ export class StoryDraftGatewayController {
   ) : Promise<IGatewayResponse> {
 
     const { state: storyState, data: storyData } = await firstValueFrom(
-      this.storyService.send<IServiceResponse<StoryEntity>, {member_id: string, draftVideoDto: StoryDraftVideoDto }>
+      this.storyService.send<IServiceResponse<StoryEntity>, { member_id: string, draftVideoDto: StoryDraftVideoDto }>
       (
         STORY_MESSAGE_PATTERNS.DRAFT_VIDEO,
         {

@@ -33,18 +33,4 @@ export class CreateMemberDto  {
   // @EmailNotRegistered({ message: 'email already registered' })
   public email: string;
 
-  @ApiProperty({
-    description: 'Password',
-    pattern: '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$&+,:;=?@#|\'<>.^*()%!-])[A-Za-z\\d@$&+,:;=?@#|\'<>.^*()%!-]{8,}$/',
-    example: '1Aaml1111*',
-    required: true
-  })
-  @IsNotEmpty()
-  @IsString()
-  @Matches(
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$&+,:;=?@#|'<>.^*()%!-])[A-Za-z\d@$&+,:;=?@#|'<>.^*()%!-]{8,}$/,
-    { message: 'invalid password' },
-  )
-  public password: string;
-
 }

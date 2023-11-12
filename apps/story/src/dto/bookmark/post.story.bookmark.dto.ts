@@ -1,14 +1,10 @@
 import { IsString, IsUUID } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
+import { Exclude } from "class-transformer";
 
 export class PostStoryBookmarkDto {
 
-  @ApiProperty({
-    description: "Member ID",
-    example: '9322c384-fd8e-4a13-80cd-1cbd1ef95ba8'
-  })
-  @IsUUID()
-  @IsString()
+  @Exclude()
   public member_id: string;
 
   @ApiProperty({

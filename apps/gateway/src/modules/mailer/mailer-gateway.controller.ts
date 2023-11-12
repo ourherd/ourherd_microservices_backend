@@ -16,11 +16,11 @@ import { MAILER_MESSAGE_PATTERNS } from "apps/mailer/src/constant/mailer-pattern
 export class MailerGatewayController {
 
   constructor(
-    @Inject(RabbitServiceName.EMAIL) private mailerClient: ClientProxy,
+    @Inject(RabbitServiceName.MAILER) private mailerClient: ClientProxy,
     ) { }
 
-  @Post('/welcomeMail')
-  @ApiOperation({ summary: 'send welcome eamil' })
+  @Post('/welcome-email')
+  @ApiOperation({ summary: 'send welcome email' })
   @ApiResponse({ status: 200, description: "send email from email template for welcoming new member" })
   async welcomeEmail (
     @Body() welcomeMailerDto: WelcomeMailerDto

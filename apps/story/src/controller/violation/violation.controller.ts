@@ -2,7 +2,7 @@ import { Controller, Logger } from "@nestjs/common";
 import { ViolationService } from "../service/violation.service";
 import { MessagePattern, Payload } from "@nestjs/microservices";
 import { IServiceResponse } from "@app/rabbit";
-import { PostViolationDto } from "../dto/post.violation.dto";
+import { PostViolationDto } from "../dto/violation/post.violation.dto";
 import { ViolationEntity } from "../entity/violation.entity";
 import { VIOLATION_MESSAGE_PATTERNS } from "../constant/violation-patterns.constants";
 

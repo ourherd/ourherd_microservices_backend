@@ -12,7 +12,7 @@ import { MemberVerificationGatewayController } from "./modules/member/member-ver
 import { FeedGatewayController } from './modules/feed/feed-gateway.controller';
 import { ReactionGatewayController } from './modules/reaction/reaction-gateway.controller';
 import { ViolationGatewayController } from './modules/violation/violation-gateway.controller';
-import { StoryBookmarkGatewayController } from "./modules/story/story-bookmark-gateway.controller";
+import { StoryBookmarkGatewayController } from "./modules/bookmark/story-bookmark-gateway.controller";
 import { StoryDraftGatewayController } from "./modules/story/story-draft-gateway.controller";
 import { AccountGatewayController } from "./modules/account/account-gateway.controller";
 import { AccountPasswordGatewayController } from "./modules/account/account-password-gateway.controller";
@@ -37,7 +37,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     }),
 
     RabbitModule.forClientProxy(RabbitServiceName.ACCOUNT),
-    RabbitModule.forClientProxy(RabbitServiceName.EMAIL),
+    RabbitModule.forClientProxy(RabbitServiceName.MAILER),
     RabbitModule.forClientProxy(RabbitServiceName.MEMBER),
     RabbitModule.forClientProxy(RabbitServiceName.FEED),
     RabbitModule.forClientProxy(RabbitServiceName.STORY),

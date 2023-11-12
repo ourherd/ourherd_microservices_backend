@@ -24,9 +24,7 @@ export class AccountGatewayController {
   private logger = new Logger(GATEWAY_SERVICE);
 
   constructor(
-    @Inject(RabbitServiceName.ACCOUNT) private accountClient: ClientProxy,
-    @Inject(RabbitServiceName.MEMBER) private memberClient: ClientProxy,
-    @Inject(RabbitServiceName.EMAIL) private emailClient: ClientProxy
+    @Inject(RabbitServiceName.ACCOUNT) private accountClient: ClientProxy
   ) { }
 
   @Post('/register')
@@ -36,7 +34,7 @@ export class AccountGatewayController {
     @Body() createDto: RegisterAccountDto
   ): Promise<IGatewayResponse> {
 
-    let accountEntityResult = await firstValueFrom(
+    const account = await firstValueFrom(
       this.accountClient.send<IServiceResponse<AccountEntity>, { createDto: RegisterAccountDto }>
         (
           ACCOUNT_MESSAGE_PATTERNS.REGISTER,
@@ -46,40 +44,7 @@ export class AccountGatewayController {
         )
     );
 
-    if (accountEntityResult.state === false) {
-      return accountEntityResult;
-    }
-
-    // transfer uuid from cognito to generate member
-    createDto.id = accountEntityResult.data.id
-
-    const resultMember = await firstValueFrom(
-      this.memberClient.send<IServiceResponse<SendMailerDto>, { createDto: RegisterAccountDto }>
-        (
-          MEMBER_MESSAGE_PATTERNS.CREATE,
-          {
-            createDto
-          }
-        )
-    );
-
-    if (resultMember.state === false) {
-      return resultMember;
-    }
-
-    const sendMailerDtoData = resultMember.data
-
-    let resultSendMail = await firstValueFrom(
-      this.emailClient.send<IServiceResponse<String>, { sendMailerDtoData: SendMailerDto }>
-        (
-          MAILER_MESSAGE_PATTERNS.EMAIL_SENT,
-          {
-            sendMailerDtoData
-          }
-        )
-    );
-
-    return resultSendMail;
+    return account;
   }
 
   @Post('/login')

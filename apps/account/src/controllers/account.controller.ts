@@ -15,20 +15,19 @@ export class AccountController {
 
   constructor(
     private readonly accountService: AccountService,
-    private readonly saga: AccountCreatedSaga,
+    private readonly accountSaga: AccountCreatedSaga,
   ) { }
 
   @MessagePattern(ACCOUNT_MESSAGE_PATTERNS.REGISTER)
   async register(
     @Payload('createDto') registerAccountDto: RegisterAccountDto
   ): Promise<IServiceResponse<AccountEntity>> {
-
-    return await this.saga.accountCreated(registerAccountDto);
+    return await this.accountSaga.accountCreated(registerAccountDto);
   }
 
   @MessagePattern(ACCOUNT_MESSAGE_PATTERNS.LOGIN)
   async login(
-    @Payload('loginDto') loginDto: LoginAccountDto): Promise<IServiceResponse<any>> {
+    @Payload('loginDto') loginDto: LoginAccountDto): Promise<IServiceResponse<AccountEntity>> {
     return await this.accountService.login(loginDto);
   }
 

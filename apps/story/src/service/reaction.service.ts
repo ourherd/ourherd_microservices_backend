@@ -6,6 +6,7 @@ import { Repository } from "typeorm";
 import { PostReactionDto } from "../dto/post.reaction.dto";
 import { IServiceResponse } from "@app/rabbit";
 import { REACTION_MESSAGE_DB_RESPONSE } from "../constant/reaction-patterns.constants";
+import { Payload } from "@nestjs/microservices";
 
 @Injectable()
 export class ReactionService {
@@ -13,18 +14,19 @@ export class ReactionService {
   constructor(
     @InjectRepository(ReactionEntity, Database.PRIMARY)  private reactionRepository: Repository<ReactionEntity >) {}
 
-  async reactionToStory(reactionDto: PostReactionDto): Promise<IServiceResponse<ReactionEntity>> {
+  async reactionToStory( member_id: string, reactionDto: PostReactionDto): Promise<IServiceResponse<ReactionEntity>> {
     this.logger.log('Reaction Post --> ' + JSON.stringify(reactionDto));
-    return await this.reaction( reactionDto );
+    return await this.reaction( member_id, reactionDto );
   }
 
-  private async reaction( reactionDto: PostReactionDto ): Promise<IServiceResponse<ReactionEntity>> {
+  private async reaction( member_id: string, reactionDto: PostReactionDto ): Promise<IServiceResponse<ReactionEntity>> {
     const reaction = await this.reactionRepository.findOneBy(
       {
-        member_id: reactionDto.member_id,
+        member_id: member_id,
         story_id: reactionDto.story_id
       }
     );
+    reactionDto.member_id = member_id;
 
     if ( reaction !== null ) {
         if (reactionDto.reaction_type === reaction.reaction_type ) {
@@ -32,14 +34,13 @@ export class ReactionService {
           this.logger.log ('REMOVE reaction on story type DTO --> ' + JSON.stringify(reactionDto) );
           const result = await this.reactionRepository.remove( reaction );
           return {
-            state: !!result,
+            state: false,
             data: result,
-            message: !!result ? REACTION_MESSAGE_DB_RESPONSE.REMOVED
-              : REACTION_MESSAGE_DB_RESPONSE.REMOVED_FAILED
+            message: REACTION_MESSAGE_DB_RESPONSE.REMOVED
           }
 
         } else {
-
+          // Dont remove this will be useful for more than one reaction
           this.logger.log ('UPDATE reaction on story type DTO --> ' + JSON.stringify(reactionDto) );
           const update = await this.reactionRepository.update( { id: reaction.id }, reactionDto );
           return {

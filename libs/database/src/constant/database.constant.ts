@@ -4,12 +4,12 @@ import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-clas
 import { MemberEntity } from 'apps/member/src/entity/member.entity';
 import { AccountEntity } from 'apps/account/src/entity/account.entity';
 import { AccountDeviceEntity } from 'apps/account/src/entity/account.device.entity';
-import { ReactionEntity } from 'apps/feed/src/entity/reaction.entity';
-import { StoryEntity } from 'apps/story/src/entity/story.entity';
-import { StoryBookmarkEntity } from 'apps/story/src/entity/story.bookmark.entity';
+import { ReactionEntity } from 'apps/story/src/entity/reaction/reaction.entity';
+import { StoryEntity } from 'apps/story/src/entity/story/story.entity';
+import { BookmarkEntity } from 'apps/story/src/entity/bookmark/bookmark.entity';
 import { MemberVerificationEntity } from 'apps/member/src/entity/member-verification.entity';
 import { StorageResourceEntity } from "../../../../apps/storage/src/entity/storage-resource.entity";
-import { ViolationEntity } from "../../../../apps/feed/src/entity/violation.entity";
+import { ViolationEntity } from "../../../../apps/story/src/entity/violation/violation.entity";
 
 export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string, entities: EntityClassOrSchema[] }> = {
     primary: {
@@ -19,7 +19,7 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
             MemberEntity,
             ReactionEntity,
             StoryEntity,
-            StoryBookmarkEntity,
+            BookmarkEntity,
             AccountEntity,
             AccountDeviceEntity,
             StorageResourceEntity,
@@ -34,7 +34,7 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
           MemberEntity,
           ReactionEntity,
           StoryEntity,
-          StoryBookmarkEntity,
+          BookmarkEntity,
           AccountEntity,
           AccountDeviceEntity,
           StorageResourceEntity,

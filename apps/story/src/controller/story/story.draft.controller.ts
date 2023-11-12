@@ -3,10 +3,10 @@ import { StoryDraftService } from "../service/story.draft.service";
 import { MessagePattern, Payload } from "@nestjs/microservices";
 import { STORY_MESSAGE_PATTERNS } from "../constant/story-patterns.constants";
 import { IServiceResponse } from "@app/rabbit";
-import { StoryDraftTextFreeformDto } from "../dto/story.draft.text-freeform.dto";
+import { StoryDraftTextFreeformDto } from "../dto/story/story.draft.text-freeform.dto";
 import { StoryEntity } from "../entity/story.entity";
-import { StoryDraftTextGuidedDto } from "../dto/story.draft.text-guided.dto";
-import { StoryDraftVideoDto } from "../dto/story.draft.video.dto";
+import { StoryDraftTextGuidedDto } from "../dto/story/story.draft.text-guided.dto";
+import { StoryDraftVideoDto } from "../dto/story/story.draft.video.dto";
 
 @Controller()
 export class StoryDraftController {

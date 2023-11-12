@@ -1,12 +1,12 @@
 import { Inject, Injectable, Logger } from "@nestjs/common";
 import { RegisterAccountDto } from "../dto/register.account.dto";
 import { AccountService } from "../services/account.service";
+import { MemberService } from "../../../member/src/service/member.service";
 import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
 import { AccountEntity } from "../entity/account.entity";
 import { ClientProxy } from "@nestjs/microservices";
-import { SendMailerDto } from "../../../mailer/src/dto/send.mailer.dto";
 import { MemberEntity } from "../../../member/src/entity/member.entity";
-import { MEMBER_MESSAGE_PATTERNS } from "../../../member/src/constant/member-patterns.constants";
+import { MEMBER_EVENT_PATTERNS } from "../../../member/src/constant/member-patterns.constants";
 import { firstValueFrom } from "rxjs";
 import { MAILER_MESSAGE_PATTERNS } from "../../../mailer/src/constant/mailer-patterns.constants";
 import { CreateMemberDto } from "../../../member/src/dto/create-member.dto";
@@ -23,36 +23,42 @@ export class AccountCreatedSaga {
   ) { }
 
   /**
-   * This method will create an account in Cognito using register service, then member and send a welcome email
+   * @remarks This method will create an account in Cognito using register service, then member and send a welcome email
    * @param registerDto
    * @return AccountEntity
    */
-  public async accountCreated ( registerDto: RegisterAccountDto ): Promise<IServiceResponse<AccountEntity>> {
+  public async accountCreated ( registerDto: RegisterAccountDto ): Promise<IServiceResponse<Object>> {
     const account = await this.accountService.register(registerDto);
-    if ( account !== null ){
-      this.memberCreated(registerDto, account.data.id);
-      //this.welcomeEmailSent(registerDto);
-    }
-
+    registerDto.id = account.data.id;
+    //TODO Manage member exist with constraint validation
+    await this.memberCreated(registerDto);
+    delete account.data.password;
     return account;
   }
-
-  private memberCreated ( registerDto: RegisterAccountDto, id: string ) {
-    let createDto = new CreateMemberDto();
-    createDto.id = id;
+  /**
+   * @remarks Create member entity
+   * @param {RegisterAccountDto}
+   * @param {user id: id}
+   * */
+  private async memberCreated ( registerDto: RegisterAccountDto ) {
+    let createDto: CreateMemberDto = new CreateMemberDto();
+    createDto.id = registerDto.id;
     createDto.email = registerDto.email;
-    createDto.password = registerDto.password;
 
-    registerDto.id = id;
-    this.memberClient.emit<IServiceResponse<MemberEntity>, { registerDto: RegisterAccountDto }>(
-      MEMBER_MESSAGE_PATTERNS.EMIT_NEW_MEMBER,
-      {
-        registerDto
-      }
-    )
+    await firstValueFrom(
+        this.memberClient.emit<IServiceResponse<MemberEntity>, { createDto: CreateMemberDto }>(
+        MEMBER_EVENT_PATTERNS.CREATED,
+        {
+          createDto
+        }
+      )
+    );
   }
 
-  // Welcome email with a token
+  /**
+   * @remarks send a welcome email
+   * @param {RegisterAccountDto}
+   * */
   private welcomeEmailSent ( registerDto: RegisterAccountDto ) {
 
     let email = registerDto.email;
