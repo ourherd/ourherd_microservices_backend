@@ -27,7 +27,7 @@ export class AccountCreatedSaga {
    * @param registerDto
    * @return AccountEntity
    */
-  public async accountCreated ( registerDto: RegisterAccountDto ): Promise<IServiceResponse<Object>> {
+  public async accountCreated ( registerDto: RegisterAccountDto ): Promise<IServiceResponse<AccountEntity>> {
     const account = await this.accountService.register(registerDto);
     registerDto.id = account.data.id;
     //TODO Manage member exist with constraint validation

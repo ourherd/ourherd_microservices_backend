@@ -27,13 +27,14 @@ export class AccountController {
 
   @MessagePattern(ACCOUNT_MESSAGE_PATTERNS.LOGIN)
   async login(
-    @Payload('loginDto') loginDto: LoginAccountDto): Promise<IServiceResponse<AccountEntity>> {
+    @Payload('loginDto') loginDto: LoginAccountDto): Promise<IServiceResponse<any>> {
     return await this.accountService.login(loginDto);
   }
 
   @MessagePattern(ACCOUNT_MESSAGE_PATTERNS.REFRESH_TOKEN)
   async refreshToken(
-    @Payload('refreshTokenAccountDto') refreshTokenAccountDto: RefreshTokenAccountDto): Promise<IServiceResponse<any>> {
+    @Payload('refreshTokenAccountDto') refreshTokenAccountDto: RefreshTokenAccountDto):
+    Promise<IServiceResponse<any>> {
     return await this.accountService.refreshToken(refreshTokenAccountDto);
   }
 
