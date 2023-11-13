@@ -22,6 +22,7 @@ import { JwtStrategy } from '@app/authentication';
 
 import { MailerGatewayController } from "./modules/mailer/mailer-gateway.controller";
 import { SurveyGatewayController } from "./modules/survey/survey-gateway.controller";
+import { StorageModule } from "apps/storage/src/storage.module";
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
 @Module({
@@ -47,6 +48,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     PassportModule.register({ defaultStrategy: 'jwt' }),
     // AuthenticationModule.register(),
     // PolicyModule,
+    StorageModule
   ],
   controllers: [
     SurveyGatewayController,

@@ -29,11 +29,4 @@ export class CreateStorageResourceDto extends BaseStorageResourceDto {
     })
     @IsEnum(StorageResourceDriverType)
     driver: StorageResourceDriverType = StorageResourceDriverType.S3;
-
-    @ApiProperty({
-        type: 'string',
-        format: 'binary'
-    })
-    @Allow()
-    file: Express.Multer.File;
 }

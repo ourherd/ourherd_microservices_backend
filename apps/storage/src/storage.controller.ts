@@ -14,9 +14,10 @@ export class StorageController {
 
   @MessagePattern(STORAGE_MESSAGE_PATTERNS.CREATE)
   async createStorageFile(
-    @Payload('storageDto') storageDto: CreateStorageResourceDto):
+    @Payload('storageDto') storageDto: CreateStorageResourceDto,
+    @Payload('story_resource') story_resource: Express.Multer.File
+    ):
     Promise<IServiceResponse<StorageResourceEntity>> {
-
-    return await this.storageService.create(storageDto);
+    return await this.storageService.upload(storageDto, story_resource);
   }
 }
