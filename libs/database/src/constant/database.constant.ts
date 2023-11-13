@@ -9,13 +9,19 @@ import { StoryEntity } from 'apps/story/src/entity/story.entity';
 import { StoryBookmarkEntity } from 'apps/story/src/entity/story.bookmark.entity';
 import { MemberVerificationEntity } from 'apps/member/src/entity/member-verification.entity';
 import { StorageResourceEntity } from "../../../../apps/storage/src/entity/storage-resource.entity";
+import { SurveyMemberInstanceEntity } from 'apps/survey/src/entities/survey-member-instances.entity';
 import { ViolationEntity } from "../../../../apps/feed/src/entity/violation.entity";
+import { SurveyFinalResponseEntity } from 'apps/survey/src/entities/survey-final-responses.entity';
+import { SurveyEntity } from 'apps/survey/src/entities/survey.entity';
 
 export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string, entities: EntityClassOrSchema[] }> = {
     primary: {
         type: 'postgres',
         env: 'PRIMARY',
         entities: [
+            SurveyMemberInstanceEntity,
+            SurveyFinalResponseEntity,
+            SurveyEntity,
             MemberEntity,
             ReactionEntity,
             StoryEntity,
@@ -23,6 +29,7 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
             AccountEntity,
             AccountDeviceEntity,
             StorageResourceEntity,
+            MemberVerificationEntity,
             ViolationEntity,
             MemberVerificationEntity
         ]
@@ -31,15 +38,19 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
         type: 'postgres',
         env: 'SECONDARY',
         entities: [
-          MemberEntity,
-          ReactionEntity,
-          StoryEntity,
-          StoryBookmarkEntity,
-          AccountEntity,
-          AccountDeviceEntity,
-          StorageResourceEntity,
-          ViolationEntity,
-          MemberVerificationEntity
+            SurveyMemberInstanceEntity,
+            SurveyFinalResponseEntity,
+            SurveyEntity,
+            MemberEntity,
+            ReactionEntity,
+            StoryEntity,
+            StoryBookmarkEntity,
+            AccountEntity,
+            AccountDeviceEntity,
+            StorageResourceEntity,
+            MemberVerificationEntity,
+            ViolationEntity,
+            MemberVerificationEntity
         ]
     }
 };
