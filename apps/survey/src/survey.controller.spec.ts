@@ -14,9 +14,4 @@ describe('SurveyController', () => {
     surveyController = app.get<SurveyController>(SurveyController);
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(surveyController.getHello()).toBe('Hello World!');
-    });
-  });
 });

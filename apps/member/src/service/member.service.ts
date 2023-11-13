@@ -19,6 +19,8 @@ export class MemberService {
   constructor(
     @InjectRepository(MemberEntity, Database.PRIMARY)
     private memberRepository: Repository<MemberEntity>,
+
+    //TODO move it no being used
     @InjectRepository(MemberVerificationEntity, Database.PRIMARY)
     private memberVerificationRepository: Repository<MemberVerificationEntity>  ) { }
 

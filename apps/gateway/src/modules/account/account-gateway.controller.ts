@@ -1,5 +1,5 @@
 import { Body, Controller, Inject, Logger, Post } from "@nestjs/common";
-import { IGatewayResponse } from '../../common/interface/gateway.interface';
+import { IGatewayResponse } from "../../common/interface/gateway.interface";
 import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
 import { RegisterAccountDto } from "apps/account/src/dto/register.account.dto";
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
@@ -7,10 +7,7 @@ import { firstValueFrom } from "rxjs";
 import { ACCOUNT_MESSAGE_PATTERNS } from "../../../../account/src/constant/account-patterns.constants";
 import { ClientProxy } from "@nestjs/microservices";
 import { LoginAccountDto } from "apps/account/src/dto/login.account.dto";
-import { MEMBER_MESSAGE_PATTERNS } from "apps/member/src/constant/member-patterns.constants";
 import { RefreshTokenAccountDto } from "apps/account/src/dto/refresh-token.account.dto";
-import { MAILER_MESSAGE_PATTERNS } from "apps/mailer/src/constant/mailer-patterns.constants";
-import { SendMailerDto } from "apps/mailer/src/dto/send.mailer.dto";
 import { GATEWAY_SERVICE } from "../../constant/gateway-patterns.constants";
 import { AccountEntity } from "apps/account/src/entity/account.entity";
 
@@ -43,7 +40,6 @@ export class AccountGatewayController {
           }
         )
     );
-
     return account;
   }
 

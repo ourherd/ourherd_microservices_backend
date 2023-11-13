@@ -102,11 +102,14 @@ export class StoryDraftGatewayController {
       this.storyService.send<IServiceResponse<StoryEntity>,
         { member_id: string, draftGuidedDto: StoryDraftTextGuidedDto }>
       (
-          STORY_MESSAGE_PATTERNS.DRAFT_TEXT_GUIDE, { member_id, draftGuidedDto })
+        STORY_MESSAGE_PATTERNS.DRAFT_TEXT_GUIDE,
+        {
+          member_id,
+          draftGuidedDto
+        })
     );
     return { state, data };
   }
-
 
   @Post('/text-freeform')
   @Auth()

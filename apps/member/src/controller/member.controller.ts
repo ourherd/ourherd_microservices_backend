@@ -1,19 +1,12 @@
-import { Controller, Get, HttpStatus } from '@nestjs/common';
-import { ApiResponse, ApiOperation } from '@nestjs/swagger';
-import { MemberService } from '../service/member.service';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { Controller } from "@nestjs/common";
+import { MemberService } from "../service/member.service";
+import { MessagePattern, Payload } from "@nestjs/microservices";
 import { MEMBER_EVENT_PATTERNS, MEMBER_MESSAGE_PATTERNS } from "../constant/member-patterns.constants";
-import { MemberEntity } from '../entity/member.entity';
-import { CreateMemberDto } from '../dto/create-member.dto';
-import { UpdateMemberDto } from '../dto/update-member.dto';
-import { IServiceResponse } from '@app/rabbit';
-import { IPagination, PaginationDto } from '@app/common';
-import { ACCOUNT_MESSAGE_PATTERNS } from 'apps/account/src/constant/account-patterns.constants';
-import { SendMailerDto } from 'apps/mailer/src/dto/send.mailer.dto';
-import { UpdateResult } from 'typeorm';
-import { VerifyUserDto } from '../dto/verify-email.member.dto';
-import { EmailVerifyTokenDto } from '../dto/email-verify-token.account.dto';
-import { MemberMailService } from "../service/member.mail.service";
+import { MemberEntity } from "../entity/member.entity";
+import { CreateMemberDto } from "../dto/create-member.dto";
+import { UpdateMemberDto } from "../dto/update-member.dto";
+import { IServiceResponse } from "@app/rabbit";
+import { IPagination, PaginationDto } from "@app/common";
 
 @Controller()
 export class MemberController {
