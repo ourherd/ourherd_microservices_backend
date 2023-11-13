@@ -8,7 +8,7 @@ import { GATEWAY_SERVICE } from "../../constant/gateway-patterns.constants";
 import { SURVEY_MESSAGE_PATTERNS } from "apps/survey/src/constant/survey-patterns.constants";
 import { CreateDQ5SurveyInstanceDto } from "apps/survey/src/dto/create-DQ5-survey-instance.survey.dto";
 import { SurveyMemberInstanceEntity } from "apps/survey/src/entities/survey-member-instances.entity";
-import { Auth, CurrentUser } from "@app/authentication";
+import { Auth, CurrentMember } from "@app/authentication";
 import { SubmitSurveyFinalDto } from "apps/survey/src/dto/submit-survey-final.survey.dto";
 import { CreateLongOnBoardingSurveyInstanceDto } from "apps/survey/src/dto/create-Long-Boarding-survey-instance.survey.dto";
 import { CreateShortOnBoardingSurveyInstanceDto } from "apps/survey/src/dto/create-Short-Boarding-survey-instance.survey.dto";
@@ -32,7 +32,7 @@ export class SurveyGatewayController {
   @ApiResponse({ status: 200, description: 'create success' })
   async createSurveyDQ5Instance(
     @Body() createDto: CreateDQ5SurveyInstanceDto,
-    @CurrentUser('id_member') id_member: string
+    @CurrentMember('id_member') id_member: string
   ): Promise<IGatewayResponse> {
 
     let createSurveyResult = await firstValueFrom(
@@ -58,7 +58,7 @@ export class SurveyGatewayController {
   @ApiResponse({ status: 200, description: 'create success' })
   async createSurveyLongInstance(
     @Body() createDto: CreateLongOnBoardingSurveyInstanceDto,
-    @CurrentUser('id_member') id_member: string
+    @CurrentMember('id_member') id_member: string
   ): Promise<IGatewayResponse> {
 
     let createSurveyResult = await firstValueFrom(
@@ -84,7 +84,7 @@ export class SurveyGatewayController {
   @ApiResponse({ status: 200, description: 'create success' })
   async createSurveyShortInstance(
     @Body() createDto: CreateShortOnBoardingSurveyInstanceDto,
-    @CurrentUser('id_member') id_member: string
+    @CurrentMember('id_member') id_member: string
   ): Promise<IGatewayResponse> {
 
     let createSurveyResult = await firstValueFrom(
