@@ -31,11 +31,6 @@ export class AccountService {
       }
     );
 
-    if (account === null) {
-
-      this.logger.log(ACCOUNT_MODULE + ' ---> null: ' + JSON.stringify(account));
-    }
-
     return {
       state: !!account,
       data: account,
@@ -62,10 +57,8 @@ export class AccountService {
       )
       // get uuid from cognito and use for generating member item
       createAccountDto.id = cognitoResult['userSub']
-
-      const password = createAccountDto.password;
-      const hash = await bcrypt.hash(password, this.saltOrRounds);
-      createAccountDto.password = hash;
+      // TODO remove this
+      createAccountDto.password = await bcrypt.hash(createAccountDto.password, this.saltOrRounds);
 
       const result = await this.accountRepository.save(createAccountDto);
 
@@ -76,7 +69,7 @@ export class AccountService {
       };
 
     } catch (e) {
-      this.logger.error("Create Account",e)
+      this.logger.error("Error Create Account", e)
       return {
         state: false,
         data: e.name

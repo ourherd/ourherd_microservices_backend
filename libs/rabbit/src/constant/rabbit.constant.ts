@@ -22,8 +22,8 @@ export const RABBIT_SERVICES: Record<RabbitServiceName, { queue: string }> =
     MODERATION_SERVICE: {
         queue: 'moderation_queue'
     },
-    EMAIL_SERVICE: {
-        queue: 'email_queue'
+    MAILER_SERVICE: {
+        queue: 'mailer_queue'
     },
     NOTIFICATION_SERVICE: {
         queue: 'notification_queue'

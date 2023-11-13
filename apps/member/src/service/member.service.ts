@@ -1,19 +1,15 @@
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { MemberEntity } from '../entity/member.entity';
-import { Repository, UpdateResult } from 'typeorm';
-import { CreateMemberDto } from '../dto/create-member.dto';
-import { UpdateMemberDto } from '../dto/update-member.dto';
-import _ from 'lodash';
-import { IServiceResponse } from '@app/rabbit';
-import { IPagination, PaginationDto } from '@app/common';
-import { Database } from '@app/database';
+import { Injectable, Logger } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { MemberEntity } from "../entity/member.entity";
+import { Repository } from "typeorm";
+import { CreateMemberDto } from "../dto/create-member.dto";
+import { UpdateMemberDto } from "../dto/update-member.dto";
+import { IServiceResponse } from "@app/rabbit";
+import { IPagination, PaginationDto } from "@app/common";
+import { Database } from "@app/database";
 import { MEMBER_MESSAGE_DB_RESPONSE } from "../constant/member-patterns.constants";
-import { MemberVerificationEntity } from '../entity/member-verification.entity';
-import { v4 } from 'uuid';
-import { plainToClass } from 'class-transformer';
-import { SendMailerDto } from 'apps/mailer/src/dto/send.mailer.dto';
-import { VerifyUserDto } from '../dto/verify-email.member.dto';
+import { MemberVerificationEntity } from "../entity/member-verification.entity";
+
 
 @Injectable()
 export class MemberService {
@@ -23,21 +19,15 @@ export class MemberService {
   constructor(
     @InjectRepository(MemberEntity, Database.PRIMARY)
     private memberRepository: Repository<MemberEntity>,
-    @InjectRepository(MemberVerificationEntity, Database.PRIMARY) private memberVerificationRepository: Repository<MemberVerificationEntity>  ) { }
+
+    //TODO move it no being used
+    @InjectRepository(MemberVerificationEntity, Database.PRIMARY)
+    private memberVerificationRepository: Repository<MemberVerificationEntity>  ) { }
 
   async create(createDto: CreateMemberDto): Promise<IServiceResponse<MemberEntity>> {
     try {
-
-      const memberExist = await this.findByEmail(createDto.email);
-
-      if (!!memberExist.state) {
-        return {
-          state: !!memberExist.state,
-          data: memberExist.data,
-          message: memberExist.message
-        };
-      }
-
+      // Validation Constraint in account
+      this.logger.log('member dto--> ' + JSON.stringify(createDto));
       const member = this.memberRepository.create(createDto);
       const result = await this.memberRepository.save(member);
 
@@ -63,8 +53,8 @@ export class MemberService {
 
   }
 
-  async update(id: string, updateDto: UpdateMemberDto): Promise<IServiceResponse<MemberEntity>> {
-    const { state, data: member } = await this.findById(id);
+  async update(member_id: string, updateDto: UpdateMemberDto): Promise<IServiceResponse<MemberEntity>> {
+    const { state, data: member } = await this.findById(member_id);
 
     if (state) {
       Object.assign(member, updateDto);

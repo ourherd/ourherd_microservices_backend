@@ -13,6 +13,7 @@ export abstract class AbstractSurveyDto {
   @IsUUID()
   public survey_id: string;
 
+  //TODO change this to exclude
   @ApiProperty()
   @IsOptional()
   @IsUUID()

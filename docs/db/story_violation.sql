@@ -6,7 +6,7 @@ create table public.story_violations
     story_id uuid not null constraint story_violation_story_id_fkey
             references stories on delete restrict,
 
-    member_id uuid not null constraint story_violation_user_id_fkey
+    member_id uuid not null constraint story_violation_member_id_fkey
             references "members" on delete restrict,
 
     created_at    timestamp with time zone default now() not null,

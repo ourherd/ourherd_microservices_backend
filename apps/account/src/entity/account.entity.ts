@@ -1,4 +1,4 @@
-import { Column, Entity } from "typeorm";
+import { Column, Entity, BeforeUpdate, BeforeInsert } from "typeorm";
 import { AbstractEntity } from "@app/database/base/base.entity";
 
 @Entity({
@@ -22,5 +22,6 @@ export class AccountEntity extends AbstractEntity {
   // @OneToMany(type => AccountDeviceEntity, account => account.id)
   // @JoinColumn({name: "account_id"})
   // device: AccountDeviceEntity;
+  // Entity function
 
 }

@@ -16,16 +16,17 @@ export class MailerController {
 
   @MessagePattern(MAILER_MESSAGE_PATTERNS.WELCOME_EMAIL_REQUEST_SENT)
   async sendMailWelcome(
-    @Payload('welcomeMailerDto') welcomeMailerDto: WelcomeMailerDto): Promise<IServiceResponse<ClientResponse>> {
-    const mailerResult = this.mailerService.welcomeEmail(welcomeMailerDto)    
-    return mailerResult
+    @Payload('welcomeMailerDto') welcomeMailerDto: WelcomeMailerDto) {
+    //: Promise<IServiceResponse<ClientResponse>>
+    // const mailerResult = this.mailerService.welcomeEmail(welcomeMailerDto)
+    // return mailerResult
   }
-  
+
   @MessagePattern(MAILER_MESSAGE_PATTERNS.EMAIL_SENT)
   async sendMail(
     @Payload('sendMailerDtoData') sendMailerDto: SendMailerDto): Promise<IServiceResponse<ClientResponse>> {
     this.logger.log('Start sending message');
-    const mailerResult = this.mailerService.sendEmail(sendMailerDto)    
+    const mailerResult = this.mailerService.sendEmail(sendMailerDto)
     this.logger.log('Stop sending message');
     return mailerResult
   }

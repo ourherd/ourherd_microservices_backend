@@ -26,7 +26,6 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.363.0",
-    "@aws-sdk/client-ses": "^3.428.0",
     "@casl/ability": "^6.5.0",
     "@nestjs-cognito/auth": "^1.0.11",
     "@nestjs-modules/mailer": "^1.9.1",
@@ -125,8 +124,6 @@
       "^@app/database(|/.*)$": "<rootDir>/libs/database/src/$1",
       "^@app/language(|/.*)$": "<rootDir>/libs/language/src/$1",
       "^@app/token(|/.*)$": "<rootDir>/libs/token/src/$1",
-      "^@app/libs/mailer(|/.*)$": "<rootDir>/libs/libs/mailer/src/$1",
-      "^@app/libs/mail(|/.*)$": "<rootDir>/libs/libs/mail/src/$1",
       "^@app/mail(|/.*)$": "<rootDir>/libs/mail/src/$1",
       "^@libs/cognito(|/.*)$": "<rootDir>/libs/cognito/src/$1"
     }

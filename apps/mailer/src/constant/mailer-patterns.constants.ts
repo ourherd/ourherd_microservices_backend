@@ -3,8 +3,9 @@ export const MAILER_MODULE = 'MAILER SERVICE';
 
 export const MAILER_MESSAGE_PATTERNS = {
   EMAIL_SENT: 'mailer.sent',
-  WELCOME_EMAIL_REQUEST: 'mailer.welcomeemail',
-  WELCOME_EMAIL_REQUEST_SENT: 'mailer.welcomeemailsent'
+  EMIT_WELCOME_EMAIL: 'mailer.emit-welcome',
+  WELCOME_EMAIL_REQUEST: 'mailer.welcome-email',
+  WELCOME_EMAIL_REQUEST_SENT: 'mailer.welcome-email-sent'
 }
 
 export const MAILER_MESSAGE_SERVICE_RESPONSE = {

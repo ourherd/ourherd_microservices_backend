@@ -38,12 +38,12 @@ export class SurveyService {
           status: SURVEY_STATIC_STATUS.ACTIVE
         }
       );
-
+      //TODO Use logger with meaningful message
       console.log(
         JSON.stringify(survey),
         JSON.stringify(createDto),
       );
-      
+
 
       if (!!survey === false) {
         return {
@@ -59,6 +59,7 @@ export class SurveyService {
         }
       }
 
+      // TODO emit new event for survey member
       const surveyMemberInstance = await this.surveyMemberInstanceRepo.findOneBy(
         {
           id: createDto.id

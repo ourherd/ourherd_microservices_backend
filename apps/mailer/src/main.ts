@@ -3,7 +3,7 @@ import { Logger } from '@nestjs/common';
 import { MailerModuleExt } from './mailer.module';
 import { MicroserviceOptions } from '@nestjs/microservices';
 import { RABBIT_SERVICE_OPTIONS } from '@app/rabbit';
-import {  MAILER_SERVICE, MAILER_MODULE } from "./constant/mailer-patterns.constants";
+import { MAILER_SERVICE, MAILER_MODULE } from "./constant/mailer-patterns.constants";
 
 async function bootstrap() {
 

@@ -18,42 +18,42 @@ export class SurveyController {
     @Payload('createDto') createSurveyInstanceDto: CreateDQ5SurveyInstanceDto,
     @Payload('id_member') id_member: string
   ): Promise<IServiceResponse<SurveyMemberInstanceEntity>> {
-    const surveyCreateResult = this.surveyService.createSurveyMemberInstance(
+    const surveyCreated = this.surveyService.createSurveyMemberInstance(
       createSurveyInstanceDto,
       id_member
       )
-    return surveyCreateResult
+    return surveyCreated;
   }
-  
+
   @MessagePattern(SURVEY_MESSAGE_PATTERNS.CREATE_LONG)
   async createSurveyLongInstance(
     @Payload('createDto') createSurveyInstanceDto: CreateLongOnBoardingSurveyInstanceDto,
     @Payload('id_member') id_member: string
   ): Promise<IServiceResponse<SurveyMemberInstanceEntity>> {
-    const surveyCreateResult = this.surveyService.createSurveyMemberInstance(
+    const surveyCreated = this.surveyService.createSurveyMemberInstance(
       createSurveyInstanceDto,
       id_member
       )
-    return surveyCreateResult
+    return surveyCreated;
   }
-  
+
   @MessagePattern(SURVEY_MESSAGE_PATTERNS.CREATE_SHORT)
   async createSurveyShortInstance(
     @Payload('createDto') createSurveyInstanceDto: CreateShortOnBoardingSurveyInstanceDto,
     @Payload('id_member') id_member: string
   ): Promise<IServiceResponse<SurveyMemberInstanceEntity>> {
-    const surveyCreateResult = this.surveyService.createSurveyMemberInstance(
+    const surveyCreated = this.surveyService.createSurveyMemberInstance(
       createSurveyInstanceDto,
       id_member
       )
-    return surveyCreateResult
+    return surveyCreated;
   }
-  
+
   @MessagePattern(SURVEY_MESSAGE_PATTERNS.SUBMIT)
   async submit(
     @Payload('submitSurveyFinalDto') submitSurveyFinalDto: SubmitSurveyFinalDto
   ): Promise<IServiceResponse<SurveyMemberInstanceEntity>> {
-    const submitSurveyFinalResult = this.surveyService.submitSurveyInstance(submitSurveyFinalDto)
-    return submitSurveyFinalResult
+    const surveyFinalCreated = this.surveyService.submitSurveyInstance(submitSurveyFinalDto)
+    return surveyFinalCreated;
   }
 }
