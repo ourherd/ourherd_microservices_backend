@@ -1,11 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
-import {
-  AuthenticationDetails,
-  CognitoRefreshToken,
-  CognitoUser,
-  CognitoUserPool,
-} from 'amazon-cognito-identity-js';
-import { COGNITO_SERVICE } from './constant/cognito-patterns.constants';
+import { Injectable, Logger } from "@nestjs/common";
+import { AuthenticationDetails, CognitoRefreshToken, CognitoUser, CognitoUserPool } from "amazon-cognito-identity-js";
+import { COGNITO_SERVICE } from "./constant/cognito-patterns.constants";
 import { ConfigService } from "@nestjs/config";
 
 @Injectable()
@@ -41,8 +36,8 @@ export class CognitoService {
         },
       );
     });
-    console.log(JSON.stringify(signUpResult));
-    return signUpResult
+
+    return signUpResult;
   }
 
   async authenticateUser(
@@ -60,7 +55,6 @@ export class CognitoService {
     });
 
     const userCognito = new CognitoUser(userData);
-
     return new Promise((resolve, reject) => {
       userCognito.authenticateUser(authenticationDetails, {
         onSuccess: () => {
@@ -196,7 +190,5 @@ export class CognitoService {
         })
     });
   }
-
-
 
 }

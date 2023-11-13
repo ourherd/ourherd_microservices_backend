@@ -7,7 +7,7 @@ import { MailService } from '@sendgrid/mail';
 
 @Module({
   imports: [
-    RabbitModule.forServerProxy(RabbitServiceName.EMAIL),
+    RabbitModule.forServerProxy(RabbitServiceName.MAILER),
   ],
   controllers: [MailerController],
   providers: [

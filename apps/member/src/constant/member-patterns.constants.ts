@@ -4,11 +4,14 @@ export const MEMBER_MODULE = 'MEMBER MODULE';
 export const MEMBER_MESSAGE_PATTERNS = {
   VERIFY_ACCOUNT: 'member.verify-account',
   RESEND_VERIFY: 'member.resend-verify',
-  CREATE: 'member.create',
   FIND_ALL: 'member.findall',
   FIND_BY_ID: 'member.findbyid',
   FIND_BY_EMAIL: 'member.findbyemail',
-  UPDATE: 'member.update'
+  UPDATE: 'member.update',
+}
+
+export const MEMBER_EVENT_PATTERNS = {
+  CREATED: 'member.event-created',
 }
 
 export const MEMBER_MESSAGE_DB_RESPONSE = {

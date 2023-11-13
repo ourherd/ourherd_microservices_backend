@@ -1,5 +1,5 @@
 import { Body, Controller, Inject, Logger, Post } from "@nestjs/common";
-import { IGatewayResponse } from '../../common/interface/gateway.interface';
+import { IGatewayResponse } from "../../common/interface/gateway.interface";
 import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
 import { RegisterAccountDto } from "apps/account/src/dto/register.account.dto";
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
@@ -7,10 +7,7 @@ import { firstValueFrom } from "rxjs";
 import { ACCOUNT_MESSAGE_PATTERNS } from "../../../../account/src/constant/account-patterns.constants";
 import { ClientProxy } from "@nestjs/microservices";
 import { LoginAccountDto } from "apps/account/src/dto/login.account.dto";
-import { MEMBER_MESSAGE_PATTERNS } from "apps/member/src/constant/member-patterns.constants";
 import { RefreshTokenAccountDto } from "apps/account/src/dto/refresh-token.account.dto";
-import { MAILER_MESSAGE_PATTERNS } from "apps/mailer/src/constant/mailer-patterns.constants";
-import { SendMailerDto } from "apps/mailer/src/dto/send.mailer.dto";
 import { GATEWAY_SERVICE } from "../../constant/gateway-patterns.constants";
 import { AccountEntity } from "apps/account/src/entity/account.entity";
 
@@ -24,9 +21,7 @@ export class AccountGatewayController {
   private logger = new Logger(GATEWAY_SERVICE);
 
   constructor(
-    @Inject(RabbitServiceName.ACCOUNT) private accountClient: ClientProxy,
-    @Inject(RabbitServiceName.MEMBER) private memberClient: ClientProxy,
-    @Inject(RabbitServiceName.EMAIL) private emailClient: ClientProxy
+    @Inject(RabbitServiceName.ACCOUNT) private accountClient: ClientProxy
   ) { }
 
   @Post('/register')
@@ -36,7 +31,7 @@ export class AccountGatewayController {
     @Body() createDto: RegisterAccountDto
   ): Promise<IGatewayResponse> {
 
-    let accountEntityResult = await firstValueFrom(
+    const account = await firstValueFrom(
       this.accountClient.send<IServiceResponse<AccountEntity>, { createDto: RegisterAccountDto }>
         (
           ACCOUNT_MESSAGE_PATTERNS.REGISTER,
@@ -45,41 +40,7 @@ export class AccountGatewayController {
           }
         )
     );
-
-    if (accountEntityResult.state === false) {
-      return accountEntityResult;
-    }
-
-    // transfer uuid from cognito to generate member
-    createDto.id = accountEntityResult.data.id
-
-    const resultMember = await firstValueFrom(
-      this.memberClient.send<IServiceResponse<SendMailerDto>, { createDto: RegisterAccountDto }>
-        (
-          MEMBER_MESSAGE_PATTERNS.CREATE,
-          {
-            createDto
-          }
-        )
-    );
-
-    if (resultMember.state === false) {
-      return resultMember;
-    }
-
-    const sendMailerDtoData = resultMember.data
-
-    let resultSendMail = await firstValueFrom(
-      this.emailClient.send<IServiceResponse<String>, { sendMailerDtoData: SendMailerDto }>
-        (
-          MAILER_MESSAGE_PATTERNS.EMAIL_SENT,
-          {
-            sendMailerDtoData
-          }
-        )
-    );
-
-    return resultSendMail;
+    return account;
   }
 
   @Post('/login')

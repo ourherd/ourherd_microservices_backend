@@ -1,4 +1,4 @@
-import { StoryDraftBaseDto } from "./story.draft.base.dto";
+import { StoryDraftBaseDto } from "./story/story.draft.base.dto";
 import { IsEnum, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
 import { StoryMedium, StoryType } from "../constant/story.enum";
 import { Transform } from "class-transformer";

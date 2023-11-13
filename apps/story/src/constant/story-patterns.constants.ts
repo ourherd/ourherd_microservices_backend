@@ -18,6 +18,7 @@ export const BOOKMARK_MESSAGE_PATTERNS = {
 }
 
 export const STORY_MESSAGE_DB_RESPONSE = {
-
+  CREATED : 'story.created',
+  CREATED_FAILED: 'story.create-failed'
 }
 

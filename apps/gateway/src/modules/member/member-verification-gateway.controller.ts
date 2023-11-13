@@ -20,7 +20,7 @@ export class MemberVerificationGatewayController {
 
   constructor(
     @Inject(RabbitServiceName.MEMBER) private memberClient: ClientProxy,
-    @Inject(RabbitServiceName.EMAIL) private emailClient: ClientProxy
+    @Inject(RabbitServiceName.MAILER) private mailerClient: ClientProxy
   ) { }
 
   @Get('/verify/:token')
@@ -67,7 +67,7 @@ export class MemberVerificationGatewayController {
     let sendMailerDtoData = sendMailerDtoResult.data
 
     let resultSendMail = await firstValueFrom(
-      this.emailClient.send<IServiceResponse<String>, { sendMailerDtoData: SendMailerDto }>
+      this.mailerClient.send<IServiceResponse<String>, { sendMailerDtoData: SendMailerDto }>
       (
         MAILER_MESSAGE_PATTERNS.EMAIL_SENT,
         {
