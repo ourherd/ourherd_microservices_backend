@@ -49,17 +49,17 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     // PolicyModule,
   ],
   controllers: [
-    SurveyGatewayController,
     AccountGatewayController,
     AccountPasswordGatewayController,
+    FeedGatewayController,
     MailerGatewayController,
     MemberGatewayController,
     MemberVerificationGatewayController,
-    FeedGatewayController,
     ReactionGatewayController,
     BookmarkGatewayController,
     StoryDraftGatewayController,
-    ViolationGatewayController
+    ViolationGatewayController,
+    SurveyGatewayController
   ],
   providers: [JwtStrategy],
 })
