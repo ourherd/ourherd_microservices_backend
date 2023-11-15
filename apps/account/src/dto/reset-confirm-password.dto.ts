@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsString, Matches } from 'class-validator';
 
 export class AuthConfirmPasswordUserDto {
-  @IsEmail()
+  // @IsEmail()
   @ApiProperty({
     description: "user email for matching account information",
     example: "info@batyr.com.au"
