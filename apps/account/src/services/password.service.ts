@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
+import { IServiceResponse } from "@app/rabbit";
 import { AccountEntity } from '../entity/account.entity';
 import { Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,9 +10,6 @@ import { ACCOUNT_MESSAGE_DB_RESPONSE } from '../constant/account-patterns.consta
 import { CognitoService } from '@libs/cognito';
 import { AuthChangePasswordUserDto } from '../dto/change-password.account.dto';
 import { ResetPasswordVerificationEntity } from '../entity/reset-password-verification.entity';
-import { ClientProxy } from '@nestjs/microservices';
-import { MAILER_MESSAGE_PATTERNS } from 'apps/mailer/src/constant/mailer-patterns.constants';
-import { SendgridService } from 'apps/mailer/src/services/sendgrid.service';
 import { MailSengridService } from '@app/mail/mail.sengrid.service';
 import { v4 } from 'uuid';
 
