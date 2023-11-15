@@ -13,6 +13,7 @@ import { ViolationEntity } from "../../../../apps/story/src/entity/violation/vio
 import { SurveyMemberInstanceEntity } from 'apps/survey/src/entities/survey-member-instances.entity';
 import { SurveyFinalResponseEntity } from 'apps/survey/src/entities/survey-final-responses.entity';
 import { SurveyEntity } from 'apps/survey/src/entities/survey.entity';
+import { StorySettingEntity } from 'apps/story/src/entity/story/story.setting.entity';
 import { ResetPasswordVerificationEntity } from 'apps/account/src/entity/reset-password-verification.entity';
 
 export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string, entities: EntityClassOrSchema[] }> = {
@@ -25,6 +26,7 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
             ResetPasswordVerificationEntity,
             SurveyEntity,
             MemberEntity,
+            StorySettingEntity,
             ReactionEntity,
             StoryEntity,
             BookmarkEntity,
@@ -44,6 +46,7 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
           ResetPasswordVerificationEntity,
           SurveyEntity,
           MemberEntity,
+          StorySettingEntity,
           ReactionEntity,
           StoryEntity,
           BookmarkEntity,
