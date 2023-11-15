@@ -4,9 +4,6 @@ import { MemberModule } from "./member.module";
 import { MicroserviceOptions } from "@nestjs/microservices";
 import { RABBIT_SERVICE_OPTIONS } from "@app/rabbit";
 import { MEMBER_MODULE, MEMBER_SERVICE } from "./constant/member-patterns.constants";
-import { useContainer } from "class-validator";
-import { GatewayModule } from "../../gateway/src/gateway.module";
-
 
 async function bootstrap() {
 
