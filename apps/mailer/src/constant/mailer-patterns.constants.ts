@@ -8,6 +8,14 @@ export const MAILER_MESSAGE_PATTERNS = {
   WELCOME_EMAIL_REQUEST_SENT: 'mailer.welcome-email-sent'
 }
 
+export const MAILER_EVENT_PATTERNS = {
+  EMAIL_SENT: 'mailer.sent',
+  EMIT_WELCOME_EMAIL: 'mailer.emit-welcome',
+  EMIT_VERIFICATION_EMAIL: 'mailer.verification-email',
+  WELCOME_EMAIL_REQUEST_SENT: 'mailer.welcome-email-sent'
+}
+
+
 export const MAILER_MESSAGE_SERVICE_RESPONSE = {
   EMAIL_SENT_SUCCESS: 'member.sent-success',
   EMAIL_SENT_FAILED: 'member.sent-failed'

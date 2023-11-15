@@ -1,34 +1,17 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Exclude, Expose } from "class-transformer";
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsString,
-  MinLength
-} from "class-validator";
+import { Exclude, Transform } from "class-transformer";
+import { IsEmail, IsNotEmpty, IsString } from "class-validator";
+import { v4 } from "uuid";
 
 @Exclude()
 export class SendMailerDto {
 
   @IsNotEmpty()
   @IsString()
-  @MinLength(4)
-  @Expose()
   @IsEmail()
   public email: string;
-  
-  @Expose()
-  @ApiProperty({
-    description: "email subject",
-    example: "Test Sending Email"
-  })
-  public subject: string;
-  
-  @Expose()
-  @ApiProperty({
-    description: "email body",
-    example: "<b>welcome</b>"
-  })
-  public html: string;
+
+  @IsString()
+  @Transform(({ value }) => value = v4())
+  public token: string = v4();
 
 }
