@@ -15,14 +15,15 @@ export class StorageService {
         private storageRepository: Repository<StorageResourceEntity>,
         private s3Service: ResourceS3AwsService ) { }
 
-    async create(
-      storageDto: CreateStorageResourceDto
+    async upload(
+      storageDto: CreateStorageResourceDto,
+      story_resource: Express.Multer.File
    ): Promise<IServiceResponse<StorageResourceEntity>> {
 
-      let result;
+      let result: StorageResourceEntity;
       const resource = this.storageRepository.create(_.omit(storageDto, ['file']));
 
-      const { state, data: { key } } = await this.s3Service.upload(storageDto)
+      const { state, data: { key } } = await this.s3Service.upload(storageDto, story_resource)
 
       if ( state === true ) {
           resource.media_resource_path = key;

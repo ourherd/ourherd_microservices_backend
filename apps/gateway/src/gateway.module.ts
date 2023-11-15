@@ -17,9 +17,11 @@ import { StoryDraftGatewayController } from "./modules/story/story-draft-gateway
 import { AccountGatewayController } from "./modules/account/account-gateway.controller";
 import { AccountPasswordGatewayController } from "./modules/account/account-password-gateway.controller";
 import { SurveyGatewayController } from "./modules/survey/survey-gateway.controller";
+import { StorageModule } from "apps/storage/src/storage.module";
 
 import { getEnvPath } from "@app/common/env/env.helper";
 import { JwtStrategy } from '@app/authentication';
+
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
 @Module({
@@ -45,6 +47,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     PassportModule.register({ defaultStrategy: 'jwt' }),
     // AuthenticationModule.register(),
     // PolicyModule,
+    StorageModule
   ],
   controllers: [
     AccountGatewayController,
