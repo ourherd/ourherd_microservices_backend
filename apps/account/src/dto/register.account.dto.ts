@@ -1,7 +1,6 @@
-import { MemberEntity } from "apps/member/src/entity/member.entity";
 import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID, Matches, MinLength } from "class-validator";
-import { Transform } from "class-transformer";
-import { v4 } from 'uuid';
+import { Exclude, Transform } from "class-transformer";
+import { v4 } from "uuid";
 import { ApiProperty } from "@nestjs/swagger";
 
 export enum MemberType {
@@ -39,5 +38,9 @@ export class RegisterAccountDto {
   @IsOptional()
   @ApiProperty()
   readonly default_role?: MemberType = MemberType.MEMBER;
+
+  @Exclude()
+  @Transform(({ value }) => value = v4())
+  public token: string = v4();
 
 }

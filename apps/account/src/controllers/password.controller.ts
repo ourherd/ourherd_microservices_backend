@@ -28,7 +28,7 @@ export class PasswordController {
   @MessagePattern(ACCOUNT_MESSAGE_PATTERNS.REQUEST_RESET_PASSWORD)
   async requestResetPassword(
     @Payload('authForgotPasswordUserDto') authForgotPasswordUserDto: AuthForgotPasswordUserDto): Promise<IServiceResponse<any>> {
-    let result = await this.awsCognitoService.forgotUserPassword(
+    let result = await this.passwordService.forgotUserPassword(
       authForgotPasswordUserDto.email
     )
     return {

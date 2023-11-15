@@ -14,4 +14,8 @@ export class WelcomeMailerDto {
   @IsEmail()
   public email: string;
 
+  @IsNotEmpty()
+  @IsString()
+  public code: string;
+
 }

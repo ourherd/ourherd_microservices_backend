@@ -14,6 +14,7 @@ import { SurveyMemberInstanceEntity } from 'apps/survey/src/entities/survey-memb
 import { SurveyFinalResponseEntity } from 'apps/survey/src/entities/survey-final-responses.entity';
 import { SurveyEntity } from 'apps/survey/src/entities/survey.entity';
 import { StorySettingEntity } from 'apps/story/src/entity/story/story.setting.entity';
+import { ResetPasswordVerificationEntity } from 'apps/account/src/entity/reset-password-verification.entity';
 
 export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string, entities: EntityClassOrSchema[] }> = {
     primary: {
@@ -22,6 +23,7 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
         entities: [
             SurveyMemberInstanceEntity,
             SurveyFinalResponseEntity,
+            ResetPasswordVerificationEntity,
             SurveyEntity,
             MemberEntity,
             StorySettingEntity,
@@ -41,6 +43,7 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
         entities: [
           SurveyMemberInstanceEntity,
           SurveyFinalResponseEntity,
+          ResetPasswordVerificationEntity,
           SurveyEntity,
           MemberEntity,
           StorySettingEntity,

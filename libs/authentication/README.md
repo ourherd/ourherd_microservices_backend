@@ -17,17 +17,17 @@
   async updateProfile(
 ```
 
-* `@CurrentUser` - `Get user info from Auth (User together with Role | Auth otherwise not working)`
+* `@CurrentMember` - `Get user info from Auth (User together with Role | Auth otherwise not working)`
 ```js
 @Patch('/:id')
   @Roles(Role.ADMIN)
   async updateProfile(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateDto: UpdateMemberDto,
-    @CurrentUser() userInfo,
+    @CurrentMember() userInfo,
 ```
 
-* `@CurrentUser['id_member']` - `Get user info from Auth (User together with Role | Auth otherwise not working)`
+* `@CurrentMember['member_id']` - `Get user info from Auth (User together with Role | Auth otherwise not working)`
   
 
 ```js
@@ -36,5 +36,5 @@
   async updateProfile(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateDto: UpdateMemberDto,
-    @CurrentUser('id_member') userInfo,
+    @CurrentMember('member_id') userInfo,
 ```

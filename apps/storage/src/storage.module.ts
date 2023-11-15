@@ -21,6 +21,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
   ],
   controllers: [StorageController],
   providers: [StorageService, ResourceS3AwsService],
+  exports: [StorageService]
 })
 
 export class StorageModule {}

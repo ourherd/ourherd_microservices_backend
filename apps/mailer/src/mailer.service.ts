@@ -1,99 +1,79 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { IServiceResponse } from '@app/rabbit';
-import { WelcomeMailerDto } from './dto/welcome.mailer.dto';
-import { SendMailerDto } from './dto/send.mailer.dto';
-import { MAILER_MESSAGE_PATTERNS, MAILER_MODULE, MAILER_SERVICE } from "./constant/mailer-patterns.constants";
-import { SendgridService } from './services/sendgrid.service';
-import { ClientResponse } from '@sendgrid/mail';
-import { EventPattern } from "@nestjs/microservices";
-import { MEMBER_MESSAGE_PATTERNS } from "../../member/src/constant/member-patterns.constants";
+import { Injectable, Logger } from "@nestjs/common";
+import { IServiceResponse } from "@app/rabbit";
+import { MAILER_SERVICE } from "./constant/mailer-patterns.constants";
+import { MailSengridService } from "@app/mail/mail.sengrid.service";
+import { EmailEnum, IEmailTemplate, TemplateMap } from "./constant/template-map-constants";
+import { ConfigService } from "@nestjs/config";
+import { v4 } from "uuid";
+import { RegisterAccountDto } from "../../account/src/dto/register.account.dto";
+import { EmailVerifyTokenDto } from "../../member/src/dto/email-verify-token.account.dto";
+
 
 @Injectable()
-export class MailerServiceExt {
+export class MailerService {
   private logger = new Logger(MAILER_SERVICE);
-  private fromEmail = 'hello@ourherd.io';
 
-  constructor(
-    private readonly sendgridService: SendgridService
-    ) { }
+  constructor(private configService: ConfigService,
+              private readonly mailService: MailSengridService) { }
 
-  @EventPattern(MAILER_MESSAGE_PATTERNS.EMIT_WELCOME_EMAIL)
-  public async welcomeEmail(email: string): Promise<IServiceResponse<ClientResponse>> {
+  public async sendWelcomeEmail( registerDto: RegisterAccountDto ): Promise<IServiceResponse<any>> {
+    const mailOptions = this.mailOptionsData( registerDto, EmailEnum.WELCOME );
+    this.logger.log('mailer options ' + JSON.stringify(mailOptions));
 
     try {
-
-      let mailOptions = {
-        to: email,
-        from: this.fromEmail,
-        templateId: 'd-efce47c71e544ae19da295c4f83d1667'
-      }
-
-      const sent = await this.sendgridService.send(mailOptions);
-
-      this.logger.log(MAILER_MODULE + ' Sent: ' + JSON.stringify(sent));
-
+      const sent = await this.mailService.send( mailOptions );
       return {
         state: !!sent,
         data: sent[0]
       };
-
-    } catch (err) {
-      this.logger.log(MAILER_MODULE + ' Error: ' + err);
-
-      return {
-        state: false,
-        data: err.name
-      };
+    } catch (e) {
+      this.logger.log('MAILER welcome email - error: ' + JSON.stringify(e));
     }
-
-
-
   }
 
-  public async sendEmail(sendMailerDto: SendMailerDto): Promise<IServiceResponse<ClientResponse>> {
+  public async sendEmailVerification ( verifyDto: EmailVerifyTokenDto | RegisterAccountDto ) {
 
+    const link = this.createLink( EmailEnum.VERIFY_EMAIL, verifyDto.token );
+    const mailOptions = this.mailOptionsData( verifyDto, EmailEnum.VERIFY_EMAIL, link );
     try {
-
-
-      if (!!sendMailerDto.email == false) {
-        return {
-          state: false,
-          data: {
-            statusCode: 400,
-            body: sendMailerDto,
-            headers: null
-          }
-        };
-      }
-
-      console.log(sendMailerDto);
-
-
-      let mailOptions = {
-        to: sendMailerDto.email,
-        from: this.fromEmail,
-        subject: sendMailerDto.subject,
-        text: "Hello",
-        html: sendMailerDto.html,
-      }
-
-      const sent = await this.sendgridService.send(mailOptions);
-
-      this.logger.log(MAILER_MODULE + ' sent: ' + sent);
-
+      const sent = await this.mailService.send( mailOptions );
       return {
-        state: !!sent,
+        state: !sent,
         data: sent[0]
       };
+    } catch (e) {
+      this.logger.log('MAILER verification email - error: ' + JSON.stringify(e));
     }
-    catch (error) {
-      this.logger.log(MAILER_MODULE + ' sent Error: ' + error);
-      return {
-        state: false,
-        data: error.name
-      };
-    }
-
-
   }
+
+  private mailOptionsData (registerDto: EmailVerifyTokenDto | RegisterAccountDto, template_name: string, link?: string) {
+
+    const template = TemplateMap[template_name] as IEmailTemplate;
+
+    const mailOptions = {
+      to: registerDto.email,
+      from: template.from,
+      templateId: template.template_id,
+      dynamic_template_data: {
+        link : link
+      },
+    };
+
+    return mailOptions;
+  }
+
+  private createLink( emailType : EmailEnum, token?: string): any {
+    switch ( emailType ) {
+      case EmailEnum.WELCOME:
+        return this.configService.get('LINK_EMAIL_VALIDATION_URL') + token;
+      case EmailEnum.RESET_PASSWORD:
+        return this.configService.get('LINK_RESET_PASSWORD_URL') + token;
+      case EmailEnum.VERIFY_EMAIL:
+        return this.configService.get('LINK_EMAIL_VALIDATION_URL') + token;
+      default:
+        console.log("No such day exists!");
+        break;
+    }
+  }
+
 }
