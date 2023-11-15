@@ -12,15 +12,12 @@ import { IPagination, PaginationDto } from "@app/common";
 export class MemberController {
   constructor(
     private readonly memberService: MemberService,
-    // private readonly mailService: MemberMailService,
   ) {}
 
   @MessagePattern(MEMBER_EVENT_PATTERNS.CREATED)
   async createMember(
     @Payload('createDto') createDto: CreateMemberDto) {
     await this.memberService.create(createDto);
-    //const sendMailerDto = this.mailService.sentEmailToken(memberCreateResult.data.email);
-    // return sendMailerDto;
   }
 
   @MessagePattern(MEMBER_MESSAGE_PATTERNS.UPDATE)

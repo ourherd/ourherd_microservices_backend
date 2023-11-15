@@ -1,15 +1,15 @@
 import { Inject, Injectable, Logger } from "@nestjs/common";
 import { RegisterAccountDto } from "../dto/register.account.dto";
 import { AccountService } from "../services/account.service";
-import { MemberService } from "../../../member/src/service/member.service";
 import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
 import { AccountEntity } from "../entity/account.entity";
 import { ClientProxy } from "@nestjs/microservices";
 import { MemberEntity } from "../../../member/src/entity/member.entity";
-import { MEMBER_EVENT_PATTERNS } from "../../../member/src/constant/member-patterns.constants";
 import { firstValueFrom } from "rxjs";
+import { MEMBER_EVENT_PATTERNS } from "../../../member/src/constant/member-patterns.constants";
 import { MAILER_MESSAGE_PATTERNS } from "../../../mailer/src/constant/mailer-patterns.constants";
 import { CreateMemberDto } from "../../../member/src/dto/create-member.dto";
+import { v4 } from "uuid";
 
 @Injectable()
 export class AccountCreatedSaga {
@@ -30,8 +30,10 @@ export class AccountCreatedSaga {
   public async accountCreated ( registerDto: RegisterAccountDto ): Promise<IServiceResponse<AccountEntity>> {
     const account = await this.accountService.register(registerDto);
     registerDto.id = account.data.id;
-    //TODO Manage member exist with constraint validation
+
     await this.memberCreated(registerDto);
+    await this.welcomeEmailSent(registerDto);
+
     delete account.data.password;
     return account;
   }
@@ -46,9 +48,10 @@ export class AccountCreatedSaga {
     createDto.email = registerDto.email;
 
     await firstValueFrom(
-        this.memberClient.emit<IServiceResponse<MemberEntity>, { createDto: CreateMemberDto }>(
+        this.memberClient.emit<IServiceResponse<MemberEntity>, { token: string, createDto: CreateMemberDto }>(
         MEMBER_EVENT_PATTERNS.CREATED,
         {
+          token : registerDto.token,
           createDto
         }
       )
@@ -59,15 +62,36 @@ export class AccountCreatedSaga {
    * @remarks send a welcome email
    * @param {RegisterAccountDto}
    * */
-  private welcomeEmailSent ( registerDto: RegisterAccountDto ) {
+  private async welcomeEmailSent ( registerDto: RegisterAccountDto ) {
 
-    let email = registerDto.email;
-    this.emailClient.emit<IServiceResponse<String>, { email: string }>(
+    await this.emailClient.emit<IServiceResponse<String>, { registerDto: RegisterAccountDto }>(
       MAILER_MESSAGE_PATTERNS.EMIT_WELCOME_EMAIL,
       {
-        email
+        registerDto
       }
-    );
-
+);
   }
+
+  /**
+   * @remarks Create token verification member
+   * @param {RegisterAccountDto}
+   * @param {user id: id}
+   * */
+  // private async memberVerificationCreated ( registerDto: RegisterAccountDto  ) {
+  //
+  //   let verifyMemberDto = new VerifyEmailMemberDto();
+  //   verifyMemberDto.member_id = registerDto.id;
+  //   verifyMemberDto.confirmationCode = registerDto.token;
+  //   verifyMemberDto.email = registerDto.email;
+  //
+  //   await firstValueFrom(
+  //     this.memberClient.emit<IServiceResponse<MemberEntity>, { verifyDto: VerifyEmailMemberDto }>(
+  //       MEMBER_EVENT_PATTERNS.EMAIL_VERIFICATION_CREATED,
+  //       {
+  //         verifyDto: verifyMemberDto
+  //       }
+  //     )
+  //   );
+  // }
+
 }
