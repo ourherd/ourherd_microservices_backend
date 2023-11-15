@@ -16,13 +16,12 @@ import { BookmarkGatewayController } from "./modules/bookmark/bookmark-gateway.c
 import { StoryDraftGatewayController } from "./modules/story/story-draft-gateway.controller";
 import { AccountGatewayController } from "./modules/account/account-gateway.controller";
 import { AccountPasswordGatewayController } from "./modules/account/account-password-gateway.controller";
+import { SurveyGatewayController } from "./modules/survey/survey-gateway.controller";
+import { StorageModule } from "apps/storage/src/storage.module";
 
 import { getEnvPath } from "@app/common/env/env.helper";
 import { JwtStrategy } from '@app/authentication';
 
-import { MailerGatewayController } from "./modules/mailer/mailer-gateway.controller";
-import { SurveyGatewayController } from "./modules/survey/survey-gateway.controller";
-import { StorageModule } from "apps/storage/src/storage.module";
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
 @Module({
@@ -54,7 +53,6 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     AccountGatewayController,
     AccountPasswordGatewayController,
     FeedGatewayController,
-    MailerGatewayController,
     MemberGatewayController,
     MemberVerificationGatewayController,
     ReactionGatewayController,
