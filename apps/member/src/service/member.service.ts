@@ -9,6 +9,8 @@ import { IPagination, PaginationDto } from "@app/common";
 import { Database } from "@app/database";
 import { MEMBER_MESSAGE_DB_RESPONSE } from "../constant/member-patterns.constants";
 import { MemberVerificationEntity } from "../entity/member-verification.entity";
+import { MemberPrivacyDto } from "../dto/member-privacy.dto";
+import { isEmpty } from "@app/common/validation-rules/object-validation.rule";
 
 
 @Injectable()
@@ -113,5 +115,41 @@ export class MemberService {
       }
     }
   }
+  
+  async checkMemberExist(member_id: string): Promise<boolean> {
+    const member = this.findById(member_id)
+    return !!member
+  }
+  
+  async memberPrivacySetting(member_id: string): Promise<MemberPrivacyDto> {
+
+    let memberPrivacyDto = new MemberPrivacyDto
+
+    memberPrivacyDto.member = (await this.findById(member_id)).data
+
+    if (isEmpty(memberPrivacyDto.member.gender)) {
+      memberPrivacyDto.share_gender = true
+    }
+    
+    if (isEmpty(memberPrivacyDto.member.birthday)) {
+      memberPrivacyDto.share_age = true
+    }
+
+    if (isEmpty(memberPrivacyDto.member.first_name)) {
+      memberPrivacyDto.share_name = true
+    }
+
+    if (
+      isEmpty(memberPrivacyDto.member.country) ||
+      isEmpty(memberPrivacyDto.member.suburb) ||
+      isEmpty(memberPrivacyDto.member.postal_code)
+      ) {
+      memberPrivacyDto.share_location = true
+    }
+
+    return memberPrivacyDto
+  }
+
+  
 
 }

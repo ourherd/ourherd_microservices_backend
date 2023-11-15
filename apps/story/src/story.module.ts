@@ -21,6 +21,7 @@ import { ViolationEntity } from "./entity/violation/violation.entity";
 
 import { getEnvPath } from "@app/common/env/env.helper";
 import { MemberEntity } from "apps/member/src/entity/member.entity";
+import { MemberModule } from "apps/member/src/member.module";
 
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
@@ -39,7 +40,8 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
       ViolationEntity,
       MemberEntity
     ]),
-    RabbitModule.forServerProxy(RabbitServiceName.STORY)
+    RabbitModule.forServerProxy(RabbitServiceName.STORY),
+    MemberModule
   ],
   controllers: [
     StoryController,

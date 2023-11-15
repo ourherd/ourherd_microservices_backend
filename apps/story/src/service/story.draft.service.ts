@@ -11,6 +11,8 @@ import { STORY_MESSAGE_DB_RESPONSE } from "../constant/story-patterns.constants"
 import { StorySettingEntity } from "../entity/story/story.setting.entity";
 import { MemberEntity } from "apps/member/src/entity/member.entity";
 import { MEMBER_MESSAGE_DB_RESPONSE } from "apps/member/src/constant/member-patterns.constants";
+import { MemberService } from "apps/member/src/service/member.service";
+import { StorySettingDto } from "../dto/story/story.setting.dto";
 
 @Injectable()
 export class StoryDraftService {
@@ -22,8 +24,7 @@ export class StoryDraftService {
     private storyRepository: Repository<StoryEntity>,
     @InjectRepository(StorySettingEntity, Database.PRIMARY) 
     private storySettingRepository: Repository<StorySettingEntity>,
-    @InjectRepository(MemberEntity, Database.PRIMARY) 
-    private memberRepository: Repository<MemberEntity>
+    private memberService: MemberService
   ) { }
 
   public async saveStory(
@@ -47,44 +48,25 @@ export class StoryDraftService {
 
   async validateMemberInfo(member_id: string, draft: StoryEntity): Promise<IServiceResponse<StorySettingEntity>> {
 
-    let storySettingEntity = new StorySettingEntity();
+    let storySettingDto = new StorySettingDto();
 
-    const member = await this.memberRepository.findOneBy({
-      id: member_id
-    });
+    const memberPrivacySetting = await this.memberService.memberPrivacySetting(member_id)
 
-    if (!!member === false) {
+    if (!!memberPrivacySetting.member) {
       return {
         state: false,
         data: null,
         message: MEMBER_MESSAGE_DB_RESPONSE.EMAIL_NOT_FOUND
       }
-    }
+    }  
 
-    if (!!member.gender && member.gender.length != 0) {
-      storySettingEntity.share_gender = true
-    }
-    
-    if (!!member.birthday) {
-      storySettingEntity.share_age = true
-    }
+    Object.assign(storySettingDto, memberPrivacySetting);
+    storySettingDto.story = draft
 
-    if (!!member.first_name && member.first_name.length != 0) {
-      storySettingEntity.share_name = true
-    }
+    const storySetting = await this.storySettingRepository.save(storySettingDto)
+    const storySettingCreated = this.storySettingRepository.create(storySetting)
 
-    if (
-      !!member.country && member.country.length != 0 ||
-      !!member.suburb && member.suburb.length != 0 ||
-      !!member.postal_code && member.postal_code.length != 0
-      ) {
-      storySettingEntity.share_location = true
-    }
-
-    storySettingEntity.story = draft
-
-    const storySetting = await this.storySettingRepository.save(storySettingEntity)
-    const storySettingCreated = this.storySettingRepository.create(storySettingEntity)
+    this.logger.log('Story Setting Created');
 
     return {
       state: !!storySettingCreated,
