@@ -24,7 +24,6 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     RabbitModule.forClientProxy(RabbitServiceName.MEMBER),
     RabbitModule.forClientProxy(RabbitServiceName.MAILER),
     CognitoModule,
-    // MailSengridModule,
   ],
   controllers: [AccountController, PasswordController],
   providers: [AccountService, PasswordService, AccountCreatedSaga],
