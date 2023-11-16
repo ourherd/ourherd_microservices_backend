@@ -47,20 +47,21 @@ export class StoryUpdateGatewayController {
 
   @Patch('/resource/:story_id')
   @Auth()
-  @ApiOperation({ summary: 'Story Draft (Video Free Form)' })
-  @ApiResponse({ status: 201, description: 'Create new Story as draft (Video Free Form)' })
+  @ApiOperation({ summary: 'Upload new file for the story' })
+  @ApiResponse({ status: 201, description: 'Upload new file for the story' })
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('story_resource'))
   async draftVideo (
     @CurrentMember('member_id') member_id: string,
     @Body() updateMediaDto: StoryUpdateMediaDto,
     @Param('story_id') story_id: string,
-    @UploadedFile(new ParseUploadVideoFilePipe() || new ParseUploadImageFilePipe()) story_resource: Express.Multer.File
+    @UploadedFile(new ParseUploadVideoFilePipe() || new ParseUploadImageFilePipe())
+            story_resource: Express.Multer.File
   ) : Promise<IGatewayResponse> {
 
-    let storageResourceType = (updateMediaDto.story_type == StoryType.VIDEO_FREE_FORM 
+    let storageResourceType = (updateMediaDto.story_type == StoryType.VIDEO_FREE_FORM
       ? StorageResourceType.STORY_VIDEO : StorageResourceType.STORY_IMAGE)
-    
+
     const storageDto = {
       file: story_resource,
       type: storageResourceType,
@@ -70,7 +71,7 @@ export class StoryUpdateGatewayController {
     }
 
     return await this.storageService.upload(storageDto, story_resource)
-    
+
   }
 
 }

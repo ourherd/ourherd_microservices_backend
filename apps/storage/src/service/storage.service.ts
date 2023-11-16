@@ -11,6 +11,7 @@ import { IsEmailNotRegistered } from '@app/common/validation-rules/email-not-reg
 
 @Injectable()
 export class StorageService {
+
   constructor(
     @InjectRepository(StorageResourceEntity, Database.PRIMARY)
     private storageRepository: Repository<StorageResourceEntity>,
@@ -22,7 +23,6 @@ export class StorageService {
   ): Promise<IServiceResponse<StorageResourceEntity>> {
 
     let result: StorageResourceEntity;
-
     const storageResourceExist = await this.storageRepository.findOneBy({ story_id: storageDto.story_id })
 
     if (!storageResourceExist) {
@@ -38,10 +38,9 @@ export class StorageService {
     } else {
       const result = this.storageRepository.create(storageResourceExist);
       Object.assign(storageDto, storageResourceExist)
-      console.log("result: ", result);
-      
+
       const { state, data: { key } } = await this.s3Service.upload(storageDto, story_resource)
-      
+
       await this.storageRepository.update({
         story_id: storageResourceExist.story_id
       }, result)

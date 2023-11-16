@@ -127,6 +127,8 @@ export class StoryDraftGatewayController {
           }
         )
     );
+
+    //TODO saga calling both gateway
     const storageDto = {
       file: story_resource,
       type: StorageResourceType.STORY_IMAGE,
