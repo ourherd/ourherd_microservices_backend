@@ -85,11 +85,12 @@ export class StoryDraftGatewayController {
   @UseInterceptors(FileInterceptor('story_resource'))
   async draftVideo(
     @CurrentMember('member_id') member_id: string,
-    @Body() draftVideoDto: StoryDraftVideoDto,
     @UploadedFile(new ParseUploadVideoFilePipe()) story_resource: Express.Multer.File
   ): Promise<IGatewayResponse> {
 
+    const draftVideoDto = new StoryDraftVideoDto()
     const { state: storyState, data: storyData } = await firstValueFrom(
+      
       this.storyProxy.send<IServiceResponse<StoryEntity>, { member_id: string, draftVideoDto: StoryDraftVideoDto }>
         (
           STORY_MESSAGE_PATTERNS.DRAFT_VIDEO,
