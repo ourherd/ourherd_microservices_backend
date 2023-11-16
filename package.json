@@ -25,6 +25,7 @@
     "test:e2e": "jest --config ./apps/gateway/test/jest-e2e.json"
   },
   "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.451.0",
     "@aws-sdk/client-s3": "^3.363.0",
     "@aws-sdk/client-ses": "^3.428.0",
     "@aws-sdk/lib-storage": "^3.449.0",

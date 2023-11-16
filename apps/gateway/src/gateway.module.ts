@@ -23,6 +23,7 @@ import { getEnvPath } from "@app/common/env/env.helper";
 import { JwtStrategy } from '@app/authentication';
 import { StoryUpdateGatewayController } from "./modules/story/story-update-gateway.controller copy";
 
+import { StoryUpdateGatewayController } from "./modules/story/story-update-gateway.controller";
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
 @Module({
