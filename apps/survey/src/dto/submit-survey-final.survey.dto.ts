@@ -1,6 +1,6 @@
-import { IsNotEmpty, IsOptional, IsString, IsUUID } from "class-validator";
-import { ApiProperty } from "@nestjs/swagger";
-import { SurveyFinalResponseEntity } from "../entities/survey-final-responses.entity";
+import { IsArray, IsNotEmpty, IsObject, IsUUID } from "class-validator";
+import { ApiProperty,  } from "@nestjs/swagger";
+import { SingleResponseSurveyDto } from "./single-response-survey.dto";
 
 export class SubmitSurveyFinalDto {
 
@@ -9,9 +9,13 @@ export class SubmitSurveyFinalDto {
   @IsUUID()
   public survey_member_instance_id: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    minimum: 5,
+    maximum: 28,
+    isArray: true,
+    type: SingleResponseSurveyDto,
+  })
   @IsNotEmpty()
-  @ApiProperty()
-  public data: SurveyFinalResponseEntity[];
+  public data: SingleResponseSurveyDto[];
 
 }
