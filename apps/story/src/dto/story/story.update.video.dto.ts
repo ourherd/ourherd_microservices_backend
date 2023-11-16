@@ -1,10 +1,10 @@
 import { Allow, IsEnum, IsString } from "class-validator";
-import { StoryDraftBaseDto } from "./story.draft.base.dto";
 import { Transform } from "class-transformer";
 import { StoryMedium, StoryType } from "../../constant/story.enum";
 import { ApiProperty } from "@nestjs/swagger";
+import { StoryUpdateBaseDto } from "./story.update.base.dto";
 
-export class StoryDraftVideoDto extends StoryDraftBaseDto {
+export class StoryUpdateVideoDto extends StoryUpdateBaseDto {
 
   @Transform(({ value }) => value = StoryType.VIDEO_FREE_FORM )
   @IsString()

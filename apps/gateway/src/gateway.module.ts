@@ -21,6 +21,7 @@ import { StorageModule } from "apps/storage/src/storage.module";
 
 import { getEnvPath } from "@app/common/env/env.helper";
 import { JwtStrategy } from '@app/authentication';
+import { StoryUpdateGatewayController } from "./modules/story/story-update-gateway.controller copy";
 
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
@@ -58,6 +59,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     ReactionGatewayController,
     BookmarkGatewayController,
     StoryDraftGatewayController,
+    StoryUpdateGatewayController,
     ViolationGatewayController,
     SurveyGatewayController
   ],

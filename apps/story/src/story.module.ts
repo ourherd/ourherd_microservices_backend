@@ -22,6 +22,8 @@ import { ViolationEntity } from "./entity/violation/violation.entity";
 import { getEnvPath } from "@app/common/env/env.helper";
 import { MemberEntity } from "apps/member/src/entity/member.entity";
 import { MemberModule } from "apps/member/src/member.module";
+import { StoryUpdateController } from "./controller/story/story.update.controller";
+import { StoryUpdateService } from "./service/story.update.service";
 
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
@@ -45,6 +47,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
   ],
   controllers: [
     StoryController,
+    StoryUpdateController,
     StoryDraftController,
     BookmarkController,
     ReactionController,
@@ -52,6 +55,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
   ],
   providers: [
     StoryService,
+    StoryUpdateService,
     StoryDraftService,
     BookmarkService,
     ReactionService,
