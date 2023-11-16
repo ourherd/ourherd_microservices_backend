@@ -14,7 +14,6 @@ export class IsUniqueConstraint implements ValidatorConstraintInterface {
 
   async validate(value: any, args?: ValidationArguments): Promise<boolean> {
     const { tableName, column }: IsUniqueConstraintInput = args.constraints[0];
-
     const exists = await this.entityManager
       .getRepository(tableName)
       .createQueryBuilder(tableName)
