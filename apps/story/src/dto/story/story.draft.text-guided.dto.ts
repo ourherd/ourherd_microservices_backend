@@ -20,8 +20,7 @@ export class StoryDraftTextGuidedDto extends StoryDraftBaseDto {
   })
   @MinLength(StoryDraftTextGuidedDto.TEXT_MIN_LENGTH , { message: '' })
   @MaxLength(StoryDraftTextGuidedDto.TEXT_MAX_LENGTH, { message: '' })
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   public content_1: string;
 
   @ApiProperty({
@@ -35,8 +34,7 @@ export class StoryDraftTextGuidedDto extends StoryDraftBaseDto {
   })
   @MinLength(StoryDraftTextGuidedDto.TEXT_MIN_LENGTH , { message: '' })
   @MaxLength(StoryDraftTextGuidedDto.TEXT_MAX_LENGTH, { message: '' })
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   public content_2: string;
 
   @ApiProperty({
@@ -51,7 +49,7 @@ export class StoryDraftTextGuidedDto extends StoryDraftBaseDto {
   @MinLength(StoryDraftTextGuidedDto.TEXT_MIN_LENGTH , { message: '' })
   @MaxLength(StoryDraftTextGuidedDto.TEXT_MAX_LENGTH, { message: '' })
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   public content_3: string;
 
   @ApiProperty({
@@ -65,8 +63,7 @@ export class StoryDraftTextGuidedDto extends StoryDraftBaseDto {
   })
   @MinLength(StoryDraftTextGuidedDto.TEXT_MIN_LENGTH , { message: '' })
   @MaxLength(StoryDraftTextGuidedDto.TEXT_MAX_LENGTH, { message: '' })
-  @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   public content_4: string;
 
   @Transform(({ value }) => value = StoryType.TEXT_GUIDED )
