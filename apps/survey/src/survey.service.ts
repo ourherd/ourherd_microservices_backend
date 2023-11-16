@@ -1,14 +1,14 @@
 import { IServiceResponse } from '@app/rabbit';
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { SurveyMemberInstanceEntity } from './entities/survey-member-instances.entity';
+import { SurveyMemberInstanceEntity } from './entity/survey-member-instances.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Database } from '@app/database';
 import { CreateDQ5SurveyInstanceDto } from './dto/create-DQ5-survey-instance.survey.dto';
 import { SURVEY_MESSAGE_DB_RESPONSE, SURVEY_SERVICE, SURVEY_STATIC_STATUS, SURVEY_STATUS } from './constant/survey-patterns.constants';
-import { SurveyFinalResponseEntity } from './entities/survey-final-responses.entity';
+import { SurveyFinalResponseEntity } from './entity/survey-final-responses.entity';
 import { SubmitSurveyFinalDto } from './dto/submit-survey-final.survey.dto';
-import { SurveyEntity } from './entities/survey.entity';
+import { SurveyEntity } from './entity/survey.entity';
 import { CreateLongOnBoardingSurveyInstanceDto } from './dto/create-Long-Boarding-survey-instance.survey.dto';
 import { CreateShortOnBoardingSurveyInstanceDto } from './dto/create-Short-Boarding-survey-instance.survey.dto';
 

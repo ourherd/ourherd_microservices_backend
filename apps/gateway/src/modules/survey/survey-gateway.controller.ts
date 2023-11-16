@@ -7,7 +7,7 @@ import { ClientProxy } from "@nestjs/microservices";
 import { GATEWAY_SERVICE } from "../../constant/gateway-patterns.constants";
 import { SURVEY_MESSAGE_PATTERNS } from "apps/survey/src/constant/survey-patterns.constants";
 import { CreateDQ5SurveyInstanceDto } from "apps/survey/src/dto/create-DQ5-survey-instance.survey.dto";
-import { SurveyMemberInstanceEntity } from "apps/survey/src/entities/survey-member-instances.entity";
+import { SurveyMemberInstanceEntity } from "apps/survey/src/entity/survey-member-instances.entity";
 import { Auth, CurrentMember } from "@app/authentication";
 import { SubmitSurveyFinalDto } from "apps/survey/src/dto/submit-survey-final.survey.dto";
 import { CreateLongOnBoardingSurveyInstanceDto } from "apps/survey/src/dto/create-Long-Boarding-survey-instance.survey.dto";
