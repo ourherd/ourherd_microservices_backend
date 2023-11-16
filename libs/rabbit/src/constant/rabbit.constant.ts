@@ -30,5 +30,8 @@ export const RABBIT_SERVICES: Record<RabbitServiceName, { queue: string }> =
     },
     STORAGE_SERVICE: {
       queue: 'storage_queue'
+    },
+    TAG_SERVICE: {
+      queue: 'tag_queue'
     }
 }
