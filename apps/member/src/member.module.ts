@@ -29,6 +29,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
   ],
   controllers: [MemberController, MemberVerificationController],
   providers: [MemberService, MemberVerificationService, MemberVerifyEmailSentSaga],
+  exports: [MemberService]
 })
 
 export class MemberModule {}
