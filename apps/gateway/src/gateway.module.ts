@@ -18,12 +18,11 @@ import { AccountGatewayController } from "./modules/account/account-gateway.cont
 import { AccountPasswordGatewayController } from "./modules/account/account-password-gateway.controller";
 import { SurveyGatewayController } from "./modules/survey/survey-gateway.controller";
 import { StorageModule } from "apps/storage/src/storage.module";
+import { StoryUpdateGatewayController } from "./modules/story/story-update-gateway.controller";
 
 import { getEnvPath } from "@app/common/env/env.helper";
 import { JwtStrategy } from '@app/authentication';
-import { StoryUpdateGatewayController } from "./modules/story/story-update-gateway.controller copy";
 
-import { StoryUpdateGatewayController } from "./modules/story/story-update-gateway.controller";
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
 @Module({
