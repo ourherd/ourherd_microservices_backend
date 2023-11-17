@@ -15,7 +15,7 @@ jobs:
       - run:
           name: apply env to Scripts
           command: |
-            circleci env subst < < ./local.env.template > ./envs/local.env
+            circleci env subst < ./local.env.template > ./envs/local.env
       - aws-ecr/build_and_push_image:
           dockerfile: Dockerfile
           create_repo: true
