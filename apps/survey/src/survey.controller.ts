@@ -3,7 +3,7 @@ import { SurveyService } from './survey.service';
 import { SURVEY_MESSAGE_PATTERNS } from './constant/survey-patterns.constants';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { CreateDQ5SurveyInstanceDto } from './dto/create-DQ5-survey-instance.survey.dto';
-import { SurveyMemberInstanceEntity } from './entities/survey-member-instances.entity';
+import { SurveyMemberInstanceEntity } from './entity/survey-member-instances.entity';
 import { IServiceResponse } from '@app/rabbit';
 import { SubmitSurveyFinalDto } from './dto/submit-survey-final.survey.dto';
 import { CreateLongOnBoardingSurveyInstanceDto } from './dto/create-Long-Boarding-survey-instance.survey.dto';

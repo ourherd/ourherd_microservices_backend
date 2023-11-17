@@ -8,4 +8,5 @@ export enum RabbitServiceName {
     MAILER = "MAILER_SERVICE",
     NOTIFICATION = "NOTIFICATION_SERVICE",
     STORAGE = "STORAGE_SERVICE",
+    TAG = "TAG_SERVICE",
 }
