@@ -10,6 +10,7 @@ export const TAG_MESSAGE_PATTERNS = {
 
 export const TAG_MESSAGE_DB_RESPONSE = {
   CREATED: 'tag.created',
+  CREATED_FAILED: 'tag.create_failed',
   NAME_EXISTING: 'tag.tag_name_existing',
   ID_EXISTING: 'tag.tag_id_existing',
   NOT_FOUND: 'tag.tag_id_not_found',

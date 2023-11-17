@@ -22,11 +22,10 @@ export class TagGatewayController {
   @Auth()
   @ApiOperation({ summary: 'Tag Story' })
   @ApiResponse({ status: 201, description: 'Add a Tag story' })
-  async createTag (
+  async create (
     @Body() tagDto: CreateTagDto,) : Promise<IGatewayResponse> {
 
-    console.log(JSON.stringify(tagDto));
-    const { state, data } = await firstValueFrom(
+    const { state, data, message } = await firstValueFrom(
       this.tagClient.send<IServiceResponse<TagEntity>,
         {
           tagDto: CreateTagDto }>
@@ -37,7 +36,7 @@ export class TagGatewayController {
         }
       )
     );
-    return { state, data };
+    return { state, data, message };
   };
 
 }
