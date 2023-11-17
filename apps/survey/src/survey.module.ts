@@ -2,14 +2,15 @@ import { Module } from '@nestjs/common';
 import { SurveyController } from './survey.controller';
 import { SurveyService } from './survey.service';
 import { Database, DatabaseModule } from '@app/database';
-import { SurveyMemberInstanceEntity } from './entities/survey-member-instances.entity';
+import { SurveyMemberInstanceEntity } from './entity/survey-member-instances.entity';
 import { RabbitModule, RabbitServiceName } from '@app/rabbit';
 import { ConfigModule } from '@nestjs/config';
 import { getEnvPath } from '@app/common/env/env.helper';
-import { SurveyFinalResponseEntity } from './entities/survey-final-responses.entity';
-import { SurveyEntity } from './entities/survey.entity';
+import { SurveyFinalResponseEntity } from './entity/survey-final-responses.entity';
+import { SurveyEntity } from './entity/survey.entity';
 
 const envFilePath: string = getEnvPath(`${__dirname}/`);
+
 @Module({
   imports: [
     ConfigModule.forRoot({
