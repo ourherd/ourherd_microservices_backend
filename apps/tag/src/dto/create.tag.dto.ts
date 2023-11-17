@@ -2,7 +2,7 @@ import { IsBoolean, IsNumber, IsOptional, IsString, IsUUID, Length } from "class
 import { Transform } from "class-transformer";
 import { v4 } from "uuid";
 import { ApiProperty } from "@nestjs/swagger";
-//import { stringFirstUppercase } from "@app/common/string/string-first-uppercase";
+import { stringFirstUppercase } from "@app/common/string/string-first-uppercase";
 
 export class CreateTagDto {
 
@@ -30,7 +30,7 @@ export class CreateTagDto {
   })
   @IsString()
   @Length(1, 40)
-  //@Transform(({value}) => stringFirstUppercase(value))
+  @Transform(({value}) => stringFirstUppercase(value))
   public name: string;
 
   @IsNumber()
