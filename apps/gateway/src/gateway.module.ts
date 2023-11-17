@@ -17,6 +17,7 @@ import { StoryDraftGatewayController } from "./modules/story/story-draft-gateway
 import { AccountGatewayController } from "./modules/account/account-gateway.controller";
 import { AccountPasswordGatewayController } from "./modules/account/account-password-gateway.controller";
 import { SurveyGatewayController } from "./modules/survey/survey-gateway.controller";
+import { TagGatewayController } from "./modules/tag/tag-gateway.controller";
 import { StorageModule } from "apps/storage/src/storage.module";
 import { StoryUpdateGatewayController } from "./modules/story/story-update-gateway.controller";
 
@@ -45,6 +46,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     RabbitModule.forClientProxy(RabbitServiceName.STORY),
     RabbitModule.forClientProxy(RabbitServiceName.STORAGE),
     RabbitModule.forClientProxy(RabbitServiceName.SURVEY),
+    RabbitModule.forClientProxy(RabbitServiceName.TAG),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     // AuthenticationModule.register(),
     // PolicyModule,
@@ -61,7 +63,8 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     StoryDraftGatewayController,
     StoryUpdateGatewayController,
     ViolationGatewayController,
-    SurveyGatewayController
+    SurveyGatewayController,
+    TagGatewayController
   ],
   providers: [JwtStrategy],
 })

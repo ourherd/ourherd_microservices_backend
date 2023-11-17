@@ -10,11 +10,12 @@ import { BookmarkEntity } from 'apps/story/src/entity/bookmark/bookmark.entity';
 import { MemberVerificationEntity } from 'apps/member/src/entity/member-verification.entity';
 import { StorageResourceEntity } from "../../../../apps/storage/src/entity/storage-resource.entity";
 import { ViolationEntity } from "../../../../apps/story/src/entity/violation/violation.entity";
-import { SurveyMemberInstanceEntity } from 'apps/survey/src/entities/survey-member-instances.entity';
-import { SurveyFinalResponseEntity } from 'apps/survey/src/entities/survey-final-responses.entity';
-import { SurveyEntity } from 'apps/survey/src/entities/survey.entity';
+import { SurveyMemberInstanceEntity } from 'apps/survey/src/entity/survey-member-instances.entity';
+import { SurveyFinalResponseEntity } from 'apps/survey/src/entity/survey-final-responses.entity';
+import { SurveyEntity } from 'apps/survey/src/entity/survey.entity';
 import { StorySettingEntity } from 'apps/story/src/entity/story/story.setting.entity';
 import { ResetPasswordVerificationEntity } from 'apps/account/src/entity/reset-password-verification.entity';
+import { TagEntity } from "../../../../apps/tag/src/entity/tag.entity";
 
 export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string, entities: EntityClassOrSchema[] }> = {
     primary: {
@@ -35,6 +36,7 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
             StorageResourceEntity,
             ViolationEntity,
             MemberVerificationEntity,
+            TagEntity
         ]
     },
     secondary: {
@@ -54,7 +56,8 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
           AccountDeviceEntity,
           StorageResourceEntity,
           ViolationEntity,
-          MemberVerificationEntity
+          MemberVerificationEntity,
+          TagEntity
         ]
     }
 };
