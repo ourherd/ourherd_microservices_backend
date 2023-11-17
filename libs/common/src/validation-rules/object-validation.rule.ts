@@ -1,8 +1,6 @@
 
-import { Repository } from 'typeorm';
-import { InjectRepository } from "@nestjs/typeorm";
 
-export function isEmpty(value): boolean {
+export function isEmpty(value: any): boolean {
     return (
       // null or undefined
       (value == null) ||

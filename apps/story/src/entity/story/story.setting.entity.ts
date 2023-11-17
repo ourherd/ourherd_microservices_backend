@@ -21,49 +21,49 @@ export class StorySettingEntity extends AbstractEntity {
   visibility: string;
   
   @Column({ 
-    nullable: false,
+    nullable: true,
     default: false
   })
   is_shareable: boolean;
   
   @Column({ 
-    nullable: false,
+    nullable: true,
     default: false
   })
   share_name: boolean;
   
   @Column({ 
-    nullable: false,
+    nullable: true,
     default: false
   })
   share_location: boolean;
   
   @Column({ 
-    nullable: false,
+    nullable: true,
     default: false
   })
   share_gender: boolean;
   
   @Column({ 
-    nullable: false,
+    nullable: true,
     default: false
   })
   share_age: boolean;
   
   @Column({ 
-    nullable: false,
+    nullable: true,
     default: false
   })
   share_batyr_instragram: boolean;
   
   @Column({ 
-    nullable: false,
+    nullable: true,
     default: false
   })
   share_batyr_tiktok: boolean;
   
   @Column({ 
-    nullable: false,
+    nullable: true,
     default: false
   })
   share_contacted: boolean;

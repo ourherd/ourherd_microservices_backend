@@ -21,7 +21,7 @@ export class CreateStorageResourceDto extends BaseStorageResourceDto {
         enum: StorageResourceType
     })
     @IsEnum(StorageResourceType)
-    type: StorageResourceType;
+    resource_type: StorageResourceType;
 
     @ApiProperty({
         enum: StorageResourceDriverType,
