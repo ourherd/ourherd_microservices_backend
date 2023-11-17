@@ -29,11 +29,6 @@ jobs:
           name: erc login
           command: |
             aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 362275395647.dkr.ecr.ap-southeast-2.amazonaws.com
-      # - docker/build:
-      #     registry: '362275395647.dkr.ecr.ap-southeast-2.amazonaws.com' 
-      #     image: ourherd-microservices-backend 
-      #     path: . 
-      #     tag: latest 
       - run:
           name: docker build
           command: |
@@ -46,13 +41,6 @@ jobs:
           name: docker push
           command: |
             docker push 362275395647.dkr.ecr.ap-southeast-2.amazonaws.com/ourherd-microservices-backend:latest
-      
-      # - aws-ecr/build_and_push_image:
-      #     dockerfile: Dockerfile
-      #     create_repo: true
-      #     repo: ourherd-microservices-backend
-      #     auth:
-      #       - aws-cli/setup
 
 workflows:
   build-and-push-backend-gateway:
