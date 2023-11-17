@@ -24,7 +24,7 @@ jobs:
       - run:
           name: apply env to Scripts
           command: |
-            circleci env subst < ./local.env.template > ./envs/local.env
+            circleci env subst < ./local-env.template > ./envs/local.env
       - run:
           name: erc login
           command: |
