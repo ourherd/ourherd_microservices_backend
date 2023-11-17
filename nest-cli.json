@@ -5,6 +5,7 @@
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": true,
+    "assets": ["libs/common/envs/*"],
     "tsConfigPath": "apps/gateway/tsconfig.app.json"
   },
   "projects": {
