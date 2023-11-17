@@ -26,7 +26,7 @@ jobs:
           repo: ourherd-microservices-backend
           auth:
             - aws-cli/setup:
-                role_arn: arn:aws:iam::362275395647
+                role_arn: arn:aws:iam::362275395647:role/aws-service-role/replication.ecr.amazonaws.com/AWSServiceRoleForECRReplication
 
 workflows:
   build-and-push-backend-gateway:
