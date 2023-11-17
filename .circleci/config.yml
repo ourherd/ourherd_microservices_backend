@@ -25,8 +25,7 @@ jobs:
           create_repo: true
           repo: ourherd-microservices-backend
           auth:
-            - aws-cli/setup:
-                role_arn: arn:aws:iam::123456789012:role/OIDC-ROLE
+            - aws-cli/setup
 
 workflows:
   build-and-push-backend-gateway:
