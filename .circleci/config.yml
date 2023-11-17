@@ -5,77 +5,31 @@ orbs:
   terraform: circleci/terraform@3.2.1
   aws-cli: circleci/aws-cli@2.0.3
 
+kubectl-job:
+  docker:
+    - image: cimg/base:stable
+  steps:
+    - aws-cli/setup
+    - checkout
+    - run:
+        name: apply env to Scripts
+        command: |
+          circleci env subst < < ./local.env.template > ./envs/local.env
+    - aws-ecr/build_and_push_image:
+        dockerfile: Dockerfile
+        create-repo: true
+        context: aws
+        repo: ourherd-microservices-backend
+        auth:
+          - aws-cli/setup:
+              role_arn: arn:aws:iam::362275395647:user/development-user
+
 workflows:
-  # build-and-push-backend-account:
-  #   jobs:
-  #     - aws-ecr/build-and-push-image:
-  #         context: aws
-  #         create-repo: true
-  #         dockerfile: Dockerfile
-  #         path: ./apps/account
-  #         repo: backend-account
   build-and-push-backend-gateway:
     jobs:
       - aws-ecr/build-and-push-image:
           context: aws
           create-repo: true
           dockerfile: Dockerfile
-          path: ./apps/gateway
+          path: .
           repo: backend-gateway
-  # build-and-push-backend-feed:
-  #   jobs:
-  #     - aws-ecr/build-and-push-image:
-  #         context: aws
-  #         create-repo: true
-  #         dockerfile: Dockerfile
-  #         path: ./apps/feed
-  #         repo: backend-feed
-  # build-and-push-backend-mailer:
-  #   jobs:
-  #     - aws-ecr/build-and-push-image:
-  #         context: aws
-  #         create-repo: true
-  #         dockerfile: Dockerfile
-  #         path: ./apps/mailer
-  #         repo: backend-mailer
-  # build-and-push-backend-member:
-  #   jobs:
-  #     - aws-ecr/build-and-push-image:
-  #         context: aws
-  #         create-repo: true
-  #         dockerfile: Dockerfile
-  #         path: ./apps/member
-  #         repo: backend-member
-  # build-and-push-backend-notification:
-  #   jobs:
-  #     - aws-ecr/build-and-push-image:
-  #         context: aws
-  #         create-repo: true
-  #         dockerfile: Dockerfile
-  #         path: ./apps/notification
-  #         repo: backend-notification
-  # build-and-push-backend-reaction:
-  #   jobs:
-  #     - aws-ecr/build-and-push-image:
-  #         context: aws
-  #         create-repo: true
-  #         dockerfile: Dockerfile
-  #         path: ./apps/reaction
-  #         repo: backend-reaction
-  # build-and-push-backend-story:
-  #   jobs:
-  #     - aws-ecr/build-and-push-image:
-  #         context: aws
-  #         create-repo: true
-  #         dockerfile: Dockerfile
-  #         path: ./apps/story
-  #         repo: backend-story
-  # build-and-push-backend-survey:
-  #   jobs:
-  #     - aws-ecr/build-and-push-image:
-  #         context: aws
-  #         create-repo: true
-  #         dockerfile: Dockerfile
-  #         path: ./apps/survey
-  #         repo: backend-survey=-+
-  
