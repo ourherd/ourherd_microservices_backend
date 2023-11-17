@@ -5,7 +5,7 @@ orbs:
   terraform: circleci/terraform@3.2.1
   aws-cli: circleci/aws-cli@2.0.3
 
-kubectl-job:
+build-push-image-service:
   docker:
     - image: cimg/base:stable
   steps:
@@ -27,9 +27,4 @@ kubectl-job:
 workflows:
   build-and-push-backend-gateway:
     jobs:
-      - aws-ecr/build-and-push-image:
-          context: aws
-          create-repo: true
-          dockerfile: Dockerfile
-          path: .
-          repo: backend-gateway
+      - build-push-image-service
