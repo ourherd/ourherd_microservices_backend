@@ -5,24 +5,25 @@ orbs:
   terraform: circleci/terraform@3.2.1
   aws-cli: circleci/aws-cli@2.0.3
 
-build-push-image-service:
-  docker:
-    - image: cimg/base:stable
-  steps:
-    - aws-cli/setup
-    - checkout
-    - run:
-        name: apply env to Scripts
-        command: |
-          circleci env subst < < ./local.env.template > ./envs/local.env
-    - aws-ecr/build_and_push_image:
-        dockerfile: Dockerfile
-        create-repo: true
-        context: aws
-        repo: ourherd-microservices-backend
-        auth:
-          - aws-cli/setup:
-              role_arn: arn:aws:iam::362275395647:user/development-user
+jobs: 
+  build-push-image-service:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - aws-cli/setup
+      - checkout
+      - run:
+          name: apply env to Scripts
+          command: |
+            circleci env subst < < ./local.env.template > ./envs/local.env
+      - aws-ecr/build_and_push_image:
+          dockerfile: Dockerfile
+          create-repo: true
+          context: aws
+          repo: ourherd-microservices-backend
+          auth:
+            - aws-cli/setup:
+                role_arn: arn:aws:iam::362275395647:user/development-user
 
 workflows:
   build-and-push-backend-gateway:
