@@ -4,6 +4,7 @@ orbs:
   aws-ecr: circleci/aws-ecr@9.0.1
   terraform: circleci/terraform@3.2.1
   aws-cli: circleci/aws-cli@4.0
+  docker: circleci/docker@2.4.0
 
 jobs: 
   build-push-image-service:
@@ -20,12 +21,23 @@ jobs:
           name: apply env to Scripts
           command: |
             circleci env subst < ./local.env.template > ./envs/local.env
-      - aws-ecr/build_and_push_image:
-          dockerfile: Dockerfile
-          create_repo: true
-          repo: ourherd-microservices-backend
-          auth:
-            - aws-cli/setup
+      - run:
+          name: erc login
+          command: |
+            aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 362275395647.dkr.ecr.ap-southeast-2.amazonaws.com
+      - docker/build:
+          tag: '362275395647.dkr.ecr.ap-southeast-2.amazonaws.com/ourherd-microservices-backend:latest' 
+          path: . 
+          image: 'ourherd-microservices-backend:latest'
+      - docker/push:
+          registry: '362275395647.dkr.ecr.ap-southeast-2.amazonaws.com' 
+          image: 'ourherd-microservices-backend:latest'
+      # - aws-ecr/build_and_push_image:
+      #     dockerfile: Dockerfile
+      #     create_repo: true
+      #     repo: ourherd-microservices-backend
+      #     auth:
+      #       - aws-cli/setup
 
 workflows:
   build-and-push-backend-gateway:
