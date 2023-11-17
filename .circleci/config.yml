@@ -42,9 +42,11 @@ jobs:
           name: docker tag
           command: |
             docker tag ourherd-microservices-backend:latest 362275395647.dkr.ecr.ap-southeast-2.amazonaws.com/ourherd-microservices-backend:latest
-      - docker/push:
-          registry: '362275395647.dkr.ecr.ap-southeast-2.amazonaws.com' 
-          image: 'ourherd-microservices-backend:latest'
+      - run:
+          name: docker push
+          command: |
+            docker push 362275395647.dkr.ecr.ap-southeast-2.amazonaws.com/ourherd-microservices-backend:latest
+      
       # - aws-ecr/build_and_push_image:
       #     dockerfile: Dockerfile
       #     create_repo: true
