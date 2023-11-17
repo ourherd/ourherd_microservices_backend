@@ -3,7 +3,7 @@ version: 2.1
 orbs:
   aws-ecr: circleci/aws-ecr@9.0.1
   terraform: circleci/terraform@3.2.1
-  aws-cli: circleci/aws-cli@2.0.3
+  aws-cli: circleci/aws-cli@4.0
 
 jobs: 
   build-push-image-service:
@@ -21,7 +21,7 @@ jobs:
           create_repo: true
           repo: ourherd-microservices-backend
           auth:
-            - aws-cli/setup:
+            - aws-cli/setup
 
 workflows:
   build-and-push-backend-gateway:
