@@ -13,6 +13,7 @@ jobs:
     steps:
       - aws-cli/setup
       - checkout
+      - docker/install-docker
       - run:
           name: create file & folder
           command: |
@@ -26,9 +27,14 @@ jobs:
           command: |
             aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 362275395647.dkr.ecr.ap-southeast-2.amazonaws.com
       - docker/build:
-          tag: '362275395647.dkr.ecr.ap-southeast-2.amazonaws.com/ourherd-microservices-backend:latest' 
+          registry: '362275395647.dkr.ecr.ap-southeast-2.amazonaws.com' 
+          image: ourherd-microservices-backend 
           path: . 
-          image: 'ourherd-microservices-backend:latest'
+          tag: latest 
+      - run:
+          name: docker tag
+          command: |
+            docker tag ourherd-microservices-backend:latest 362275395647.dkr.ecr.ap-southeast-2.amazonaws.com/ourherd-microservices-backend:latest
       - docker/push:
           registry: '362275395647.dkr.ecr.ap-southeast-2.amazonaws.com' 
           image: 'ourherd-microservices-backend:latest'
