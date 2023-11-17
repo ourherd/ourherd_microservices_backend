@@ -22,7 +22,6 @@ jobs:
           repo: ourherd-microservices-backend
           auth:
             - aws-cli/setup:
-              role_arn: arn:aws:iam::362275395647:user/development-user
 
 workflows:
   build-and-push-backend-gateway:
