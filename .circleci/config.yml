@@ -13,9 +13,9 @@ jobs:
       - aws-cli/setup
       - checkout
       - run:
-          name: apply env to Scripts
+          name: create file & folder
           command: |
-            touch ./envs/local.env
+            mkdir envs && touch ./envs/local.env
       - run:
           name: apply env to Scripts
           command: |
