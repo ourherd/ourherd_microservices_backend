@@ -20,8 +20,10 @@ jobs:
           dockerfile: Dockerfile
           create_repo: true
           repo: ourherd-microservices-backend
+          region: ap-southeast-2
           auth:
-            - aws-cli/setup
+            - aws-cli/setup:
+                role_arn: arn:aws:iam::362275395647
 
 workflows:
   build-and-push-backend-gateway:
