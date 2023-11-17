@@ -18,14 +18,14 @@ jobs:
             circleci env subst < < ./local.env.template > ./envs/local.env
       - aws-ecr/build_and_push_image:
           dockerfile: Dockerfile
-          create-repo: true
-          context: aws
+          create_repo: true
           repo: ourherd-microservices-backend
           auth:
             - aws-cli/setup:
-                role_arn: arn:aws:iam::362275395647:user/development-user
+              role_arn: arn:aws:iam::362275395647:user/development-user
 
 workflows:
   build-and-push-backend-gateway:
     jobs:
-      - build-push-image-service
+      - build-push-image-service:
+          context: aws
