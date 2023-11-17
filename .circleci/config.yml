@@ -58,4 +58,6 @@ workflows:
   build-and-push-backend-gateway:
     jobs:
       - build-push-image-service:
-          context: aws
+          context: 
+            - aws
+            - ourherd_backend_env
