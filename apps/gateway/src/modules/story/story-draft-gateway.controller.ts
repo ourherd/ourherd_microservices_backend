@@ -3,6 +3,8 @@ import {
   Body,
   Controller,
   Inject,
+  Param,
+  ParseUUIDPipe,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -28,6 +30,7 @@ import { v4 } from "uuid";
 import { StorageService } from "apps/storage/src/service/storage.service";
 import { ParseUploadVideoFilePipe } from "@app/common/pipe/parse-upload-video-file.pipe";
 import { ParseUploadImageFilePipe } from "@app/common/pipe/parse-upload-image-file.pipe";
+import { CreateStorageResourceDto } from "apps/storage/src/dto/create-storage-resource.dto";
 
 @ApiTags('Story Create Gateway')
 @Controller({
@@ -48,6 +51,31 @@ export class StoryDraftGatewayController {
 
   ) { }
 
+  @Post('/image/:story_id')
+  @Auth()
+  @ApiOperation({ summary: 'Upload picture for the story' })
+  @ApiResponse({ status: 201, description: 'Upload picture for the story' })
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('story_resource'))
+  async draftImage (
+    @Param('story_id', ParseUUIDPipe) story_id: string,
+    @UploadedFile(new ParseUploadImageFilePipe()) story_resource: Express.Multer.File
+  ) : Promise<IGatewayResponse> {
+
+    let storageResourceType = StorageResourceType.STORY_IMAGE;
+
+    let storageDto = new CreateStorageResourceDto()
+
+    storageDto = {
+      resource_type: storageResourceType,
+      driver: StorageResourceDriverType.S3,
+      story_id: story_id,
+      id: v4(),
+    }
+
+    return await this.storageService.upload(storageDto, story_resource)
+
+  }
 
   @Post('/video')
   @Auth()
@@ -57,11 +85,12 @@ export class StoryDraftGatewayController {
   @UseInterceptors(FileInterceptor('story_resource'))
   async draftVideo(
     @CurrentMember('member_id') member_id: string,
-    @Body() draftVideoDto: StoryDraftVideoDto,
     @UploadedFile(new ParseUploadVideoFilePipe()) story_resource: Express.Multer.File
   ): Promise<IGatewayResponse> {
 
+    const draftVideoDto = new StoryDraftVideoDto()
     const { state: storyState, data: storyData } = await firstValueFrom(
+      
       this.storyProxy.send<IServiceResponse<StoryEntity>, { member_id: string, draftVideoDto: StoryDraftVideoDto }>
         (
           STORY_MESSAGE_PATTERNS.DRAFT_VIDEO,
@@ -72,9 +101,9 @@ export class StoryDraftGatewayController {
         )
     );
 
-    const storageDto = {
-      file: story_resource,
-      type: StorageResourceType.STORY_VIDEO,
+    let storageDto = new CreateStorageResourceDto()
+    storageDto = {
+      resource_type: StorageResourceType.STORY_VIDEO,
       driver: StorageResourceDriverType.S3,
       story_id: storyData.id,
       id: v4(),
@@ -109,14 +138,13 @@ export class StoryDraftGatewayController {
   @Auth()
   @ApiOperation({ summary: 'Story Draft (Free Form Text)' })
   @ApiResponse({ status: 201, description: 'Create new Story as draft (Free Form Text) ' })
-  @UseInterceptors(FileInterceptor('story_resource'))
   async draftTextFreeForm(
     @CurrentMember('member_id') member_id: string,
     @Body() draftFreeFormDto: StoryDraftTextFreeformDto,
     @UploadedFile(new ParseUploadImageFilePipe()) story_resource: Express.Multer.File
   )
     : Promise<IGatewayResponse> {
-    const draftStoryTextFreeForm = await firstValueFrom(
+    return await firstValueFrom(
       this.storyProxy.send<IServiceResponse<StoryEntity>,
         { member_id: string, draftFreeFormDto: StoryDraftTextFreeformDto }>
         (
@@ -128,17 +156,6 @@ export class StoryDraftGatewayController {
         )
     );
 
-    //TODO saga calling both gateway
-    const storageDto = {
-      file: story_resource,
-      type: StorageResourceType.STORY_IMAGE,
-      driver: StorageResourceDriverType.S3,
-      story_id: draftStoryTextFreeForm.data.id,
-      id: v4(),
-    }
-
-    return await this.storageService.upload(storageDto, story_resource)
   }
-
 
 }

@@ -31,7 +31,7 @@ export class ResourceS3AwsService {
     story_resource: Express.Multer.File
   ): Promise<IServiceResponse<any>> {
 
-    const key = this.s3_media_key(storageDto.type, storageDto.id);
+    const key = this.s3_media_key(storageDto.resource_type, storageDto.id);
     const bucket = this.configService.get<string>('S3_BUCKET');
     const upload = new Upload({
       params: {

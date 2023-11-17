@@ -1,17 +1,10 @@
-import { IsNotEmpty, IsOptional } from "class-validator";
+import { IsOptional } from "class-validator";
 import { StoryVisibility } from "../../constant/story.enum";
-import { StoryEntity } from "../../entity/story/story.entity";
 import { ApiProperty } from "@nestjs/swagger";
 
 
-export class StorySettingDto {
-  
-  @ApiProperty({
-    type: StoryEntity
-  })
-  @IsNotEmpty()
-  story: StoryEntity;
-  
+export class StoryUpdateSettingDto {
+    
   @ApiProperty({
     type: StoryVisibility,
     enum: StoryVisibility,
