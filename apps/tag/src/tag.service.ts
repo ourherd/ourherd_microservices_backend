@@ -1,19 +1,19 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { TAG_SERVICE } from "./constant/tag-patterns.constants";
-import { PostReactionDto } from "../../story/src/dto/reaction/post.reaction.dto";
-import { IServiceResponse } from "@app/rabbit";
-import { ReactionEntity } from "../../story/src/entity/reaction/reaction.entity";
 import { TAG_MESSAGE_DB_RESPONSE } from "./constant/tag-patterns.constants";
+import { IServiceResponse } from "@app/rabbit";
 import { CreateTagDto } from "./dto/create.tag.dto";
 import { TagEntity } from "./entity/tag.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Database } from "@app/database";
 import { Repository } from "typeorm";
+import { IPagination, PaginationDto } from "@app/common";
 
 @Injectable()
 export class TagService {
 
   private readonly logger = new Logger(TagService.name)
+  private readonly LIMIT_APP_TAGS = 100;
+
   constructor(
     @InjectRepository(TagEntity, Database.PRIMARY)  private tagRepository: Repository<TagEntity>) {}
 
@@ -23,6 +23,31 @@ export class TagService {
        return await this.createTag(tagDto);
     }
     return tagExist;
+  }
+
+
+
+  async findTagsAppAll({ limit }: PaginationDto): Promise<IServiceResponse<IPagination<TagEntity>>> {
+
+    const tags = await this.tagRepository.find({
+        take: limit ? limit: this.LIMIT_APP_TAGS,
+        where: {
+          verified : true,
+          in_app: true
+        },
+        order: {
+          order: "ASC"
+        }
+      },
+    );
+
+    return {
+      state: true,
+      data: {
+        items: tags,
+        limit: limit
+      }
+    }
   }
 
   private async findByName ( tagDto: CreateTagDto ) {

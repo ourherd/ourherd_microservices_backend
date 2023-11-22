@@ -9,3 +9,6 @@ CREATE TABLE IF NOT EXISTS public.tags
     updated_at timestamp with time zone default now() not null,
     deleted_at timestamp
 );
+
+
+ALTER TABLE tags ADD COLUMN in_app boolean default false;

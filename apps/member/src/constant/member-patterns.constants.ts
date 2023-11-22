@@ -7,6 +7,7 @@ export const MEMBER_MESSAGE_PATTERNS = {
   RESEND_VERIFY: 'member.resend-verify',
   FIND_ALL: 'member.findall',
   FIND_BY_ID: 'member.findbyid',
+  GET_MY_PROFILE: 'member.getmyprofile',
   FIND_BY_EMAIL: 'member.findbyemail',
   UPDATE: 'member.update',
 }

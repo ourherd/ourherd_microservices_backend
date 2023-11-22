@@ -22,6 +22,12 @@ export class TagEntity extends AbstractEntity {
   @Column({ nullable: true })
   order: number;
 
+  @Column({
+    nullable: true,
+    default: false
+  })
+  in_app: boolean;
+
   @ManyToMany(
     () => StoryEntity,
     story => story.tags,
