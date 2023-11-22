@@ -28,7 +28,6 @@ export class MemberService {
 
   async create(createDto: CreateMemberDto): Promise<IServiceResponse<MemberEntity>> {
     try {
-      // Validation Constraint in account
       this.logger.log('member dto--> ' + JSON.stringify(createDto));
       const member = this.memberRepository.create(createDto);
       const result = await this.memberRepository.save(member);
@@ -78,6 +77,7 @@ export class MemberService {
 
   async findById(id: string): Promise<IServiceResponse<MemberEntity>> {
     const member = await this.memberRepository.findOneBy({ id });
+
     return {
       state: !!member,
       data: member,
@@ -115,12 +115,12 @@ export class MemberService {
       }
     }
   }
-  
+
   async checkMemberExist(member_id: string): Promise<boolean> {
     const member = this.findById(member_id)
     return !!member
   }
-  
+
   async memberPrivacySetting(member_id: string): Promise<MemberPrivacyDto> {
 
     let memberPrivacyDto = new MemberPrivacyDto
@@ -130,7 +130,7 @@ export class MemberService {
     if (isEmpty(memberPrivacyDto.member.gender)) {
       memberPrivacyDto.share_gender = true
     }
-    
+
     if (isEmpty(memberPrivacyDto.member.birthday)) {
       memberPrivacyDto.share_age = true
     }
@@ -150,6 +150,6 @@ export class MemberService {
     return memberPrivacyDto
   }
 
-  
+
 
 }

@@ -35,8 +35,8 @@ export class MemberController {
   }
 
   // Only admin
-  @MessagePattern(MEMBER_MESSAGE_PATTERNS.FIND_BY_ID)
-  async getMemberById(@Payload() id: string): Promise<IServiceResponse<MemberEntity>> {
+  @MessagePattern(MEMBER_MESSAGE_PATTERNS.GET_MY_PROFILE)
+  async getMemberById(@Payload('member_id') id: string): Promise<IServiceResponse<MemberEntity>> {
     return await this.memberService.findById(id);
   }
 

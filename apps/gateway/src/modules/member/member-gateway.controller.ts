@@ -11,6 +11,8 @@ import { ClientProxy } from "@nestjs/microservices";
 import { UpdateMemberDto } from "../../../../member/src/dto/update-member.dto";
 import { CurrentMember } from "@app/authentication/decorator/member.decorator";
 import { Auth } from "@app/authentication";
+import { Roles } from "@app/authentication/decorator/role.decorator";
+import { Role } from "@app/authentication/constant/roles.enum";
 
 @ApiTags('Member Gateway')
 @Controller({
@@ -25,7 +27,8 @@ export class MemberGatewayController {
   ) { }
 
   @Auth()
-  @Get('/')
+  @Roles(Role.ADMIN)
+  @Get('/all')
   async getMembers ( @Query() findDto: FindMemberDto ): Promise<IGatewayResponse<IPagination<MemberEntity>>> {
     const { state, data } = await firstValueFrom(
       this.memberClient.send<IServiceResponse<IPagination<MemberEntity>>>
@@ -57,6 +60,26 @@ export class MemberGatewayController {
     );
 
     return { state, data };
+  }
+  @Get('/me')
+  @Auth()
+  @ApiOperation({ summary: 'Get My Profile' })
+  @ApiResponse({ status: 200, description: "Get My Profile" })
+  async getProfile (
+    @CurrentMember ('member_id') member_id: string
+  ): Promise<IGatewayResponse> {
+
+    const { state, data } = await firstValueFrom(
+      this.memberClient.send<IServiceResponse<MemberEntity>, { member_id: string }>(
+        MEMBER_MESSAGE_PATTERNS.GET_MY_PROFILE,
+        {
+          member_id
+        }
+      )
+    );
+
+    return { state, data };
+
   }
 
 }
