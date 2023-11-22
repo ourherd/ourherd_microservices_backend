@@ -9,3 +9,6 @@ CREATE TABLE IF NOT EXISTS public.story_tags
     updated_at timestamp with time zone default now() not null,
     deleted_at timestamp
 );
+
+
+

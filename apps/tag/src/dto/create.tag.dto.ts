@@ -21,7 +21,7 @@ export class CreateTagDto {
   @IsOptional()
   @IsBoolean()
   @Transform(({ value} ) => value === false)
-  readonly verified: boolean = false;
+  public verified: boolean = false;
 
   @ApiProperty({
     description: "Member first name",

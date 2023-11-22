@@ -4,11 +4,15 @@
  * @param value
  */
 export function stringFirstUppercase(name: string): string {
-  const arr = name.split(" ");
+
+  const new_string = name.replace(/and|ANd|AND|AnD|anD/g, "&");
+  const arr = new_string.split(" ");
+
   for (let i = 0; i < arr.length; i++) {
     arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
   }
-  const str2 = arr.join(" ");
-  return str2;
+  const final_tag = arr.join(" ")
+
+  return final_tag;
 }
 

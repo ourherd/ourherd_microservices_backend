@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsNumber, Min, Max } from 'class-validator';
+import { IsNumber, Min, Max, IsOptional } from 'class-validator';
 import { ApiProperty } from "@nestjs/swagger";
 
 export class PaginationDto {
@@ -11,6 +11,7 @@ export class PaginationDto {
     })
     @Transform(({ value }) => parseInt(value))
     @IsNumber()
+    @IsOptional()
     @Min(1)
     @Max(50)
     limit: number;
@@ -22,6 +23,7 @@ export class PaginationDto {
     })
     @Transform(({ value }) => parseInt(value))
     @IsNumber()
+    @IsOptional()
     @Min(1)
     page: number;
 }
