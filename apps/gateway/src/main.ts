@@ -1,4 +1,5 @@
 import path from 'path';
+import fs from 'fs';
 import helmet from 'helmet';
 import compression from 'compression';
 import { NestFactory, Reflector } from '@nestjs/core';
@@ -41,6 +42,7 @@ async function bootstrap() {
     .addBearerAuth()
     .build()
   const document = SwaggerModule.createDocument(app, documentConfig);
+  fs.writeFileSync("./swagger-spec.json", JSON.stringify(document));
   SwaggerModule.setup('/document', app, document, { jsonDocumentUrl: '/document.json' });
 
   let logger = new Logger('Gateway API');

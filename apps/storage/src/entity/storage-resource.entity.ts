@@ -33,6 +33,4 @@ export class StorageResourceEntity extends AbstractEntity {
     driver: StorageResourceDriverType;
 
 
-
-
 }

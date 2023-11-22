@@ -26,7 +26,6 @@ export class TagGatewayController {
 
   @Auth()
   @Get('/all')
-  // async getMembers ( @Query() findDto: FindMemberDto ): Promise<IGatewayResponse<IPagination<MemberEntity>>> {
   async getTagsApp ( @Query() findDto: AllTagsAppDto ): Promise<IGatewayResponse<IPagination<TagEntity>>> {
     const { state, data } = await firstValueFrom(
       this.tagClient.send<IServiceResponse<IPagination<TagEntity>>>
