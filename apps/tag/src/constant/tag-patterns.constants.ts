@@ -2,6 +2,7 @@ export const TAG_SERVICE = 'TAG SERVICE';
 export const TAG_MODULE = 'TAG MODULE';
 
 export const TAG_MESSAGE_PATTERNS = {
+  ALL: 'tag.all',
   CREATE: 'tag.create',
   UPDATE: 'tag.update',
   DELETE: 'tag.delete',
