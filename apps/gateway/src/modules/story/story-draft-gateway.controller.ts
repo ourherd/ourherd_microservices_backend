@@ -61,10 +61,9 @@ export class StoryDraftGatewayController {
     @Param('story_id', ParseUUIDPipe) story_id: string,
     @UploadedFile(new ParseUploadImageFilePipe()) story_resource: Express.Multer.File
   ) : Promise<IGatewayResponse> {
-
+    //TODO Refactor this, create another DTO
     let storageResourceType = StorageResourceType.STORY_IMAGE;
-
-    let storageDto = new CreateStorageResourceDto()
+    let storageDto: CreateStorageResourceDto;
 
     storageDto = {
       resource_type: storageResourceType,
@@ -74,7 +73,6 @@ export class StoryDraftGatewayController {
     }
 
     return await this.storageService.upload(storageDto, story_resource)
-
   }
 
   @Post('/video')
@@ -88,9 +86,9 @@ export class StoryDraftGatewayController {
     @UploadedFile(new ParseUploadVideoFilePipe()) story_resource: Express.Multer.File
   ): Promise<IGatewayResponse> {
 
+    //TODO Refactor this, create another DTO
     const draftVideoDto = new StoryDraftVideoDto()
     const { state: storyState, data: storyData } = await firstValueFrom(
-      
       this.storyProxy.send<IServiceResponse<StoryEntity>, { member_id: string, draftVideoDto: StoryDraftVideoDto }>
         (
           STORY_MESSAGE_PATTERNS.DRAFT_VIDEO,
