@@ -25,9 +25,7 @@ export class TagService {
     return tagExist;
   }
 
-
-
-  async findTagsAppAll({ limit }: PaginationDto): Promise<IServiceResponse<IPagination<TagEntity>>> {
+  async findTagsAppAll({ limit, page }: PaginationDto): Promise<IServiceResponse<IPagination<TagEntity>>> {
 
     const tags = await this.tagRepository.find({
         take: limit ? limit: this.LIMIT_APP_TAGS,
@@ -45,7 +43,8 @@ export class TagService {
       state: true,
       data: {
         items: tags,
-        limit: limit
+        limit: limit,
+        total: tags.length
       }
     }
   }
