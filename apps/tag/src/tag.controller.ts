@@ -5,6 +5,9 @@ import { TAG_MESSAGE_PATTERNS } from "./constant/tag-patterns.constants";
 import { IServiceResponse } from "@app/rabbit";
 import { CreateTagDto } from "./dto/create.tag.dto";
 import { TagEntity } from "./entity/tag.entity";
+import { AllTagsAppDto } from "./dto/all.tags.app.dto";
+import { IPagination, PaginationDto } from "@app/common";
+import { MemberEntity } from "../../member/src/entity/member.entity";
 
 @Controller()
 export class TagController {
@@ -16,6 +19,12 @@ export class TagController {
   async createTag (
     @Payload('tagDto') tagDto: CreateTagDto): Promise<IServiceResponse<TagEntity>> {
     return await this.tagService.create(tagDto);
+  }
+
+  @MessagePattern(TAG_MESSAGE_PATTERNS.ALL)
+  async findAll(@Payload() paginationDto: PaginationDto):
+    Promise<IServiceResponse<IPagination<TagEntity>>> {
+    return await this.tagService.findTagsAppAll(paginationDto);
   }
 
 }
