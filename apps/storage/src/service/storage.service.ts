@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { IServiceResponse } from "@app/rabbit";
 import { Injectable, Logger } from "@nestjs/common";
 import { CreateStorageResourceDto } from "../dto/create-storage-resource.dto";
@@ -7,7 +6,8 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Database } from "@app/database";
 import { ResourceS3AwsService } from "./driver/resource-s3-aws-service";
-import { STORAGE_MESSAGE_DB_RESPONSE } from '../constant/storage-patterns.constant';
+import { STORAGE_MESSAGE_DB_RESPONSE } from "../constant/storage-patterns.constant";
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class StorageService {
@@ -16,8 +16,9 @@ export class StorageService {
 
   constructor(
     @InjectRepository(StorageResourceEntity, Database.PRIMARY)
-    private storageRepository: Repository<StorageResourceEntity>,
-    private s3Service: ResourceS3AwsService) { }
+      private storageRepository: Repository<StorageResourceEntity>,
+    private s3Service: ResourceS3AwsService,
+    private configService: ConfigService) { }
 
   async upload(
     storageDto: CreateStorageResourceDto,
@@ -28,11 +29,10 @@ export class StorageService {
 
       let result: StorageResourceEntity;
       const storageResourceExist = await this.storageRepository.findOneBy({ story_id: storageDto.story_id })
-      
+
       if (!storageResourceExist) {
 
         const resource = this.storageRepository.create(storageDto);
-
         const { state, data: { key } } = await this.s3Service.upload(storageDto, story_resource)
 
         if (state === true) {
@@ -40,8 +40,8 @@ export class StorageService {
           resource.resource_type = storageDto.resource_type;
           result = await this.storageRepository.save(resource);
         }
-      } else {        
-        
+      } else {
+
         if (storageDto.resource_type != storageResourceExist.resource_type) {
           return {
             state: false,
@@ -51,9 +51,7 @@ export class StorageService {
         }
 
         Object.assign(storageDto, storageResourceExist)
-        
         const resource = this.storageRepository.create(storageDto);
-
         const { state, data: { key } } = await this.s3Service.upload(storageDto, story_resource)
 
         await this.storageRepository.update({

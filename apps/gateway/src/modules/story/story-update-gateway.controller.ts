@@ -11,7 +11,7 @@ import {
   UsePipes,
   ValidationPipe
 } from "@nestjs/common";
-import { Auth, CurrentMember } from "@app/authentication";
+import { Auth } from "@app/authentication";
 import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
 import { ClientProxy } from "@nestjs/microservices";
 import { FileInterceptor } from "@nestjs/platform-express";
@@ -22,8 +22,6 @@ import {
 } from "../../../../storage/src/interface/storage-resource.interface";
 import { v4 } from "uuid";
 import { StorageService } from "apps/storage/src/service/storage.service";
-import { StoryUpdateMediaDto } from "apps/story/src/dto/story/story.update.media.dto";
-import { StoryType } from "apps/story/src/constant/story.enum";
 import { STORY_MESSAGE_PATTERNS } from "apps/story/src/constant/story-patterns.constants";
 import { StoryEntity } from "apps/story/src/entity/story/story.entity";
 import { StoryUpdateSettingDto } from "apps/story/src/dto/story/story.update.setting.dto";
@@ -33,8 +31,7 @@ import { StoryUpdateTextGuidedDto } from "apps/story/src/dto/story/story.update.
 import { StoryUpdateVideoDto } from "apps/story/src/dto/story/story.update.video.dto";
 import { CreateStorageResourceDto } from "apps/storage/src/dto/create-storage-resource.dto";
 import { ParseUploadImageVideoFilePipe } from "@app/common/pipe/parse-upload-image-video-file.pipe";
-import { ParseUploadImageFilePipe } from "@app/common/pipe/parse-upload-image-file.pipe";
-import { AVAILABLE_UPLOAD_IMAGES_FILE_MIMES, AVAILABLE_UPLOAD_VIDEO_FILE_MIMES } from "@app/common/constant/upload.constant";
+import { AVAILABLE_UPLOAD_IMAGES_FILE_MIMES } from "@app/common/constant/upload.constant";
 
 @ApiTags('Story Update Gateway')
 @Controller({

@@ -5,7 +5,7 @@ import { StorageResourceDriverType, StorageResourceType } from "../interface/sto
 import { Transform } from "class-transformer";
 import { v4 } from "uuid";
 
-export class CreateStorageResourceDto extends BaseStorageResourceDto {
+export class CreateStorageResourceDto {
 
     @ApiProperty()
     @IsUUID()
