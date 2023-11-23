@@ -8,45 +8,26 @@ import { IServiceResponse } from '@app/rabbit';
 import { SubmitSurveyFinalDto } from './dto/submit-survey-final.survey.dto';
 import { CreateLongOnBoardingSurveyInstanceDto } from './dto/create-Long-Boarding-survey-instance.survey.dto';
 import { CreateShortOnBoardingSurveyInstanceDto } from './dto/create-Short-Boarding-survey-instance.survey.dto';
+import { CreateInstanceSurveyDto } from "./dto/create-instance.survey.dto";
 
 @Controller()
 export class SurveyController {
   constructor(private readonly surveyService: SurveyService) {}
 
-  @MessagePattern(SURVEY_MESSAGE_PATTERNS.CREATE_DQ5)
-  async createSurveyDQ5Instance(
-    @Payload('createDto') createSurveyInstanceDto: CreateDQ5SurveyInstanceDto,
-    @Payload('id_member') id_member: string
-  ): Promise<IServiceResponse<SurveyMemberInstanceEntity>> {
-    const surveyCreated = this.surveyService.createSurveyMemberInstance(
-      createSurveyInstanceDto,
-      id_member
-      )
-    return surveyCreated;
-  }
 
-  @MessagePattern(SURVEY_MESSAGE_PATTERNS.CREATE_LONG)
-  async createSurveyLongInstance(
-    @Payload('createDto') createSurveyInstanceDto: CreateLongOnBoardingSurveyInstanceDto,
-    @Payload('id_member') id_member: string
+  @MessagePattern(SURVEY_MESSAGE_PATTERNS.START)
+  async startSurveyInstance(
+    @Payload('member_id') member_id: string,
+  @Payload('createDto') createSurveyInstanceDto: CreateInstanceSurveyDto
   ): Promise<IServiceResponse<SurveyMemberInstanceEntity>> {
-    const surveyCreated = this.surveyService.createSurveyMemberInstance(
-      createSurveyInstanceDto,
-      id_member
-      )
-    return surveyCreated;
-  }
 
-  @MessagePattern(SURVEY_MESSAGE_PATTERNS.CREATE_SHORT)
-  async createSurveyShortInstance(
-    @Payload('createDto') createSurveyInstanceDto: CreateShortOnBoardingSurveyInstanceDto,
-    @Payload('id_member') id_member: string
-  ): Promise<IServiceResponse<SurveyMemberInstanceEntity>> {
     const surveyCreated = this.surveyService.createSurveyMemberInstance(
-      createSurveyInstanceDto,
-      id_member
-      )
+      member_id,
+      createSurveyInstanceDto
+    );
+
     return surveyCreated;
+
   }
 
   @MessagePattern(SURVEY_MESSAGE_PATTERNS.SUBMIT)

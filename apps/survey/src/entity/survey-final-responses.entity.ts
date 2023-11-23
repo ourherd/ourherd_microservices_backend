@@ -16,15 +16,15 @@ export class SurveyFinalResponseEntity extends AbstractEntity {
   question_number: string;
 
   @Column({ nullable: true })
-  question_name: string;
+  question_text: string;
 
   @Column({ nullable: true })
   question_response: string;
-  
+
   @Column({ nullable: false })
   question_response_scale: number;
-  
-  
+
+
 
   // @OneToMany(type => AccountDeviceEntity, account => account.id)
   // @JoinColumn({name: "account_id"})
