@@ -16,6 +16,7 @@ export class ResourceS3AwsService {
   public s3: S3Client;
 
   constructor(private configService: ConfigService) {
+    
     this.region = configService.get<string>('AWS_S3_REGION') || 'eu-west-2';
     this.s3 = new S3Client({
       region: this.region,
@@ -32,14 +33,13 @@ export class ResourceS3AwsService {
   ): Promise<IServiceResponse<any>> {
 
     const key = this.s3_media_key(storageDto.resource_type, storageDto.id);
-    const bucket = this.configService.get<string>('S3_BUCKET');
     const upload = new Upload({
       params: {
         Bucket: this.configService.get('AWS_S3_BUCKET'),
         Key: key,
         Body: story_resource.buffer,
       },
-      client: new S3({}),
+      client: this.s3,
       queueSize: 3,
     });
 
