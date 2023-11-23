@@ -10,7 +10,7 @@ export enum SURVEY_TYPE {
 }
 
 export enum SURVEY_STATUS {
-  INCOMPLETE = 'INCOMPLETE',
+  INCOMPLETED = 'INCOMPLETED',
   COMPLETED = 'COMPLETED',
   ARCHIVED = 'ARCHIVED',
   STARTED = 'STARTED'
@@ -22,6 +22,7 @@ export enum SURVEY_STATIC_STATUS {
 }
 
 export const SURVEY_MESSAGE_PATTERNS = {
+  START: 'survey-start.create',
   CREATE_DQ5: 'survey-dq5.create',
   CREATE_LONG: 'survey-long.create',
   CREATE_SHORT: 'survey-short.create',
@@ -33,5 +34,6 @@ export const SURVEY_MESSAGE_DB_RESPONSE = {
   ID_EXISTING: 'survey.survey_id_existing',
   NOT_FOUND: 'survey.survey_id_not_found',
   SUBMITED: 'survey.survey_has_submitted',
+  SUBMITTED: 'survey.survey_has_submitted',
   INCORRECT_TYPE: 'survey.type_not_match',
 }

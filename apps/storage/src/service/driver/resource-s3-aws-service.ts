@@ -16,7 +16,7 @@ export class ResourceS3AwsService {
   public s3: S3Client;
 
   constructor(private configService: ConfigService) {
-    
+
     this.region = configService.get<string>('AWS_S3_REGION') || 'eu-west-2';
     this.s3 = new S3Client({
       region: this.region,
@@ -45,9 +45,8 @@ export class ResourceS3AwsService {
 
     try {
       upload.on("httpUploadProgress", (progress) => {
-        console.log(progress);
+        this.logger.log(progress);
       });
-
       const response = await upload.done();
 
       return {

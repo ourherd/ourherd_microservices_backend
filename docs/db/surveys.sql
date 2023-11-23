@@ -11,7 +11,7 @@ CREATE TYPE survey_type AS ENUM (
     'SHORT_SURVEY_ONBOARDING',
     'WELLBEING_TODAY',
     'LOOKOUT_FOR_YOUR_MATE'
-    );
+);
 
 CREATE TYPE survey_static_status AS ENUM (
     'ACTIVE',
@@ -47,7 +47,8 @@ CREATE TABLE IF NOT EXISTS public.surveys
 --     deleted_at timestamp
 -- );
 
-CREATE TYPE survey_status AS ENUM ('INCOMPLETE', 'COMPLETED', 'ARCHIVED');
+DROP TYPE survey_status;
+CREATE TYPE survey_status AS ENUM ('INCOMPLETED', 'COMPLETED', 'ARCHIVED', 'STARTED');
 
 CREATE TABLE IF NOT EXISTS public.survey_member_instances
 (
@@ -56,7 +57,7 @@ CREATE TABLE IF NOT EXISTS public.survey_member_instances
     member_id uuid not null, -- member id
     full_name varchar(255),
     consent boolean DEFAULT false,
-    "status" survey_status DEFAULT 'INCOMPLETE',
+    "status" survey_status DEFAULT 'STARTED',
     "type" survey_type NOT NULL,
     created_at timestamp with time zone default now() not null,
     updated_at timestamp with time zone default now() not null,
@@ -73,7 +74,7 @@ CREATE TABLE IF NOT EXISTS public.survey_single_responses
     id uuid default gen_random_uuid() not null constraint survey_member_instances_pkey primary key,
     survey_member_instance_id uuid, -- 82727
     question_number varchar(2), --  1
-    question_name varchar(255), -- how happy are you?
+    question_text varchar(255), -- how happy are you?
     question_response varchar(255), -- 5
     created_at timestamp with time zone default now() not null,
     updated_at timestamp with time zone default now() not null,
@@ -85,7 +86,7 @@ CREATE TABLE IF NOT EXISTS public.survey_final_responses
     id uuid default gen_random_uuid() not null constraint survey_final_responses_pkey primary key,
     survey_member_instance_id uuid not NULL,
     question_number varchar(2) not null,
-    question_name varchar(255),
+    question_text varchar(255),
     question_response varchar(255),
     question_response_scale integer not null,
     created_at timestamp with time zone default now() not null,
