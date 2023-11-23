@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID } from "class-validator";
+import { IsEnum, IsNotEmpty } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { SURVEY_TYPE } from "../constant/survey-patterns.constants";
 import { AbstractSurveyDto } from "./base-survey.dto";
