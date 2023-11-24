@@ -59,10 +59,12 @@ CREATE TABLE IF NOT EXISTS public.survey_member_instances
     consent boolean DEFAULT false,
     "status" survey_status DEFAULT 'STARTED',
     "type" survey_type NOT NULL,
+    survey_score integer DEFAULT 0,
     created_at timestamp with time zone default now() not null,
     updated_at timestamp with time zone default now() not null,
     deleted_at timestamp
 );
+
 
 ALTER TABLE public.survey_member_instances
     ADD CONSTRAINT fk_survey_instances_survey foreign key(survey_id) references surveys(id);
