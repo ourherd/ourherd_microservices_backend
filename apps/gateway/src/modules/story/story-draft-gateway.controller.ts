@@ -139,7 +139,6 @@ export class StoryDraftGatewayController {
   async draftTextFreeForm(
     @CurrentMember('member_id') member_id: string,
     @Body() draftFreeFormDto: StoryDraftTextFreeformDto,
-    @UploadedFile(new ParseUploadImageFilePipe()) story_resource: Express.Multer.File
   )
     : Promise<IGatewayResponse> {
     return await firstValueFrom(
