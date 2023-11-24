@@ -44,8 +44,7 @@ export class SurveyService {
         }
       }
 
-      await this.surveyUpdateStatus( member_id, createDto.type, SURVEY_STATUS.INCOMPLETED);
-
+      await this.surveyInstanceUpdate( member_id, createDto.type, SURVEY_STATUS.INCOMPLETED);
       createDto.member_id = member_id;
       createDto.survey_id = survey.id;
       const surveyCreatedData = this.surveyMemberInstanceRepo.create(createDto);
@@ -61,7 +60,6 @@ export class SurveyService {
         state: false,
         data: error
       }
-
     }
   }
 
@@ -78,9 +76,9 @@ export class SurveyService {
         }
       }
 
-      await this.surveyUpdateStatus( surveyMemberInstance.member_id,
-        surveyMemberInstance.type, SURVEY_STATUS.COMPLETED );
-
+      const score = this.surveyScore(submitFinalDto);
+      await this.surveyInstanceUpdate( surveyMemberInstance.member_id, surveyMemberInstance.type,
+          SURVEY_STATUS.COMPLETED, score );
       const surveyFinalResponseEntities = this.surveyFinalResponseRepo.create(submitFinalDto.data);
       await this.surveyFinalResponseRepo.save(surveyFinalResponseEntities);
 
@@ -117,12 +115,17 @@ export class SurveyService {
     );
   }
 
-  private async surveyUpdateStatus( member_id: string, type: string, status: SURVEY_STATUS) {
-    const entity = new SurveyEntity();
-    entity.status = status;
-    const updated = await this.surveyMemberInstanceRepo.update(
+  private async surveyInstanceUpdate( member_id: string, type: string, status: SURVEY_STATUS, survey_score?:number) {
+    await this.surveyMemberInstanceRepo.update(
       { member_id, type, status: SURVEY_STATUS.STARTED },
-      { status });
+      { status, survey_score });
+  }
 
+  private surveyScore( submitFinalDto: SubmitSurveyFinalDto ): number {
+    let total = 0;
+    submitFinalDto.data.forEach( dto => {
+      total += dto.question_response_scale;
+    });
+    return total;
   }
 }
