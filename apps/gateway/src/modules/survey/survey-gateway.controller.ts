@@ -1,4 +1,4 @@
-import { Body, Controller, Inject, Logger, Post } from "@nestjs/common";
+import { Body, Controller, Inject, Logger, Param, ParseUUIDPipe, Post } from "@nestjs/common";
 import { IGatewayResponse } from '../../common/interface/gateway.interface';
 import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
@@ -12,6 +12,7 @@ import { Auth, CurrentMember } from "@app/authentication";
 import { SubmitSurveyFinalDto } from "apps/survey/src/dto/submit-survey-final.survey.dto";
 import { CreateLongOnBoardingSurveyInstanceDto } from "apps/survey/src/dto/create-Long-Boarding-survey-instance.survey.dto";
 import { CreateShortOnBoardingSurveyInstanceDto } from "apps/survey/src/dto/create-Short-Boarding-survey-instance.survey.dto";
+import { CreateInstanceSurveyDto } from "../../../../survey/src/dto/create-instance.survey.dto";
 
 @ApiTags('Survey Gateway')
 @ApiBearerAuth()
@@ -22,86 +23,31 @@ import { CreateShortOnBoardingSurveyInstanceDto } from "apps/survey/src/dto/crea
 export class SurveyGatewayController {
   private logger = new Logger(GATEWAY_SERVICE);
 
-  constructor(
-    @Inject(RabbitServiceName.SURVEY) private surveyClient: ClientProxy,
-  ) { }
+  constructor(@Inject(RabbitServiceName.SURVEY) private surveyClient: ClientProxy,) { }
 
-  @Post('/start/dq5')
+  @Post('/start')
   @Auth()
-  @ApiOperation({ summary: 'Create Survey Instance DQ5' })
-  @ApiResponse({ status: 200, description: 'Create Survey Instance DQ5' })
-  async createSurveyDQ5Instance(
-    @Body() createDto: CreateDQ5SurveyInstanceDto,
-    @CurrentMember('id_member') id_member: string
-  ): Promise<IGatewayResponse> {
+  @ApiOperation({ summary: 'Create Survey Instance' })
+  @ApiResponse({ status: 200, description: 'Create Survey Instance' })
+  async createSurveyInstance(
+    @CurrentMember('member_id') member_id: string,
+    @Body() createDto: CreateInstanceSurveyDto): Promise<IGatewayResponse> {
 
-    let createSurveyResult = await firstValueFrom(
+    let survey = await firstValueFrom(
       this.surveyClient.send<IServiceResponse<SurveyMemberInstanceEntity>, {
-        createDto: CreateDQ5SurveyInstanceDto ,
-        id_member: string
+        member_id: string,
+        createDto: CreateInstanceSurveyDto
       }>
-        (
-          SURVEY_MESSAGE_PATTERNS.CREATE_DQ5,
-          {
-            createDto,
-            id_member
-          }
-        )
+      (
+        SURVEY_MESSAGE_PATTERNS.START,
+        {
+          member_id,
+          createDto,
+        }
+      )
     );
 
-    return createSurveyResult;
-  }
-
-  @Post('/start/long-onboarding')
-  @Auth()
-  @ApiOperation({ summary: 'Create Survey Instance Long Survey' })
-  @ApiResponse({ status: 200, description: 'Create Survey Instance Long Survey' })
-  async createSurveyLongInstance(
-    @Body() createDto: CreateLongOnBoardingSurveyInstanceDto,
-    @CurrentMember('id_member') id_member: string
-  ): Promise<IGatewayResponse> {
-
-    let createSurveyResult = await firstValueFrom(
-      this.surveyClient.send<IServiceResponse<SurveyMemberInstanceEntity>, {
-        createDto: CreateLongOnBoardingSurveyInstanceDto ,
-        id_member: string
-      }>
-        (
-          SURVEY_MESSAGE_PATTERNS.CREATE_LONG,
-          {
-            createDto,
-            id_member
-          }
-        )
-    );
-
-    return createSurveyResult;
-  }
-
-  @Post('/start/short-onboarding')
-  @Auth()
-  @ApiOperation({ summary: 'Create Survey Instance Short Survey' })
-  @ApiResponse({ status: 200, description: 'Create Survey Instance Short Survey' })
-  async createSurveyShortInstance(
-    @Body() createDto: CreateShortOnBoardingSurveyInstanceDto,
-    @CurrentMember('member_id') id_member: string
-  ): Promise<IGatewayResponse> {
-
-    let createSurveyResult = await firstValueFrom(
-      this.surveyClient.send<IServiceResponse<SurveyMemberInstanceEntity>, {
-        createDto: CreateShortOnBoardingSurveyInstanceDto ,
-        id_member: string
-      }>
-        (
-          SURVEY_MESSAGE_PATTERNS.CREATE_SHORT,
-          {
-            createDto,
-            id_member
-          }
-        )
-    );
-
-    return createSurveyResult;
+    return survey;
   }
 
   @Post('/submit')

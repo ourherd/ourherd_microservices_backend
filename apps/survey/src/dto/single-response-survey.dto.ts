@@ -17,7 +17,7 @@ export class SingleResponseSurveyDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  public question_name: string;
+  public question_text: string;
 
   @ApiProperty()
   @IsNotEmpty()

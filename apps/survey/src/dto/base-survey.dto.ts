@@ -1,19 +1,20 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsOptional, IsUUID } from "class-validator";
+import { IsOptional, IsUUID } from "class-validator";
+import { Transform } from "class-transformer";
+import { v4 } from "uuid";
 
 export abstract class AbstractSurveyDto {
 
   @ApiProperty()
-  @IsNotEmpty()
   @IsUUID()
-  public id: string;
+  @Transform(({ value }) => value = v4())
+  public id: string = v4();
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsUUID()
   public survey_id: string;
 
-  //TODO change this to exclude
   @ApiProperty()
   @IsOptional()
   @IsUUID()

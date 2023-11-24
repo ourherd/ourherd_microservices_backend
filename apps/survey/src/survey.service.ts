@@ -1,16 +1,19 @@
-import { IServiceResponse } from '@app/rabbit';
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { SurveyMemberInstanceEntity } from './entity/survey-member-instances.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Database } from '@app/database';
-import { CreateDQ5SurveyInstanceDto } from './dto/create-DQ5-survey-instance.survey.dto';
-import { SURVEY_MESSAGE_DB_RESPONSE, SURVEY_SERVICE, SURVEY_STATIC_STATUS, SURVEY_STATUS } from './constant/survey-patterns.constants';
-import { SurveyFinalResponseEntity } from './entity/survey-final-responses.entity';
-import { SubmitSurveyFinalDto } from './dto/submit-survey-final.survey.dto';
-import { SurveyEntity } from './entity/survey.entity';
-import { CreateLongOnBoardingSurveyInstanceDto } from './dto/create-Long-Boarding-survey-instance.survey.dto';
-import { CreateShortOnBoardingSurveyInstanceDto } from './dto/create-Short-Boarding-survey-instance.survey.dto';
+import { IServiceResponse } from "@app/rabbit";
+import { Injectable, Logger } from "@nestjs/common";
+import { SurveyMemberInstanceEntity } from "./entity/survey-member-instances.entity";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Database } from "@app/database";
+import {
+  SURVEY_MESSAGE_DB_RESPONSE,
+  SURVEY_SERVICE,
+  SURVEY_STATIC_STATUS,
+  SURVEY_STATUS
+} from "./constant/survey-patterns.constants";
+import { SurveyFinalResponseEntity } from "./entity/survey-final-responses.entity";
+import { SubmitSurveyFinalDto } from "./dto/submit-survey-final.survey.dto";
+import { SurveyEntity } from "./entity/survey.entity";
+import { CreateInstanceSurveyDto } from "./dto/create-instance.survey.dto";
 
 @Injectable()
 export class SurveyService {
@@ -23,69 +26,37 @@ export class SurveyService {
     private surveyFinalResponseRepo: Repository<SurveyFinalResponseEntity>,
     @InjectRepository(SurveyEntity, Database.PRIMARY)
     private surveyRepo: Repository<SurveyEntity>,
-  ) { }
+  ) {
+  }
 
   async createSurveyMemberInstance(
-    createDto: CreateDQ5SurveyInstanceDto|CreateLongOnBoardingSurveyInstanceDto|CreateShortOnBoardingSurveyInstanceDto,
-    id_member: string
+    member_id: string,
+    createDto: CreateInstanceSurveyDto
   ): Promise<IServiceResponse<SurveyMemberInstanceEntity>> {
 
     try {
-
-      const survey = await this.surveyRepo.findOneBy(
-        {
-          id: createDto.survey_id,
-          status: SURVEY_STATIC_STATUS.ACTIVE
-        }
-      );
-      //TODO Use logger with meaningful message
-      console.log(
-        JSON.stringify(survey),
-        JSON.stringify(createDto),
-      );
-
-
-      if (!!survey === false) {
+      const survey = await this.surveyExist(createDto.type);
+      if (survey === null) {
         return {
           state: false,
           data: null,
           message: SURVEY_MESSAGE_DB_RESPONSE.NOT_FOUND
         }
-      } else if (survey.type !== createDto.type) {
-        return {
-          state: false,
-          data: null,
-          message: SURVEY_MESSAGE_DB_RESPONSE.INCORRECT_TYPE
-        }
       }
 
-      // TODO emit new event for survey member
-      const surveyMemberInstance = await this.surveyMemberInstanceRepo.findOneBy(
-        {
-          id: createDto.id
-        }
-      );
+      await this.surveyUpdateStatus( member_id, createDto.type, SURVEY_STATUS.INCOMPLETED);
 
-      if (!!surveyMemberInstance === true) {
-        return {
-          state: false,
-          data: null,
-          message: SURVEY_MESSAGE_DB_RESPONSE.ID_EXISTING
-        }
-      }
-
-      createDto.member_id = id_member
-
-      const surveyCreatedData = this.surveyMemberInstanceRepo.create(createDto)
-      const surveySavedData = await this.surveyMemberInstanceRepo.save(surveyCreatedData)
-
+      createDto.member_id = member_id;
+      createDto.survey_id = survey.id;
+      const surveyCreatedData = this.surveyMemberInstanceRepo.create(createDto);
+      const surveySavedData = await this.surveyMemberInstanceRepo.save(surveyCreatedData);
       return {
         state: !!surveySavedData,
         data: surveySavedData,
         message: SURVEY_MESSAGE_DB_RESPONSE.CREATED
       }
     } catch (error) {
-      this.logger.error("createSurveyMemberInstance: ", error)
+      this.logger.error("Error create survey instance: ", error);
       return {
         state: false,
         data: error
@@ -94,17 +65,12 @@ export class SurveyService {
     }
   }
 
-  async submitSurveyInstance(submitFinalDto: SubmitSurveyFinalDto): Promise<IServiceResponse<SurveyMemberInstanceEntity>> {
+  async submitSurveyInstance(submitFinalDto: SubmitSurveyFinalDto):
+    Promise<IServiceResponse<SurveyMemberInstanceEntity>> {
 
     try {
-
-      const surveyMemberInstance = await this.surveyMemberInstanceRepo.findOneBy(
-        {
-          survey_id: submitFinalDto.survey_member_instance_id
-        }
-      );
-
-      if (!!surveyMemberInstance === false) {
+      const surveyMemberInstance = await this.surveyMemberInstanceExist( submitFinalDto.survey_member_instance_id );
+      if (surveyMemberInstance === null) {
         return {
           state: false,
           data: null,
@@ -112,19 +78,11 @@ export class SurveyService {
         }
       }
 
-      await this.surveyMemberInstanceRepo.update(
-        {
-          survey_id: submitFinalDto.survey_member_instance_id
-        },
-        {
-          status: SURVEY_STATUS.COMPLETED
-        }
-      )
+      await this.surveyUpdateStatus( surveyMemberInstance.member_id,
+        surveyMemberInstance.type, SURVEY_STATUS.COMPLETED );
 
-      const surveyFinalResponseEntities = this.surveyFinalResponseRepo.create(
-        submitFinalDto.data
-      )
-      await this.surveyFinalResponseRepo.save(surveyFinalResponseEntities)
+      const surveyFinalResponseEntities = this.surveyFinalResponseRepo.create(submitFinalDto.data);
+      await this.surveyFinalResponseRepo.save(surveyFinalResponseEntities);
 
       return {
         state: !!surveyMemberInstance,
@@ -138,7 +96,33 @@ export class SurveyService {
         state: false,
         data: error
       }
-
     }
+  }
+
+  private async surveyExist(survey_type: string): Promise<SurveyEntity> {
+    return await this.surveyRepo.findOneBy(
+      {
+        type: survey_type,
+        status: SURVEY_STATIC_STATUS.ACTIVE
+      }
+    );
+  }
+
+  private async surveyMemberInstanceExist(id: string): Promise<SurveyMemberInstanceEntity> {
+    return await this.surveyMemberInstanceRepo.findOneBy(
+      {
+        id: id,
+        status: SURVEY_STATUS.STARTED
+      }
+    );
+  }
+
+  private async surveyUpdateStatus( member_id: string, type: string, status: SURVEY_STATUS) {
+    const entity = new SurveyEntity();
+    entity.status = status;
+    const updated = await this.surveyMemberInstanceRepo.update(
+      { member_id, type, status: SURVEY_STATUS.STARTED },
+      { status });
+
   }
 }

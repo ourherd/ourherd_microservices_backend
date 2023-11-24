@@ -18,20 +18,20 @@ export class SurveyMemberInstanceEntity extends AbstractEntity {
   @Column({ nullable: true })
   full_name: string;
 
-  @Column({ 
-    nullable: true, 
+  @Column({
+    nullable: true,
     default: false
   })
   consent: boolean;
 
-  @Column({ 
-    nullable: true, 
-    default: SURVEY_STATUS.INCOMPLETE
+  @Column({
+    nullable: true,
+    default: SURVEY_STATUS.STARTED
   })
   status: string;
-  
-  @Column({ 
-    nullable: false, 
+
+  @Column({
+    nullable: false,
   })
   @IsEnum(SURVEY_TYPE)
   type: string;

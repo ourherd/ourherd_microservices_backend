@@ -1,5 +1,5 @@
-import { IsArray, IsNotEmpty, IsObject, IsUUID } from "class-validator";
-import { ApiProperty,  } from "@nestjs/swagger";
+import { IsNotEmpty, IsUUID, ArrayNotEmpty, ArrayMinSize, ArrayMaxSize } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
 import { SingleResponseSurveyDto } from "./single-response-survey.dto";
 
 export class SubmitSurveyFinalDto {
@@ -15,7 +15,9 @@ export class SubmitSurveyFinalDto {
     isArray: true,
     type: SingleResponseSurveyDto,
   })
-  @IsNotEmpty()
+  @ArrayNotEmpty()
+  @ArrayMinSize(5)
+  @ArrayMaxSize(28)
   public data: SingleResponseSurveyDto[];
 
 }
