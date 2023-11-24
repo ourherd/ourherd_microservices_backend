@@ -1,5 +1,5 @@
 import { StoryDraftBaseDto } from "./story.draft.base.dto";
-import { IsEnum, IsNotEmpty, IsOptional, IsString, MaxLength, maxLength, MinLength, minLength } from "class-validator";
+import { IsEnum, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
 import { Transform } from "class-transformer";
 import { StoryMedium, StoryType } from "../../constant/story.enum";
 import { ApiProperty } from "@nestjs/swagger";

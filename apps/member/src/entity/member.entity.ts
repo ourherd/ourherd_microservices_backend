@@ -23,7 +23,6 @@ export enum EmploymentType {
   NO_APPLY = 'NO_APPLY'
 }
 
-
 @Entity({
   name: 'members'
 })
