@@ -9,7 +9,6 @@ import { firstValueFrom } from "rxjs";
 import { MEMBER_EVENT_PATTERNS } from "../../../member/src/constant/member-patterns.constants";
 import { MAILER_MESSAGE_PATTERNS } from "../../../mailer/src/constant/mailer-patterns.constants";
 import { CreateMemberDto } from "../../../member/src/dto/create-member.dto";
-import { v4 } from "uuid";
 
 @Injectable()
 export class AccountCreatedSaga {
