@@ -11,6 +11,7 @@ import { STORY_MESSAGE_DB_RESPONSE } from "../constant/story-patterns.constants"
 import { StorySettingEntity } from "../entity/story/story.setting.entity";
 import { MEMBER_MESSAGE_DB_RESPONSE } from "apps/member/src/constant/member-patterns.constants";
 import { MemberService } from "apps/member/src/service/member.service";
+import { SurveyService } from "apps/survey/src/service/survey.service";
 import { StorySettingDto } from "../dto/story/story.setting.dto";
 
 @Injectable()
@@ -19,10 +20,8 @@ export class StoryDraftService {
   private readonly logger = new Logger(StoryDraftService.name)
 
   constructor(
-    @InjectRepository(StoryEntity, Database.PRIMARY)
-    private storyRepository: Repository<StoryEntity>,
-    @InjectRepository(StorySettingEntity, Database.PRIMARY)
-    private storySettingRepository: Repository<StorySettingEntity>,
+    @InjectRepository(StoryEntity, Database.PRIMARY) private storyRepository: Repository<StoryEntity>,
+    @InjectRepository(StorySettingEntity, Database.PRIMARY) private storySettingRepository: Repository<StorySettingEntity>,
     private memberService: MemberService
   ) { }
 
@@ -32,14 +31,12 @@ export class StoryDraftService {
   ): Promise<IServiceResponse<StoryEntity | null>> {
 
     try {
-      
-      
+
       draftDto.member_id = member_id;
       const draft = this.storyRepository.create(draftDto);
       const result = await this.storyRepository.save(draft);
-      this.validateMemberInfo(member_id, draft)
       this.logger.log('Story Created - Story Type ' + draftDto.story_type, JSON.stringify(result));
-      
+
       return {
         state: !!result,
         data: result,
@@ -51,14 +48,11 @@ export class StoryDraftService {
 
   }
 
-  async validateMemberInfo(member_id: string, draft: StoryEntity): Promise<IServiceResponse<StorySettingEntity>> {
+  async setStorySetting(member_id: string, draft: StoryEntity) {
 
     try {
-
-      let storySettingDto = new StorySettingDto();
-
-      const memberPrivacySetting = await this.memberService.memberPrivacySetting(member_id)
-
+      let storySettingDto = new StorySettingDto;
+      const memberPrivacySetting = await this.memberService.memberPrivacySetting(member_id);
       if (!memberPrivacySetting.member) {
         return {
           state: false,
@@ -71,18 +65,12 @@ export class StoryDraftService {
       storySettingDto.story = draft
 
       const storySetting = await this.storySettingRepository.save(storySettingDto)
-      const storySettingCreated = this.storySettingRepository.create(storySetting)
+      await this.storySettingRepository.create(storySetting)
 
       this.logger.log('Story Setting Created');
 
-      return {
-        state: !!storySettingCreated,
-        data: storySetting,
-      }
     } catch (error) {
-
       this.logger.error("Story Setting Created Error: ", error)
-
     }
   }
 

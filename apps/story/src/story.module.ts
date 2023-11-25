@@ -7,24 +7,29 @@ import { StoryDraftController } from "./controller/story/story.draft.controller"
 import { BookmarkController } from "./controller/bookmark/bookmark.controller";
 import { ReactionController } from "./controller/reaction/reaction.controller";
 import { ViolationController } from "./controller/violation/violation.controller";
+import { StoryUpdateController } from "./controller/story/story.update.controller";
+
+import { StoryDraftSaga } from "./saga/story.draft.saga";
 import { StoryService } from "./service/story.service";
 import { StoryDraftService } from "./service/story.draft.service";
 import { BookmarkService } from "./service/bookmark.service";
 import { ReactionService } from "./service/reaction.service";
 import { ViolationService } from "./service/violation.service";
+import { StoryUpdateService } from "./service/story.update.service";
+import { SurveyService } from "../../survey/src/service/survey.service";
+
 import { StoryEntity } from "./entity/story/story.entity";
 import { StorySettingEntity } from "./entity/story/story.setting.entity";
 import { StoryResourceEntity } from "./entity/story/story.resource.entity";
 import { BookmarkEntity } from "./entity/bookmark/bookmark.entity";
 import { ReactionEntity } from "./entity/reaction/reaction.entity";
 import { ViolationEntity } from "./entity/violation/violation.entity";
-
-import { getEnvPath } from "@app/common/env/env.helper";
 import { MemberEntity } from "apps/member/src/entity/member.entity";
 import { MemberModule } from "apps/member/src/member.module";
-import { StoryUpdateController } from "./controller/story/story.update.controller";
-import { StoryUpdateService } from "./service/story.update.service";
+import { SurveyEntity } from "../../survey/src/entity/survey.entity";
+import { SurveyMemberInstanceEntity } from "../../survey/src/entity/survey-member-instances.entity";
 
+import { getEnvPath } from "@app/common/env/env.helper";
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
 @Module({
@@ -40,7 +45,9 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
       BookmarkEntity,
       ReactionEntity,
       ViolationEntity,
-      MemberEntity
+      MemberEntity,
+      SurveyEntity,
+      SurveyMemberInstanceEntity,
     ]),
     RabbitModule.forServerProxy(RabbitServiceName.STORY),
     MemberModule
@@ -59,7 +66,9 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     StoryDraftService,
     BookmarkService,
     ReactionService,
-    ViolationService
+    ViolationService,
+    SurveyService,
+    StoryDraftSaga
   ],
 })
 

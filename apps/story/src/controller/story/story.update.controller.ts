@@ -27,7 +27,6 @@ export class StoryUpdateController {
     @Payload('story_id') story_id: string,
     @Payload('updateGuidedDto') updateGuidedDto: StoryUpdateTextGuidedDto):
     Promise<IServiceResponse<UpdateResult>> {
-
     return await this.updateService.updateStory( story_id, updateGuidedDto );
   }
 
@@ -36,7 +35,6 @@ export class StoryUpdateController {
     @Payload('story_id') story_id: string,
     @Payload('updateFreeFormDto') updateFreeFormDto: StoryUpdateTextFreeFormDto):
     Promise<IServiceResponse<UpdateResult>> {
-
     return await this.updateService.updateStory( story_id, updateFreeFormDto );
   }
 
@@ -45,7 +43,6 @@ export class StoryUpdateController {
     @Payload('story_id') story_id: string,
     @Payload('updateSettingDto') updateSettingDto: StoryUpdateSettingDto):
     Promise<IServiceResponse<UpdateResult>> {
-
     return await this.updateService.updateStorySetting( story_id, updateSettingDto );
   }
 

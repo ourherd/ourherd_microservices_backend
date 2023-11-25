@@ -7,18 +7,21 @@ import { StoryDraftTextFreeformDto } from "../../dto/story/story.draft.text-free
 import { StoryEntity } from "../../entity/story/story.entity";
 import { StoryDraftTextGuidedDto } from "../../dto/story/story.draft.text-guided.dto";
 import { StoryDraftVideoDto } from "../../dto/story/story.draft.video.dto";
+import { StoryDraftSaga } from "../../saga/story.draft.saga";
 
 @Controller()
 export class StoryDraftController {
 
-  constructor(private readonly draftService: StoryDraftService) {}
+  constructor(
+    private readonly saga: StoryDraftSaga,
+  private readonly draftService: StoryDraftService) {}
 
   @MessagePattern(STORY_MESSAGE_PATTERNS.DRAFT_VIDEO)
   async draftVideo (
     @Payload('member_id') member_id: string,
     @Payload('draftVideoDto') draftVideoDto: StoryDraftVideoDto):
     Promise<IServiceResponse<StoryEntity>> {
-    return await this.draftService.saveStory( member_id, draftVideoDto );
+    return await this.saga.createDraftStory( member_id, draftVideoDto );
   }
 
   @MessagePattern(STORY_MESSAGE_PATTERNS.DRAFT_TEXT_GUIDE)
@@ -26,8 +29,7 @@ export class StoryDraftController {
     @Payload('member_id') member_id: string,
     @Payload('draftGuidedDto') draftGuidedDto: StoryDraftTextGuidedDto):
     Promise<IServiceResponse<StoryEntity>> {
-
-    return await this.draftService.saveStory( member_id, draftGuidedDto );
+    return await this.saga.createDraftStory( member_id, draftGuidedDto );
   }
 
   @MessagePattern(STORY_MESSAGE_PATTERNS.DRAFT_TEXT_FREE_FORM)
@@ -35,9 +37,7 @@ export class StoryDraftController {
     @Payload('member_id') member_id: string,
     @Payload('draftFreeFormDto') draftFreeFormDto: StoryDraftTextFreeformDto):
     Promise<IServiceResponse<StoryEntity>> {
-
-    return await this.draftService.saveStory( member_id, draftFreeFormDto );
+    return await this.saga.createDraftStory( member_id, draftFreeFormDto );
   }
-
 
 }
