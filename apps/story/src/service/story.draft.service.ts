@@ -64,7 +64,7 @@ export class StoryDraftService {
       storySettingDto.story = draft
       const storySetting = await this.storySettingRepository.save(storySettingDto)
       await this.storySettingRepository.create(storySetting)
-      this.logger.log('Story Setting Created '+ JSON.stringify(storySetting.id) );
+      this.logger.log('Story Setting Created ID'+ JSON.stringify(storySetting.id) );
 
     } catch (error) {
       this.logger.error("Story Setting Created Error: ", error)

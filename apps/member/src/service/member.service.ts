@@ -146,5 +146,4 @@ export class MemberService {
     }
     return memberPrivacyDto
   }
-
 }
