@@ -126,28 +126,25 @@ export class MemberService {
     let memberPrivacyDto = new MemberPrivacyDto;
     memberPrivacyDto.member = (await this.findById(member_id)).data
 
-    if (isEmptyOrNull(memberPrivacyDto.member.gender)) {
-      memberPrivacyDto.share_gender = true
+    if (!isEmptyOrNull(memberPrivacyDto.member.gender)) {
+      memberPrivacyDto.share_gender = false;
+    }
+    if (!isEmptyOrNull(memberPrivacyDto.member.birthday)) {
+      memberPrivacyDto.share_age = false;
     }
 
-    if (isEmptyOrNull(memberPrivacyDto.member.birthday)) {
-      memberPrivacyDto.share_age = true
-    }
-
-    if (isEmptyOrNull(memberPrivacyDto.member.first_name)) {
-      memberPrivacyDto.share_name = true
+    if (!isEmptyOrNull(memberPrivacyDto.member.first_name)) {
+      memberPrivacyDto.share_name = false;
     }
 
     if (
-      isEmptyOrNull(memberPrivacyDto.member.country) ||
-      isEmptyOrNull(memberPrivacyDto.member.suburb) ||
-      isEmptyOrNull(memberPrivacyDto.member.postal_code)
+      !isEmptyOrNull(memberPrivacyDto.member.country) ||
+      !isEmptyOrNull(memberPrivacyDto.member.suburb) ||
+      !isEmptyOrNull(memberPrivacyDto.member.postal_code)
       ) {
-      memberPrivacyDto.share_location = true
+      memberPrivacyDto.share_location = false;
     }
     return memberPrivacyDto
   }
-
-
 
 }
