@@ -20,7 +20,7 @@ CREATE TYPE survey_static_status AS ENUM (
 
 CREATE TABLE IF NOT EXISTS public.surveys
 (
-    id uuid default gen_random_uuid() not null constraint survey_pkey primary key,
+    id uuid default gen_random_uuid() not null constraint survey_pkey primary key, 
     name varchar(255),
     description text,
     version int,
@@ -42,9 +42,11 @@ CREATE TABLE IF NOT EXISTS public.surveys
 --     description text,
 --     question_type varchar(255),  -- 1 to 5 / 1 to 7
 --     version int default 1,
+--     parent_question_id uuid,
 --     created_at timestamp with time zone default now() not null,
 --     updated_at timestamp with time zone default now() not null,
---     deleted_at timestamp
+--     deleted_at timestamp,
+--     CONSTRAINT fk_account FOREIGN KEY(parent_question_id) REFERENCES survey_questions(id) ON DELETE CASCADE
 -- );
 
 DROP TYPE survey_status;
