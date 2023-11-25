@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { SurveyController } from './survey.controller';
-import { SurveyService } from './survey.service';
+import { SurveyService } from './service/survey.service';
+import { SurveyFinalService } from './service/survey.final.service';
 import { Database, DatabaseModule } from '@app/database';
 import { SurveyMemberInstanceEntity } from './entity/survey-member-instances.entity';
 import { RabbitModule, RabbitServiceName } from '@app/rabbit';
@@ -25,6 +26,6 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     RabbitModule.forServerProxy(RabbitServiceName.SURVEY),
   ],
   controllers: [SurveyController],
-  providers: [SurveyService],
+  providers: [SurveyService, SurveyFinalService],
 })
 export class SurveyModule {}

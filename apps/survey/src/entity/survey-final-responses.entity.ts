@@ -23,9 +23,6 @@ export class SurveyFinalResponseEntity extends AbstractEntity {
 
   @Column({ nullable: false })
   question_response_scale: number;
-
-
-
   // @OneToMany(type => AccountDeviceEntity, account => account.id)
   // @JoinColumn({name: "account_id"})
   // device: AccountDeviceEntity;

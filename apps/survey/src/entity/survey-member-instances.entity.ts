@@ -36,4 +36,7 @@ export class SurveyMemberInstanceEntity extends AbstractEntity {
   @IsEnum(SURVEY_TYPE)
   type: string;
 
+  @Column({ nullable: true, default: 0 })
+  survey_score: number;
+
 }

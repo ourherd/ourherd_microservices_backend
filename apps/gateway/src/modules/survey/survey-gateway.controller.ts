@@ -1,17 +1,14 @@
-import { Body, Controller, Inject, Logger, Param, ParseUUIDPipe, Post } from "@nestjs/common";
-import { IGatewayResponse } from '../../common/interface/gateway.interface';
+import { Body, Controller, Inject, Logger, Post } from "@nestjs/common";
+import { IGatewayResponse } from "../../common/interface/gateway.interface";
 import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { firstValueFrom } from "rxjs";
 import { ClientProxy } from "@nestjs/microservices";
 import { GATEWAY_SERVICE } from "../../constant/gateway-patterns.constants";
 import { SURVEY_MESSAGE_PATTERNS } from "apps/survey/src/constant/survey-patterns.constants";
-import { CreateDQ5SurveyInstanceDto } from "apps/survey/src/dto/create-DQ5-survey-instance.survey.dto";
 import { SurveyMemberInstanceEntity } from "apps/survey/src/entity/survey-member-instances.entity";
 import { Auth, CurrentMember } from "@app/authentication";
 import { SubmitSurveyFinalDto } from "apps/survey/src/dto/submit-survey-final.survey.dto";
-import { CreateLongOnBoardingSurveyInstanceDto } from "apps/survey/src/dto/create-Long-Boarding-survey-instance.survey.dto";
-import { CreateShortOnBoardingSurveyInstanceDto } from "apps/survey/src/dto/create-Short-Boarding-survey-instance.survey.dto";
 import { CreateInstanceSurveyDto } from "../../../../survey/src/dto/create-instance.survey.dto";
 
 @ApiTags('Survey Gateway')

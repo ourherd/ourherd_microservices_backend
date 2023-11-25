@@ -1,5 +1,5 @@
-import { IsEnum, IsString, IsUUID, IsOptional, IsEmpty } from "class-validator";
-import { Transform, Exclude } from "class-transformer";
+import { IsEnum, IsString, IsUUID } from "class-validator";
+import { Exclude, Transform } from "class-transformer";
 
 import { v4 } from "uuid";
 import { StorySourceType, StoryStatus } from "../../constant/story.enum";

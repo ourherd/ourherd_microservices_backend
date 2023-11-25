@@ -10,7 +10,7 @@ import { StoryUpdateVideoDto } from "../dto/story/story.update.video.dto";
 import { STORY_MESSAGE_DB_RESPONSE } from "../constant/story-patterns.constants";
 import { StoryUpdateSettingDto } from "../dto/story/story.update.setting.dto";
 import { StorySettingEntity } from "../entity/story/story.setting.entity";
-import { isEmpty } from "@app/common/validation-rules/object-validation.rule";
+import { isEmptyOrNull } from "@app/common/validation-rules/object-validation.rule";
 
 @Injectable()
 export class StoryUpdateService {
@@ -18,9 +18,9 @@ export class StoryUpdateService {
   private readonly logger = new Logger(StoryUpdateService.name)
 
   constructor(
-    @InjectRepository(StoryEntity, Database.PRIMARY) 
+    @InjectRepository(StoryEntity, Database.PRIMARY)
     private storyRepository: Repository<StoryEntity>,
-    @InjectRepository(StorySettingEntity, Database.PRIMARY) 
+    @InjectRepository(StorySettingEntity, Database.PRIMARY)
     private storySettingRepository: Repository<StorySettingEntity>
     ) { }
 
@@ -31,19 +31,19 @@ export class StoryUpdateService {
 
     try {
 
-      updateDto.has_hero_statement = isEmpty(updateDto.hero_statement) ? false : true
-
+      updateDto.has_hero_statement = isEmptyOrNull(updateDto.hero_statement) ? false : true;
       const result = await this.storyRepository.update({
         id: story_id
       }, updateDto);
+
       this.logger.log('Story Updated - Story Type ' + updateDto.story_type, JSON.stringify(result));
-  
+
       return {
         state: !!result,
         data: result,
         message: !!result ? STORY_MESSAGE_DB_RESPONSE.UPDATED : STORY_MESSAGE_DB_RESPONSE.UPDATED_FAILED
       }
-      
+
     } catch (error) {
       this.logger.error("Update Story Setting Error: ", error)
       return {
@@ -68,7 +68,7 @@ export class StoryUpdateService {
         story: storyEntity
       }, updateDto);
       this.logger.log('Story Setting Updated');
-      
+
       return {
         state: !!result,
         data: result,
