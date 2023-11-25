@@ -1,4 +1,5 @@
-import { IsBoolean, IsDate, IsEnum, IsInt, IsOptional, IsString, Length } from "class-validator";
+import { IsBoolean, IsDate, IsEnum, IsInt, IsOptional, IsString, Length, Matches } from "class-validator";
+import { stringFirstUppercaseAfterHyphen } from "@app/common/string/string-first-uppercase";
 import { ApiProperty } from "@nestjs/swagger";
 import { EmploymentType, MemberStatus } from "../entity/member.entity";
 import { Transform } from "class-transformer";
@@ -85,7 +86,6 @@ export class UpdateMemberDto  {
   @IsOptional()
   public suburb: string;
 
-
   @ApiProperty({
     description: "Member Postcode",
     example: 2000,
@@ -103,6 +103,26 @@ export class UpdateMemberDto  {
   @IsString()
   @IsOptional()
   public mobile_number: string;
+
+  @ApiProperty({
+    description: "Member has a different gender than the one in the list",
+    example: 'true',
+    required: false
+  })
+  @IsBoolean()
+  @IsOptional()
+  public freeform_gender: boolean = false;
+
+  @ApiProperty({
+    description: "Member gender",
+    example: 'Androgyny',
+    required: false
+  })
+  @Matches(RegExp('^(?=.*[A-Za-z])[A-Za-z]+(?:-[A-Za-z]+)+$'))
+  @Transform(({ value }) => stringFirstUppercaseAfterHyphen(value.toString()))
+  @IsString()
+  @IsOptional()
+  public gender: string;
 
   @ApiProperty({
     description: "Member Employment type",

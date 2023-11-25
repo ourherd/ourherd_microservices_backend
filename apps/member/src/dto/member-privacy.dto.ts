@@ -2,6 +2,7 @@ import { IsBoolean } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { MemberEntity } from "../entity/member.entity";
 
+// TODO this is story settings DTO
 export class MemberPrivacyDto  {
 
   @ApiProperty({})
@@ -9,18 +10,18 @@ export class MemberPrivacyDto  {
 
   @ApiProperty({})
   @IsBoolean()
-  share_gender: boolean = false;
-  
+  share_gender: boolean;
+
   @ApiProperty({})
   @IsBoolean()
-  share_age: boolean = false;
-  
+  share_age: boolean;
+
   @ApiProperty({})
   @IsBoolean()
-  share_name: boolean = false;
-  
+  share_name: boolean;
+
   @ApiProperty({})
   @IsBoolean()
-  share_location: boolean = false;
+  share_location: boolean;
 
 }
