@@ -3,12 +3,6 @@ import { Transform } from "class-transformer";
 import { v4 } from 'uuid';
 import { ApiProperty } from "@nestjs/swagger";
 
-export enum MemberStatus {
-  ACTIVATED = 'ACTIVATED',
-  DEACTIVATED = 'DEACTIVATED',
-  BANNED = 'BANNED'
-}
-
 export class CreateMemberDto  {
 
   @IsUUID()

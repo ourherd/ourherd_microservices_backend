@@ -79,6 +79,9 @@ export class MemberEntity extends AbstractEntity {
   @Column({ nullable: true })
   mobile_number: string;
 
+  @Column({ default: false })
+  freeform_gender: boolean;
+
   @Column({ nullable: true })
   gender: string;
 
