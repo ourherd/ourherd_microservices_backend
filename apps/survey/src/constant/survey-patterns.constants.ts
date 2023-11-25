@@ -1,5 +1,10 @@
 export const SURVEY_SERVICE = 'SURVEY SERVICE';
 export const SURVEY_MODULE = 'SURVEY MODULE';
+export const SURVEY_FINAL_SERVICE = 'SURVEY FINAL SERVICE';
+
+export const SURVEY_DQ5_MIN_SCORE = 15;
+export const SURVEY_DQ5_WAIT_TIME = "12 hours";
+export const SURVEY_DQ5_WAIT_TIME_DEV = "5 minutes"; // 12hours to seconds
 
 export enum SURVEY_TYPE {
   DQ5_MEMBER_STORY = 'DQ5_MEMBER_STORY',
@@ -33,7 +38,8 @@ export const SURVEY_MESSAGE_DB_RESPONSE = {
   CREATED: 'survey.created',
   ID_EXISTING: 'survey.survey_id_existing',
   NOT_FOUND: 'survey.survey_id_not_found',
-  SUBMITED: 'survey.survey_has_submitted',
   SUBMITTED: 'survey.survey_has_submitted',
   INCORRECT_TYPE: 'survey.type_not_match',
+  NOT_DQ5_TO_STORY: 'survey.there_not_survey_last_12_hours',
+  VALID_DQ5_TO_STORY: 'survey.valid_survey_last_12_hours',
 }
