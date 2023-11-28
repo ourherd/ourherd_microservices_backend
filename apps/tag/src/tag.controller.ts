@@ -5,9 +5,9 @@ import { TAG_MESSAGE_PATTERNS } from "./constant/tag-patterns.constants";
 import { IServiceResponse } from "@app/rabbit";
 import { CreateTagDto } from "./dto/create.tag.dto";
 import { TagEntity } from "./entity/tag.entity";
-import { AllTagsAppDto } from "./dto/all.tags.app.dto";
 import { IPagination, PaginationDto } from "@app/common";
-import { MemberEntity } from "../../member/src/entity/member.entity";
+import { TAG_STORY_MESSAGE_PATTERNS } from "../../story/src/constant/tag-patterns.constants";
+import { TagDto } from "./dto/tag.dto";
 
 @Controller()
 export class TagController {
@@ -21,7 +21,14 @@ export class TagController {
     return await this.tagService.create(tagDto);
   }
 
-  @MessagePattern(TAG_MESSAGE_PATTERNS.ALL)
+  @MessagePattern(TAG_STORY_MESSAGE_PATTERNS.NEW_TAG_STORY)
+  async createStoryTag (
+    @Payload('story_id') story_id: string,
+    @Payload('tags') tags: TagDto[]) {
+    await this.tagService.createStoryTag(story_id, tags);
+  }
+
+  @MessagePattern(TAG_MESSAGE_PATTERNS.APP)
   async findAll(@Payload() paginationDto: PaginationDto):
     Promise<IServiceResponse<IPagination<TagEntity>>> {
     return await this.tagService.findTagsAppAll(paginationDto);

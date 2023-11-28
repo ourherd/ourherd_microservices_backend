@@ -3,6 +3,7 @@ export const TAG_MODULE = 'TAG MODULE';
 
 export const TAG_MESSAGE_PATTERNS = {
   ALL: 'tag.all',
+  APP: 'tag.app',
   CREATE: 'tag.create',
   UPDATE: 'tag.update',
   DELETE: 'tag.delete',
