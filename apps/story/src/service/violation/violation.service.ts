@@ -1,21 +1,22 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { ReactionEntity } from "../entity/reaction/reaction.entity";
+import { ReactionEntity } from "../../entity/reaction/reaction.entity";
 import { Database } from "@app/database";
 import { Repository } from "typeorm";
-import { PostReactionDto } from "../dto/reaction/post.reaction.dto";
+import { PostReactionDto } from "../../dto/reaction/post.reaction.dto";
 import { IServiceResponse } from "@app/rabbit";
-import { REACTION_MESSAGE_DB_RESPONSE } from "../constant/reaction-patterns.constants";
-import { ViolationEntity } from "../entity/violation/violation.entity";
-import { PostViolationDto } from "../dto/violation/post.violation.dto";
-import { VIOLATION_MESSAGE_DB_RESPONSE } from "../constant/violation-patterns.constants";
+import { REACTION_MESSAGE_DB_RESPONSE } from "../../constant/reaction-patterns.constants";
+import { ViolationEntity } from "../../entity/violation/violation.entity";
+import { PostViolationDto } from "../../dto/violation/post.violation.dto";
+import { VIOLATION_MESSAGE_DB_RESPONSE } from "../../constant/violation-patterns.constants";
 
 @Injectable()
 export class ViolationService {
 
   private readonly logger = new Logger(ViolationService.name)
   constructor(
-    @InjectRepository(ViolationEntity, Database.PRIMARY)  private violationRepository: Repository<ViolationEntity >) {}
+    @InjectRepository(ViolationEntity, Database.PRIMARY)
+    private violationRepository: Repository<ViolationEntity >) {}
 
   async reportViolationStory( member_id: string, violationDto: PostViolationDto):
     Promise<IServiceResponse<ViolationEntity>> {

@@ -74,7 +74,7 @@ export class StoryEntity extends AbstractEntity {
   @ManyToMany(
   () => TagEntity,
   tag => tag.stories,
-  {onDelete: 'NO ACTION', onUpdate: 'NO ACTION'})
+  {onDelete: 'NO ACTION'})
     @JoinTable({
       name: 'story_tags',
       joinColumn: {
@@ -86,6 +86,6 @@ export class StoryEntity extends AbstractEntity {
         referencedColumnName: 'id',
       },
     })
-    tags?: TagEntity[];
+  tags?: TagEntity[];
 
 }

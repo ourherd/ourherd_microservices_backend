@@ -3,16 +3,15 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Database } from "@app/database";
 import { Repository } from "typeorm";
 import { IServiceResponse } from "@app/rabbit";
-import { StoryEntity } from "../entity/story/story.entity";
-import { StoryDraftTextFreeformDto } from "../dto/story/story.draft.text-freeform.dto";
-import { StoryDraftTextGuidedDto } from "../dto/story/story.draft.text-guided.dto";
-import { StoryDraftVideoDto } from "../dto/story/story.draft.video.dto";
-import { STORY_MESSAGE_DB_RESPONSE } from "../constant/story-patterns.constants";
-import { StorySettingEntity } from "../entity/story/story.setting.entity";
+import { StoryEntity } from "../../entity/story/story.entity";
+import { StoryDraftTextFreeformDto } from "../../dto/story/story.draft.text-freeform.dto";
+import { StoryDraftTextGuidedDto } from "../../dto/story/story.draft.text-guided.dto";
+import { StoryDraftVideoDto } from "../../dto/story/story.draft.video.dto";
+import { STORY_MESSAGE_DB_RESPONSE } from "../../constant/story-patterns.constants";
+import { StorySettingEntity } from "../../entity/story/story.setting.entity";
 import { MEMBER_MESSAGE_DB_RESPONSE } from "apps/member/src/constant/member-patterns.constants";
 import { MemberService } from "apps/member/src/service/member.service";
-import { SurveyService } from "apps/survey/src/service/survey.service";
-import { StorySettingDto } from "../dto/story/story.setting.dto";
+import { StorySettingDto } from "../../dto/story/story.setting.dto";
 
 @Injectable()
 export class StoryDraftService {
@@ -31,7 +30,7 @@ export class StoryDraftService {
   ): Promise<IServiceResponse<StoryEntity | null>> {
 
     try {
-
+      // TODO
       draftDto.member_id = member_id;
       const draft = this.storyRepository.create(draftDto);
       const result = await this.storyRepository.save(draft);
