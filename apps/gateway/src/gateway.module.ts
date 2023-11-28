@@ -14,12 +14,14 @@ import { ReactionGatewayController } from './modules/reaction/reaction-gateway.c
 import { ViolationGatewayController } from './modules/violation/violation-gateway.controller';
 import { BookmarkGatewayController } from "./modules/bookmark/bookmark-gateway.controller";
 import { StoryDraftGatewayController } from "./modules/story/story-draft-gateway.controller";
+import { StoryUpdateGatewayController } from "./modules/story/story-update-gateway.controller";
+import { StoryResourceGatewayController } from "./modules/story/story-resource-gateway.controller";
+import { StorySettingsGatewayController } from "./modules/story/story-settings-gateway.controller";
 import { AccountGatewayController } from "./modules/account/account-gateway.controller";
 import { AccountPasswordGatewayController } from "./modules/account/account-password-gateway.controller";
 import { SurveyGatewayController } from "./modules/survey/survey-gateway.controller";
 import { TagGatewayController } from "./modules/tag/tag-gateway.controller";
 import { StorageModule } from "apps/storage/src/storage.module";
-import { StoryUpdateGatewayController } from "./modules/story/story-update-gateway.controller";
 
 import { getEnvPath } from "@app/common/env/env.helper";
 import { JwtStrategy } from '@app/authentication';
@@ -62,6 +64,8 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     BookmarkGatewayController,
     StoryDraftGatewayController,
     StoryUpdateGatewayController,
+    StoryResourceGatewayController,
+    StorySettingsGatewayController,
     ViolationGatewayController,
     SurveyGatewayController,
     TagGatewayController
