@@ -1,13 +1,9 @@
 import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID, Matches, MinLength } from "class-validator";
 import { Exclude, Transform } from "class-transformer";
+import { DateOfBirthValidation } from "../validation/date.of.birth.validation"
 import { v4 } from "uuid";
 import { ApiProperty } from "@nestjs/swagger";
-
-export enum MemberType {
-  MEMBER = 'MEMBER',
-  STUDENT = 'STUDENT',
-  ADMIN = 'ADMIN'
-}
+import { Role } from "@app/authentication/constant/roles.enum";
 
 export class RegisterAccountDto {
 
@@ -34,10 +30,20 @@ export class RegisterAccountDto {
   )
   public password: string;
 
-  @IsEnum(MemberType)
+  @ApiProperty({
+    description: "Member birthday",
+    example: '14/11/1992',
+    required: true
+  })
+  @DateOfBirthValidation()
+  @IsNotEmpty()
+  @IsString()
+  public birthday: string;
+
+  @IsEnum(Role)
   @IsOptional()
   @ApiProperty()
-  readonly default_role?: MemberType = MemberType.MEMBER;
+  readonly default_role?: Role = Role.MEMBER;
 
   @Exclude()
   @Transform(({ value }) => value = v4())

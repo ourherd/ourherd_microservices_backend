@@ -45,6 +45,7 @@ export class AccountCreatedSaga {
     let createDto: CreateMemberDto = new CreateMemberDto();
     createDto.id = registerDto.id;
     createDto.email = registerDto.email;
+    createDto.birthday = registerDto.birthday;
 
     await firstValueFrom(
         this.memberClient.emit<IServiceResponse<MemberEntity>, { token: string, createDto: CreateMemberDto }>(
