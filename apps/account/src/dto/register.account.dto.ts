@@ -1,13 +1,12 @@
 import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID, Matches, MinLength } from "class-validator";
 import { Exclude, Transform } from "class-transformer";
-import { DateOfBirthValidation } from "../validation/date.of.birth.validation"
+import { isValidBirthday } from "../validation/date.of.birth.validation"
 import { v4 } from "uuid";
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, ApiHideProperty } from "@nestjs/swagger";
 import { Role } from "@app/authentication/constant/roles.enum";
 
 export class RegisterAccountDto {
 
-  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   @IsUUID()
@@ -33,16 +32,22 @@ export class RegisterAccountDto {
   @ApiProperty({
     description: "Member birthday",
     example: '14/11/1992',
-    required: true
+    required: true,
+    type: String
   })
-  @DateOfBirthValidation()
+  @Matches(
+    /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/,
+    { message: 'invalid date of birth' },
+  )
+  @isValidBirthday()
   @IsNotEmpty()
   @IsString()
   public birthday: string;
 
   @IsEnum(Role)
   @IsOptional()
-  @ApiProperty()
+  @ApiHideProperty()
+  @Exclude()
   readonly default_role?: Role = Role.MEMBER;
 
   @Exclude()
