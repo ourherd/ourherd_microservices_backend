@@ -6,8 +6,7 @@ import { StoryDraftTextFreeformDto } from "../dto/story/story.draft.text-freefor
 import { StoryDraftTextGuidedDto } from "../dto/story/story.draft.text-guided.dto";
 import { StoryEntity } from "../entity/story/story.entity";
 import { SurveyMemberInstanceEntity } from "../../../survey/src/entity/survey-member-instances.entity";
-import { StoryDraftService } from "../service/story.draft.service";
-import { STORY_MESSAGE_DB_RESPONSE } from "../constant/story-patterns.constants";
+import { StoryDraftService } from "../service/story/story.draft.service";
 
 @Injectable()
 export class StoryDraftSaga {
@@ -51,6 +50,10 @@ export class StoryDraftSaga {
     return dq5Valid;
   }
 
+  /**
+   * @remarks
+   * @param member_id & draft StoryEntity
+   */
   private async storySettingCreated ( member_id: string, draft: StoryEntity ) {
     await this.draftService.setStorySetting(member_id, draft)
   }

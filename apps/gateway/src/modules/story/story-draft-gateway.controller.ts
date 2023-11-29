@@ -106,9 +106,7 @@ export class StoryDraftGatewayController {
       story_id: storyData.id,
       id: v4(),
     }
-
     return await this.storageService.upload(storageDto, story_resource)
-
   }
 
   @Post('/text-guided')

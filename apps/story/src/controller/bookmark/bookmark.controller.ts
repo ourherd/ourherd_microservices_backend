@@ -1,5 +1,5 @@
 import { Controller, Logger } from "@nestjs/common";
-import { BookmarkService } from "../../service/bookmark.service";
+import { BookmarkService } from "../../service/bookmark/bookmark.service";
 import { MessagePattern, Payload } from "@nestjs/microservices";
 import { BOOKMARK_MESSAGE_PATTERNS } from "../../constant/story-patterns.constants";
 import { PostStoryBookmarkDto } from "../../dto/bookmark/post.story.bookmark.dto";

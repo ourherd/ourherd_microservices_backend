@@ -6,6 +6,7 @@ import { AccountEntity } from 'apps/account/src/entity/account.entity';
 import { AccountDeviceEntity } from 'apps/account/src/entity/account.device.entity';
 import { ReactionEntity } from 'apps/story/src/entity/reaction/reaction.entity';
 import { StoryEntity } from 'apps/story/src/entity/story/story.entity';
+import { StoryTagEntity } from "../../../../apps/story/src/entity/tag/story.tag.entity";
 import { BookmarkEntity } from 'apps/story/src/entity/bookmark/bookmark.entity';
 import { MemberVerificationEntity } from 'apps/member/src/entity/member-verification.entity';
 import { StorageResourceEntity } from "../../../../apps/storage/src/entity/storage-resource.entity";
@@ -36,7 +37,8 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
             StorageResourceEntity,
             ViolationEntity,
             MemberVerificationEntity,
-            TagEntity
+            TagEntity,
+            StoryTagEntity
         ]
     },
     secondary: {
@@ -57,7 +59,8 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
           StorageResourceEntity,
           ViolationEntity,
           MemberVerificationEntity,
-          TagEntity
+          TagEntity,
+          StoryTagEntity
         ]
     }
 };

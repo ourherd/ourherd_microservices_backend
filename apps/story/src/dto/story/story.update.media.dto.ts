@@ -1,4 +1,4 @@
-import { Allow, IsEnum, IsString } from "class-validator";
+import { Allow, IsString } from "class-validator";
 import { StoryType } from "../../constant/story.enum";
 import { ApiProperty } from "@nestjs/swagger";
 

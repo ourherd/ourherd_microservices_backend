@@ -3,8 +3,8 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Database } from "@app/database";
 import { Repository } from "typeorm";
 import { IServiceResponse } from "@app/rabbit";
-import { BookmarkEntity } from "../entity/bookmark/bookmark.entity";
-import { PostStoryBookmarkDto } from "../dto/bookmark/post.story.bookmark.dto";
+import { BookmarkEntity } from "../../entity/bookmark/bookmark.entity";
+import { PostStoryBookmarkDto } from "../../dto/bookmark/post.story.bookmark.dto";
 
 @Injectable()
 export class BookmarkService {

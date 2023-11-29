@@ -31,7 +31,7 @@ export class TagEntity extends AbstractEntity {
   @ManyToMany(
     () => StoryEntity,
     story => story.tags,
-    { onDelete: 'NO ACTION', onUpdate: 'NO ACTION' },
+    { onDelete: 'NO ACTION' },
   )
   stories?: StoryEntity[];
 

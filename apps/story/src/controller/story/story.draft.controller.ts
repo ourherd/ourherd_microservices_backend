@@ -1,5 +1,4 @@
 import { Controller } from "@nestjs/common";
-import { StoryDraftService } from "../../service/story.draft.service";
 import { MessagePattern, Payload } from "@nestjs/microservices";
 import { STORY_MESSAGE_PATTERNS } from "../../constant/story-patterns.constants";
 import { IServiceResponse } from "@app/rabbit";
@@ -13,8 +12,7 @@ import { StoryDraftSaga } from "../../saga/story.draft.saga";
 export class StoryDraftController {
 
   constructor(
-    private readonly saga: StoryDraftSaga,
-  private readonly draftService: StoryDraftService) {}
+    private readonly saga: StoryDraftSaga) {}
 
   @MessagePattern(STORY_MESSAGE_PATTERNS.DRAFT_VIDEO)
   async draftVideo (

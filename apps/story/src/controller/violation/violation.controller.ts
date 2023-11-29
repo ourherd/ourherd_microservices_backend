@@ -1,5 +1,5 @@
 import { Controller, Logger } from "@nestjs/common";
-import { ViolationService } from "../../service/violation.service";
+import { ViolationService } from "../../service/violation/violation.service";
 import { MessagePattern, Payload } from "@nestjs/microservices";
 import { IServiceResponse } from "@app/rabbit";
 import { PostViolationDto } from "../../dto/violation/post.violation.dto";
