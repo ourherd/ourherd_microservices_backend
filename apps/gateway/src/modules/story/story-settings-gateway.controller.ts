@@ -1,13 +1,14 @@
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { Body, Controller, Inject, Param, ParseUUIDPipe, Patch, UsePipes, ValidationPipe } from "@nestjs/common";
+import { ClientProxy } from "@nestjs/microservices";
+import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
+import { firstValueFrom } from "rxjs";
 import { Auth } from "@app/authentication";
 import { StoryUpdateSettingDto } from "../../../../story/src/dto/story/story.update.setting.dto";
 import { IGatewayResponse } from "../../common/interface/gateway.interface";
-import { firstValueFrom } from "rxjs";
-import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
 import { StoryEntity } from "../../../../story/src/entity/story/story.entity";
 import { STORY_MESSAGE_PATTERNS } from "../../../../story/src/constant/story-patterns.constants";
-import { ClientProxy } from "@nestjs/microservices";
+
 
 @ApiTags('Story Settings Update Gateway')
 @Controller({
