@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common";
 import { RabbitModule, RabbitServiceName } from "@app/rabbit";
 import { ConfigModule } from "@nestjs/config";
 import { Database, DatabaseModule } from "@app/database";
-import { StoryController } from "./controller/story/story.controller";
+import { StorySubmitController } from "./controller/story/story.submit.controller";
 import { StoryDraftController } from "./controller/story/story.draft.controller";
 import { BookmarkController } from "./controller/bookmark/bookmark.controller";
 import { ReactionController } from "./controller/reaction/reaction.controller";
@@ -57,7 +57,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     MemberModule
   ],
   controllers: [
-    StoryController,
+    StorySubmitController,
     StoryUpdateController,
     StoryDraftController,
     BookmarkController,

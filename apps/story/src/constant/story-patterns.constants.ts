@@ -6,7 +6,7 @@ export const STORY_MESSAGE_PATTERNS = {
   DRAFT_TEXT_FREE_FORM: 'story.draft-text-freeform',
   DRAFT_TEXT_GUIDE: 'story.draft-text-guide',
   DRAFT_VIDEO: 'story.draft-video',
-  
+
   UPDATE_TEXT_FREE_FORM: 'story.update-text-freeform',
   UPDATE_TEXT_GUIDE: 'story.update-text-guide',
   UPDATE_VIDEO: 'story.update-video',
@@ -15,7 +15,9 @@ export const STORY_MESSAGE_PATTERNS = {
   UPDATE_MEDIA_IMAGE_FREE_FORM: 'story.update-meida-image-free-form',
   UPDATE_MEDIA_IMAGE_GUIDE: 'story.update-meida-image-guide',
   UPDATE_MEDIA_VIDEO: 'story.update-meida-video',
-  FIND_BY_ID: 'story.findbyid'
+  FIND_BY_ID: 'story.findbyid',
+
+  SUBMIT_STORY: 'story.submit-story'
 }
 
 export const BOOKMARK_MESSAGE_PATTERNS = {
