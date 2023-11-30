@@ -18,7 +18,7 @@ export class MailerService {
 
   public async sendWelcomeEmail( registerDto: RegisterAccountDto ): Promise<IServiceResponse<any>> {
     const mailOptions = this.mailOptionsData( registerDto, EmailEnum.WELCOME );
-    this.logger.log('mailer options ' + JSON.stringify(mailOptions));
+    this.logger.log('Mail sent ' + EmailEnum.WELCOME + ' to '+ JSON.stringify(registerDto.email));
 
     try {
       const sent = await this.mailService.send( mailOptions );

@@ -5,6 +5,7 @@ import {
   registerDecorator,
   ValidatorConstraintInterface,
 } from "class-validator";
+import { STORY_MESSAGE } from "../../../story/src/constant/story-patterns.constants";
 
 const MIN_AGE = 13;
 
@@ -14,7 +15,7 @@ export class DateOfBirthValidation implements ValidatorConstraintInterface {
   validate(value: string, args: ValidationArguments): boolean {
 
     const [day, month, year] = value.split('/');
-    let birthday = new Date( +year, +month-1, day );
+    let birthday = new Date( +year, +month-1, +day );
     let min_age = new Date();
     min_age.setFullYear( min_age.getFullYear() - MIN_AGE );
     min_age.setHours(0,0,0,0);
@@ -26,9 +27,8 @@ export class DateOfBirthValidation implements ValidatorConstraintInterface {
   }
 
   defaultMessage(args: ValidationArguments) {
-    return 'You need to 13 years old or older to create an account.';
+    return STORY_MESSAGE.MIN_AGE;
   }
-
 }
 
 export function isValidBirthday(validationOptions?: ValidationOptions) {
