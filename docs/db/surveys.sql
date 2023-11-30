@@ -20,7 +20,7 @@ CREATE TYPE survey_static_status AS ENUM (
 
 CREATE TABLE IF NOT EXISTS public.surveys
 (
-    id uuid default gen_random_uuid() not null constraint survey_pkey primary key, 
+    id uuid default public.uuid_generate_v1() not null constraint survey_pkey primary key, 
     name varchar(255),
     description text,
     version int,
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS public.surveys
 
 -- CREATE TABLE IF NOT EXISTS public.survey_questions
 -- (
---     id uuid default gen_random_uuid() not null constraint survey_question_pkey primary key,
+--     id uuid default public.uuid_generate_v1() not null constraint survey_question_pkey primary key,
 --     survey_id uuid,
 --     question_text text,
 --     description text,
@@ -54,7 +54,7 @@ CREATE TYPE survey_status AS ENUM ('INCOMPLETED', 'COMPLETED', 'ARCHIVED', 'STAR
 
 CREATE TABLE IF NOT EXISTS public.survey_member_instances
 (
-    id uuid default gen_random_uuid() not null constraint survey_member_instances_pkey primary key, -- 82727
+    id uuid default public.uuid_generate_v1() not null constraint survey_member_instances_pkey primary key, -- 82727
     survey_id uuid not null, -- DQ5_MEMBER = 23 | SHORT_SURVEY
     member_id uuid not null, -- member id
     full_name varchar(255),
@@ -75,7 +75,7 @@ ALTER TABLE public.survey_member_instances
 
 CREATE TABLE IF NOT EXISTS public.survey_single_responses
 (
-    id uuid default gen_random_uuid() not null constraint survey_single_response_pkey primary key,
+    id uuid default public.uuid_generate_v1() not null constraint survey_single_response_pkey primary key,
     survey_member_instance_id uuid, -- 82727
     question_number varchar(2), --  1
     question_text varchar(255), -- how happy are you?
@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS public.survey_single_responses
 
 CREATE TABLE IF NOT EXISTS public.survey_final_responses
 (
-    id uuid default gen_random_uuid() not null constraint survey_final_responses_pkey primary key,
+    id uuid default public.uuid_generate_v1() not null constraint survey_final_responses_pkey primary key,
     survey_member_instance_id uuid not NULL,
     question_number varchar(2) not null,
     question_text varchar(255),

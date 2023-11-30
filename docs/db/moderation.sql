@@ -2,7 +2,7 @@ CREATE TYPE ModerationStatus AS ENUM ('APPROVED', 'CO_CREATION', 'ON_REVIEW', 'C
 
 CREATE TABLE IF NOT EXISTS public.moderation
 (
-    id uuid  default gen_random_uuid() not null constraint moderation_pkey primary key,
+    id uuid  default public.uuid_generate_v1() not null constraint moderation_pkey primary key,
     revision serial,
     story_id uuid not null,
     "status" ModerationStatus default 'CO_CREATION',

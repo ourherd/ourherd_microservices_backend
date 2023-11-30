@@ -3,7 +3,7 @@ CREATE TYPE resource_media_type AS ENUM ('VIDEO', 'IMAGE');
 
 CREATE TABLE IF NOT EXISTS public.story_resources
 (
-    id uuid  default gen_random_uuid() not null constraint resource_pkey primary key,
+    id uuid  default public.uuid_generate_v1() not null constraint resource_pkey primary key,
     story_id uuid,
 
     resource_type resource_media_type,

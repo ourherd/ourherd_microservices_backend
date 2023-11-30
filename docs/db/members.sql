@@ -3,7 +3,7 @@ CREATE TYPE member_status AS ENUM ('ACTIVATED', 'INACTIVATED', 'BANNED');
 
 CREATE TABLE IF NOT EXISTS public.members
 (
-    id uuid  default gen_random_uuid() not null primary key references accounts (id),
+    id uuid  default public.uuid_generate_v1() not null primary key references accounts (id),
     email text, -- I will be moving this out of members profile
     display_name text,
 

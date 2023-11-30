@@ -2,7 +2,7 @@ CREATE TYPE story_visibility AS ENUM ('PUBLIC', 'PRIVATE');
 
 CREATE TABLE IF NOT EXISTS public.story_settings
 (
-    id uuid  default gen_random_uuid() not null constraint story_s_pkey primary key,
+    id uuid  default public.uuid_generate_v1() not null constraint story_s_pkey primary key,
     story_id  uuid not null constraint story_setting_id_fkey references "stories" on update restrict on delete restrict,
 
     visibility story_visibility default 'PUBLIC',

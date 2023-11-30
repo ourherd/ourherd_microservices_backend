@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS public.tags
 (
-    id uuid default gen_random_uuid() not null constraint tag_pkey primary key,
+    id uuid default public.uuid_generate_v1() not null constraint tag_pkey primary key,
     name text,
     category varchar(100),
     verified boolean default false,

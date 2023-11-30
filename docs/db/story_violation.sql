@@ -1,6 +1,6 @@
 create table public.story_violations
 (
-    id  uuid default gen_random_uuid() not null constraint story_violation_pkey primary key,
+    id  uuid default public.uuid_generate_v1() not null constraint story_violation_pkey primary key,
     reason text,
 
     story_id uuid not null constraint story_violation_story_id_fkey

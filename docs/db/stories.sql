@@ -9,7 +9,7 @@ CREATE TYPE story_type AS ENUM ('VIDEO_FREE_FORM', 'TEXT_FREE_FORM', 'TEXT_GUIDE
 
 CREATE TABLE IF NOT EXISTS public.stories
 (
-    id uuid default gen_random_uuid() not null constraint story_pkey primary key,
+    id uuid default public.uuid_generate_v1() not null constraint story_pkey primary key,
     member_id uuid not null constraint story_member_id_fkey references "members" on update restrict on delete restrict,
 
     title varchar(255),

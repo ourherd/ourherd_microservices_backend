@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS public.reset_password_verifications
 (
-    id uuid default gen_random_uuid() not null constraint reset_password_verifications_pkey primary key,
+    id uuid default public.uuid_generate_v1() not null constraint reset_password_verifications_pkey primary key,
     account_id uuid NOT NULL,
     email text,
     email_token text not NULL,

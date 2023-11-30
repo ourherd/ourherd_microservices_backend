@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS public.member_verifications
 (
-    id uuid default gen_random_uuid() not null constraint member_verification_pkey primary key,
+    id uuid default public.uuid_generate_v1() not null constraint member_verification_pkey primary key,
     member_id uuid NOT NULL, -- needs to a foreign key
     email text,
     email_token text,
