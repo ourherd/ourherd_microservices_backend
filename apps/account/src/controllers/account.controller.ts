@@ -28,7 +28,13 @@ export class AccountController {
   @MessagePattern(ACCOUNT_MESSAGE_PATTERNS.LOGIN)
   async login(
     @Payload('loginDto') loginDto: LoginAccountDto): Promise<IServiceResponse<any>> {
-    return await this.accountService.login(loginDto);
+    console.log('loginDto ', loginDto);
+
+    const sss = await this.accountService.login(loginDto);
+
+    console.log('loginDto ', sss);
+
+    return sss;
   }
 
   @MessagePattern(ACCOUNT_MESSAGE_PATTERNS.REFRESH_TOKEN)

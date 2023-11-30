@@ -11,7 +11,8 @@ import { StoryUpdateController } from "./controller/story/story.update.controlle
 
 import { StoryDraftSaga } from "./saga/story.draft.saga";
 import { StoryUpdateSaga } from "./saga/story.update.saga";
-import { StoryService } from "./service/story.service";
+import { StoryService } from "./service/story/story.service";
+import { StorySubmitService } from "./service/story/story.submit.service";
 import { StoryDraftService } from "./service/story/story.draft.service";
 import { BookmarkService } from "./service/bookmark/bookmark.service";
 import { ReactionService } from "./service/reaction/reaction.service";
@@ -19,6 +20,7 @@ import { ViolationService } from "./service/violation/violation.service";
 import { StoryTagService } from "./service/tag/story.tag.service";
 import { StoryUpdateService } from "./service/story/story.update.service";
 import { SurveyService } from "../../survey/src/service/survey.service";
+import { StorageService } from "../../storage/src/service/storage.service"
 
 import { StoryEntity } from "./entity/story/story.entity";
 import { StorySettingEntity } from "./entity/story/story.setting.entity";
@@ -32,6 +34,7 @@ import { SurveyEntity } from "../../survey/src/entity/survey.entity";
 import { SurveyMemberInstanceEntity } from "../../survey/src/entity/survey-member-instances.entity";
 
 import { getEnvPath } from "@app/common/env/env.helper";
+import { StorageResourceEntity } from "../../storage/src/entity/storage-resource.entity";
 
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
@@ -67,6 +70,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
   ],
   providers: [
     StoryService,
+    StorySubmitService,
     StoryTagService,
     StoryUpdateService,
     StoryDraftService,
@@ -75,7 +79,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     ViolationService,
     SurveyService,
     StoryDraftSaga,
-    StoryUpdateSaga
+    StoryUpdateSaga,
   ],
 })
 

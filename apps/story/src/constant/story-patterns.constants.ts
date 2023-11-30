@@ -28,6 +28,8 @@ export const STORY_MESSAGE_DB_RESPONSE = {
   CREATED : 'story.created',
   CREATED_FAILED: 'story.create-failed',
   UPDATED : 'story.created',
-  UPDATED_FAILED: 'story.create-failed'
+  UPDATED_FAILED: 'story.create-failed',
+  FOUND : 'story.found',
+  NO_FOUND : 'story.no-found'
 }
 

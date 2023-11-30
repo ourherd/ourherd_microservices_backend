@@ -5,6 +5,8 @@ import { Repository } from "typeorm";
 import { StoryTagEntity } from "../../entity/tag/story.tag.entity";
 import { TagAddStoryDto } from "../../../../tag/src/dto/tag.add.story.dto";
 import { DeleteResult } from "typeorm/query-builder/result/DeleteResult";
+import { TAG_STORY_MESSAGE_DB_RESPONSE } from "../../constant/tag-patterns.constants";
+import { IServiceResponse } from "@app/rabbit";
 
 @Injectable()
 export class StoryTagService {
@@ -49,4 +51,13 @@ export class StoryTagService {
     return await this.storyTagRepository.delete({ story_id: story_id });
   }
 
+  async tagsByStoryID ( story_id: string ): Promise<IServiceResponse<StoryTagEntity>>  {
+    const tags = await this.storyTagRepository.findBy({ story_id });
+    return {
+      state: !!tags,
+      data: tags.length > 0 ? tags[0]: null,
+      message: !!tags ? TAG_STORY_MESSAGE_DB_RESPONSE.FOUND : TAG_STORY_MESSAGE_DB_RESPONSE.NOT_FOUND
+    }
+
+  }
 }

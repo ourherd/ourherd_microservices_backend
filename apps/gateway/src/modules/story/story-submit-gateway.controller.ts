@@ -1,10 +1,9 @@
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { Body, Controller, Inject, Param, ParseUUIDPipe, Patch, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Controller, Inject, Param, ParseUUIDPipe, Patch, UsePipes, ValidationPipe } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
 import { firstValueFrom } from "rxjs";
-import { Auth } from "@app/authentication";
-import { StoryUpdateSettingDto } from "../../../../story/src/dto/story/story.update.setting.dto";
+import { Auth, CurrentMember } from "@app/authentication";
 import { IGatewayResponse } from "../../common/interface/gateway.interface";
 import { StoryEntity } from "../../../../story/src/entity/story/story.entity";
 import { STORY_MESSAGE_PATTERNS } from "../../../../story/src/constant/story-patterns.constants";
@@ -32,21 +31,22 @@ export class StorySubmitGatewayController {
   @ApiOperation({ summary: 'Story Submit' })
   @ApiResponse({ status: 201, description: 'Submit story' })
   async submit(
+    @CurrentMember('member_id') member_id: string,
     @Param('story_id', ParseUUIDPipe) story_id: string,
-  )
-    : Promise<IGatewayResponse> {
-    const { state, data } = await firstValueFrom(
+  ): Promise<IGatewayResponse> {
+
+    const { state, data, message } = await firstValueFrom(
       this.storyClient.send<IServiceResponse<StoryEntity>,
-        { story_id: string, updateSettingDto: StoryUpdateSettingDto }>
+        { member_id: string, story_id: string }>
       (
-        STORY_MESSAGE_PATTERNS.UPDATE_SETTING,
+        STORY_MESSAGE_PATTERNS.SUBMIT_STORY,
         {
+          member_id,
           story_id,
-          updateSettingDto
         }
       )
     );
-    return { state, data };
+    return { state, data, message };
   }
 
 }

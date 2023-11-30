@@ -146,4 +146,13 @@ export class MemberService {
     }
     return memberPrivacyDto
   }
+
+  async memberVerified (member_id: string): Promise<IServiceResponse<MemberEntity>> {
+    const member = await this.findById(member_id);
+    return {
+      state: member.data.verified,
+      data: member.data.verified ? member.data: null,
+      message: member.data.verified ? MEMBER_MESSAGE_DB_RESPONSE.VERIFIED : MEMBER_MESSAGE_DB_RESPONSE.NO_VERIFIED
+    }
+  }
 }
