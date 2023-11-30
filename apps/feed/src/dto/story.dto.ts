@@ -1,6 +1,6 @@
 import { IsBoolean, IsNumber, IsString } from "class-validator";
 
-export class GetFeedDto {
+export class StoryDto {
 
   @IsString()
   readonly title: string;
@@ -31,16 +31,6 @@ export class GetFeedDto {
 
   @IsNumber()
   readonly order: number;
-
-  @IsNumber()
-  readonly ranking: number;
-
-  @IsString()
-  readonly source: string;
-
-  @IsNumber()
-  readonly revision: number;
-
 
 
 }
