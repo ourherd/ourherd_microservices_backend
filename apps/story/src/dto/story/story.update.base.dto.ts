@@ -1,15 +1,5 @@
-import {
-  IsArray,
-  IsBoolean,
-  IsOptional,
-  IsString,
-  MaxLength,
-  ArrayNotEmpty,
-  ArrayMaxSize,
-  ArrayMinSize,
-  ValidateNested
-} from "class-validator";
-import { Type } from 'class-transformer';
+import { ArrayMaxSize, IsArray, IsBoolean, IsOptional, IsString, MaxLength, ValidateNested } from "class-validator";
+import { Type } from "class-transformer";
 import { TagAddStoryDto } from "../../../../tag/src/dto/tag.add.story.dto";
 import { ApiProperty } from "@nestjs/swagger";
 import { TagDto } from "../../../../tag/src/dto/tag.dto";

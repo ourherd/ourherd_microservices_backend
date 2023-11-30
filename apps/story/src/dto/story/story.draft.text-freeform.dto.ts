@@ -24,7 +24,6 @@ export class StoryDraftTextFreeformDto extends StoryDraftBaseDto {
   @IsNotEmpty()
   public content: string;
 
-
   @Transform(({ value }) => value = StoryType.TEXT_FREE_FORM )
   @IsString()
   @IsOptional()
@@ -36,6 +35,5 @@ export class StoryDraftTextFreeformDto extends StoryDraftBaseDto {
   @IsOptional()
   @IsEnum(StoryMedium)
   readonly story_medium: StoryMedium = StoryMedium.TEXT;
-
 
 }

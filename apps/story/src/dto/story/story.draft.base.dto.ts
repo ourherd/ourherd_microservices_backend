@@ -1,8 +1,8 @@
 import { IsEnum, IsString, IsUUID } from "class-validator";
 import { Exclude, Transform } from "class-transformer";
-
 import { v4 } from "uuid";
 import { StorySourceType, StoryStatus } from "../../constant/story.enum";
+import { STORY_DEFAULT_TITLE } from "../../constant/story-patterns.constants";
 
 export class StoryDraftBaseDto {
 
@@ -13,6 +13,10 @@ export class StoryDraftBaseDto {
 
   @Exclude()
   public member_id: string;
+
+  @Transform(({ value }) => value = STORY_DEFAULT_TITLE )
+  @IsString()
+  readonly title: string = STORY_DEFAULT_TITLE;
 
   @IsString()
   @IsEnum(StoryStatus)
