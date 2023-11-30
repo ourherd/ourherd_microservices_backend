@@ -3,7 +3,6 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Database } from "@app/database";
 import { Repository, UpdateResult } from "typeorm";
 import { IServiceResponse } from "@app/rabbit";
-import { StoryTagService } from "../../service/tag/story.tag.service";
 import { StoryEntity } from "../../entity/story/story.entity";
 import { StoryUpdateTextFreeFormDto } from "../../dto/story/story.update.text-freeform.dto";
 import { StoryUpdateTextGuidedDto } from "../../dto/story/story.update.text-guided.dto";
@@ -12,19 +11,17 @@ import { STORY_MESSAGE_DB_RESPONSE } from "../../constant/story-patterns.constan
 import { StoryUpdateSettingDto } from "../../dto/story/story.update.setting.dto";
 import { StorySettingEntity } from "../../entity/story/story.setting.entity";
 import { isEmptyOrNull } from "@app/common/validation-rules/object-validation.rule";
-import { TagAddStoryDto } from "../../../../tag/src/dto/tag.add.story.dto";
 
 @Injectable()
 export class StoryUpdateService {
 
-  private readonly logger = new Logger(StoryUpdateService.name)
+  private readonly logger = new Logger(StoryUpdateService.name);
 
   constructor(
     @InjectRepository(StoryEntity, Database.PRIMARY)
     private storyRepository: Repository<StoryEntity>,
     @InjectRepository(StorySettingEntity, Database.PRIMARY)
     private storySettingRepository: Repository<StorySettingEntity>,
-    private readonly storyTagService: StoryTagService,
     ) { }
 
   public async updateStory(
@@ -33,11 +30,6 @@ export class StoryUpdateService {
   ): Promise<IServiceResponse<UpdateResult | null>> {
 
     try {
-      // const tags_ids:TagAddStoryDto[] = updateDto.tags;
-      // await this.addTags( story_id, tags_ids );
-      //
-      // delete updateDto["tags"];
-      // delete updateDto["new_tags"];
 
       updateDto.has_hero_statement = isEmptyOrNull(updateDto.hero_statement) ? false : true;
       const result = await this.storyRepository.update(

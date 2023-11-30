@@ -28,5 +28,7 @@ export const MEMBER_MESSAGE_DB_RESPONSE = {
   FOUND: 'member.found',
   NOT_FOUND: 'member.not-found',
   EMAIL_FOUND: 'member.email-found',
-  EMAIL_NOT_FOUND: 'member.email-not-found'
+  EMAIL_NOT_FOUND: 'member.email-not-found',
+  VERIFIED: 'member.verified',
+  NO_VERIFIED: 'member.no-verified'
 }

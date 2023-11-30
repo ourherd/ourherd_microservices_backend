@@ -8,6 +8,7 @@ import { Database } from "@app/database";
 import { ResourceS3AwsService } from "./driver/resource-s3-aws-service";
 import { STORAGE_MESSAGE_DB_RESPONSE } from "../constant/storage-patterns.constant";
 import { ConfigService } from "@nestjs/config";
+import { REACTION_MESSAGE_DB_RESPONSE } from "../../../story/src/constant/reaction-patterns.constants";
 
 @Injectable()
 export class StorageService {
@@ -17,8 +18,7 @@ export class StorageService {
   constructor(
     @InjectRepository(StorageResourceEntity, Database.PRIMARY)
       private storageRepository: Repository<StorageResourceEntity>,
-    private s3Service: ResourceS3AwsService,
-    private configService: ConfigService) { }
+      private s3Service: ResourceS3AwsService) { }
 
   async upload(
     storageDto: CreateStorageResourceDto,
@@ -28,7 +28,7 @@ export class StorageService {
     try {
 
       let result: StorageResourceEntity;
-      const storageResourceExist = await this.storageRepository.findOneBy({ story_id: storageDto.story_id })
+      const storageResourceExist = await this.resourceByStoryId(storageDto.story_id);
 
       if (!storageResourceExist) {
 
@@ -74,6 +74,18 @@ export class StorageService {
 
     }
 
+  }
+
+  async resourceByStoryId (story_id:string) : Promise<StorageResourceEntity> {
+    return await this.storageRepository.findOneBy({ story_id });
+  }
+
+  async resourceExist (story_id: string) : Promise<IServiceResponse<StorageResourceEntity>> {
+    const resource =  await this.resourceByStoryId(story_id);
+    return {
+      state: !!resource.media_resource_path,
+      data: resource
+    }
   }
 
 }
