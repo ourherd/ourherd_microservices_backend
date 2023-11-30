@@ -75,7 +75,7 @@ ALTER TABLE public.survey_member_instances
 
 CREATE TABLE IF NOT EXISTS public.survey_single_responses
 (
-    id uuid default gen_random_uuid() not null constraint survey_member_instances_pkey primary key,
+    id uuid default gen_random_uuid() not null constraint survey_single_response_pkey primary key,
     survey_member_instance_id uuid, -- 82727
     question_number varchar(2), --  1
     question_text varchar(255), -- how happy are you?
