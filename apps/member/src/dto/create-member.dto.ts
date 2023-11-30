@@ -23,22 +23,16 @@ export class CreateMemberDto  {
   @MinLength(4)
   @Matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,3}$/g)
   @Transform(({ value }) => value.toString().toLowerCase())
-  // TODO This is not working yet
   // @EmailNotRegistered({ message: 'email already registered' })
   public email: string;
 
   @ApiProperty({
-    description: 'Password',
-    pattern: '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$&+,:;=?@#|\'<>.^*()%!-])[A-Za-z\\d@$&+,:;=?@#|\'<>.^*()%!-]{8,}$/',
-    example: '1Aaml1111*',
+    description: "Member birthday",
+    example: '14/11/1992',
     required: true
   })
   @IsNotEmpty()
   @IsString()
-  @Matches(
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$&+,:;=?@#|'<>.^*()%!-])[A-Za-z\d@$&+,:;=?@#|'<>.^*()%!-]{8,}$/,
-    { message: 'invalid password' },
-  )
-  public password: string;
+  public birthday: string;
 
 }
