@@ -13,6 +13,7 @@ import { FeedGatewayController } from './modules/feed/feed-gateway.controller';
 import { ReactionGatewayController } from './modules/reaction/reaction-gateway.controller';
 import { ViolationGatewayController } from './modules/violation/violation-gateway.controller';
 import { BookmarkGatewayController } from "./modules/bookmark/bookmark-gateway.controller";
+import { StorySubmitGatewayController } from "./modules/story/story-submit-gateway.controller";
 import { StoryDraftGatewayController } from "./modules/story/story-draft-gateway.controller";
 import { StoryUpdateGatewayController } from "./modules/story/story-update-gateway.controller";
 import { StoryResourceGatewayController } from "./modules/story/story-resource-gateway.controller";
@@ -62,6 +63,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     MemberVerificationGatewayController,
     ReactionGatewayController,
     BookmarkGatewayController,
+    StorySubmitGatewayController,
     StoryDraftGatewayController,
     StoryUpdateGatewayController,
     StoryResourceGatewayController,

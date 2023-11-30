@@ -8,13 +8,11 @@ import { STORY_MODULE, STORY_SERVICE } from "./constant/story-patterns.constants
 async function bootstrap() {
 
   let logger = new Logger(STORY_MODULE);
-
   const app = await NestFactory.create(StoryModule);
   // * setup
   app.connectMicroservice<MicroserviceOptions>(app.get<MicroserviceOptions>(RABBIT_SERVICE_OPTIONS));
   // * start
   await app.startAllMicroservices();
-
   logger.log(`🚀 Application { ` + STORY_SERVICE +` } running 🚀`);
 
 }
