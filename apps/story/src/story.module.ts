@@ -20,7 +20,6 @@ import { ViolationService } from "./service/violation/violation.service";
 import { StoryTagService } from "./service/tag/story.tag.service";
 import { StoryUpdateService } from "./service/story/story.update.service";
 import { SurveyService } from "../../survey/src/service/survey.service";
-import { StorageService } from "../../storage/src/service/storage.service"
 
 import { StoryEntity } from "./entity/story/story.entity";
 import { StorySettingEntity } from "./entity/story/story.setting.entity";
@@ -34,7 +33,8 @@ import { SurveyEntity } from "../../survey/src/entity/survey.entity";
 import { SurveyMemberInstanceEntity } from "../../survey/src/entity/survey-member-instances.entity";
 
 import { getEnvPath } from "@app/common/env/env.helper";
-import { StorageResourceEntity } from "../../storage/src/entity/storage-resource.entity";
+import { StorySettingService } from "./service/story/story.setting.service";
+import { StorySurveyEntity } from "./entity/survey/story.survey.entity";
 
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
@@ -46,6 +46,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     DatabaseModule.register(Database.PRIMARY),
     DatabaseModule.forEntity(Database.PRIMARY, [
       StoryEntity,
+      StorySurveyEntity,
       StoryTagEntity,
       StorySettingEntity,
       BookmarkEntity,
@@ -74,6 +75,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     StoryTagService,
     StoryUpdateService,
     StoryDraftService,
+    StorySettingService,
     BookmarkService,
     ReactionService,
     ViolationService,

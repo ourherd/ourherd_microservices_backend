@@ -7,6 +7,7 @@ import { IServiceResponse } from "@app/rabbit";
 import { SubmitSurveyFinalDto } from "./dto/submit-survey-final.survey.dto";
 import { CreateInstanceSurveyDto } from "./dto/create-instance.survey.dto";
 import { SurveyFinalService } from "./service/survey.final.service";
+import { SurveyEntity } from "./entity/survey.entity";
 
 @Controller()
 export class SurveyController {
@@ -19,7 +20,7 @@ export class SurveyController {
   async startSurveyInstance(
     @Payload('member_id') member_id: string,
   @Payload('createDto') createSurveyInstanceDto: CreateInstanceSurveyDto
-  ): Promise<IServiceResponse<SurveyMemberInstanceEntity>> {
+  ): Promise<IServiceResponse<SurveyMemberInstanceEntity|SurveyEntity>> {
 
     const survey = this.surveyService.createSurveyMemberInstance(
       member_id,

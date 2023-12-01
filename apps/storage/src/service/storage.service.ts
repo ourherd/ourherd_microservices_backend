@@ -7,8 +7,6 @@ import { Repository } from "typeorm";
 import { Database } from "@app/database";
 import { ResourceS3AwsService } from "./driver/resource-s3-aws-service";
 import { STORAGE_MESSAGE_DB_RESPONSE } from "../constant/storage-patterns.constant";
-import { ConfigService } from "@nestjs/config";
-import { REACTION_MESSAGE_DB_RESPONSE } from "../../../story/src/constant/reaction-patterns.constants";
 
 @Injectable()
 export class StorageService {
