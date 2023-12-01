@@ -14,7 +14,7 @@ export class DateOfBirthValidation implements ValidatorConstraintInterface {
   validate(value: string, args: ValidationArguments): boolean {
 
     const [day, month, year] = value.split('/');
-    let birthday = new Date( +year, +month-1, day );
+    let birthday = new Date( +year, +month-1, +day );
     let min_age = new Date();
     min_age.setFullYear( min_age.getFullYear() - MIN_AGE );
     min_age.setHours(0,0,0,0);

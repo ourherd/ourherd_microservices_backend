@@ -28,7 +28,7 @@ export class  CreateTagDto {
   })
   // @Matches(RegExp('/[^a-zA-Z ]/g'))
   @IsString()
-  @Length(1, 30)
+  @Length(1, 35)
   @Transform(({value}) => firstUppercase(value).trim())
   public name: string;
 
