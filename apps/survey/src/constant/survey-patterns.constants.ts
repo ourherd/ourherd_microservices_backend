@@ -38,6 +38,7 @@ export const SURVEY_MESSAGE_DB_RESPONSE = {
   CREATED: 'survey.created',
   ID_EXISTING: 'survey.survey_id_existing',
   NOT_FOUND: 'survey.survey_id_not_found',
+  NOT_FOUND_12_HOUR: 'survey.survey_not_found_12_hours_interval',
   SUBMITTED: 'survey.survey_has_submitted',
   INCORRECT_TYPE: 'survey.type_not_match',
   NOT_DQ5_TO_STORY: 'survey.there_not_survey_last_12_hours',

@@ -17,8 +17,7 @@ export class SurveyFinalService {
     @InjectRepository(SurveyFinalResponseEntity, Database.PRIMARY)
     private surveyFinalResponseRepo: Repository<SurveyFinalResponseEntity>,
     private readonly surveyInstanceService: SurveyService,
-  ) {
-  }
+  ) {}
 
   async submitSurvey(submitFinalDto: SubmitSurveyFinalDto):
     Promise<IServiceResponse<SurveyMemberInstanceEntity>> {
@@ -37,9 +36,11 @@ export class SurveyFinalService {
       const score = this.surveyInstanceService.surveyScore(submitFinalDto);
       await this.surveyInstanceService.surveyInstanceUpdate(
         surveyMemberInstance.member_id, surveyMemberInstance.type, SURVEY_STATUS.COMPLETED, score );
+
       const surveyFinalResponseEntities = this.surveyFinalResponseRepo.create(submitFinalDto.data);
       await this.surveyFinalResponseRepo.save(surveyFinalResponseEntities);
-      this.logger.log("submit Survey Instance: ", JSON.stringify(surveyFinalResponseEntities));
+
+      this.logger.log("Submit Survey Instance --> " + submitFinalDto.survey_member_instance_id);
 
       return {
         state: !!surveyMemberInstance,
@@ -48,7 +49,7 @@ export class SurveyFinalService {
       }
 
     } catch (error) {
-      this.logger.error("submitSurveyInstance: ", error)
+      this.logger.error("Submit Survey Instance: ", error)
       return {
         state: false,
         data: error

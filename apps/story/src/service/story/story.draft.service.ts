@@ -8,20 +8,15 @@ import { StoryDraftTextFreeformDto } from "../../dto/story/story.draft.text-free
 import { StoryDraftTextGuidedDto } from "../../dto/story/story.draft.text-guided.dto";
 import { StoryDraftVideoDto } from "../../dto/story/story.draft.video.dto";
 import { STORY_MESSAGE_DB_RESPONSE } from "../../constant/story-patterns.constants";
-import { StorySettingEntity } from "../../entity/story/story.setting.entity";
-import { MEMBER_MESSAGE_DB_RESPONSE } from "apps/member/src/constant/member-patterns.constants";
-import { MemberService } from "apps/member/src/service/member.service";
-import { StorySettingDto } from "../../dto/story/story.setting.dto";
 
 @Injectable()
 export class StoryDraftService {
 
-  private readonly logger = new Logger(StoryDraftService.name)
+  private readonly logger = new Logger(StoryDraftService.name);
 
   constructor(
-    @InjectRepository(StoryEntity, Database.PRIMARY) private storyRepository: Repository<StoryEntity>,
-    @InjectRepository(StorySettingEntity, Database.PRIMARY) private storySettingRepository: Repository<StorySettingEntity>,
-    private memberService: MemberService
+    @InjectRepository(StoryEntity, Database.PRIMARY)
+    private storyRepository: Repository<StoryEntity>,
   ) { }
 
   public async saveStory(
@@ -45,29 +40,6 @@ export class StoryDraftService {
       this.logger.error("Story Setting Created Error: ", error)
     }
 
-  }
-
-  async setStorySetting(member_id: string, draft: StoryEntity) {
-
-    try {
-      let storySettingDto = new StorySettingDto;
-      const memberPrivacySetting = await this.memberService.memberPrivacySetting(member_id);
-      if (!memberPrivacySetting.member) {
-        return {
-          state: false,
-          data: null,
-          message: MEMBER_MESSAGE_DB_RESPONSE.EMAIL_NOT_FOUND
-        }
-      }
-      Object.assign(storySettingDto, memberPrivacySetting);
-      storySettingDto.story = draft
-      const storySetting = await this.storySettingRepository.save(storySettingDto)
-      await this.storySettingRepository.create(storySetting)
-      this.logger.log('Story Setting Created ID'+ JSON.stringify(storySetting.id) );
-
-    } catch (error) {
-      this.logger.error("Story Setting Created Error: ", error)
-    }
   }
 
 }

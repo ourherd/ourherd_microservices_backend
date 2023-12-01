@@ -7,6 +7,8 @@ import { StoryDraftTextGuidedDto } from "../dto/story/story.draft.text-guided.dt
 import { StoryEntity } from "../entity/story/story.entity";
 import { SurveyMemberInstanceEntity } from "../../../survey/src/entity/survey-member-instances.entity";
 import { StoryDraftService } from "../service/story/story.draft.service";
+import { StorySettingService } from "../service/story/story.setting.service";
+import { StoryService } from "../service/story/story.service";
 
 @Injectable()
 export class StoryDraftSaga {
@@ -14,7 +16,9 @@ export class StoryDraftSaga {
   private logger = new Logger(StoryDraftSaga.name);
   constructor(
       private readonly draftService: StoryDraftService,
-      private surveyService: SurveyService,
+      private readonly settingService: StorySettingService,
+      private readonly surveyService: SurveyService,
+      private readonly storyService: StoryService,
   ){}
 
   /**
@@ -29,10 +33,14 @@ export class StoryDraftSaga {
 
     const dq5Valid = await this.checkValidDQ5(member_id);
     if (dq5Valid.state){
+      this.logger.log('Valid DQ5 ID ' + dq5Valid.data.id );
       const draft = await this.draftService.saveStory( member_id, draftDto);
       await this.storySettingCreated(member_id, draft.data);
+      await this.storySurveyCreated(draft.data.id, dq5Valid.data);
       return draft;
     }
+
+    this.logger.log('Invalid DQ5' + dq5Valid.message );
     return {
       state: false,
       data: null,
@@ -55,7 +63,15 @@ export class StoryDraftSaga {
    * @param member_id & draft StoryEntity
    */
   private async storySettingCreated ( member_id: string, draft: StoryEntity ) {
-    await this.draftService.setStorySetting(member_id, draft)
+    await this.settingService.setStorySetting(member_id, draft)
+  }
+
+  /**
+   * @remarks
+   * @param member_id & story_id & survey_id
+   */
+  private async storySurveyCreated ( story_id: string, survey: SurveyMemberInstanceEntity ) {
+    await this.storyService.storySurvey(story_id, survey);
   }
 
 }

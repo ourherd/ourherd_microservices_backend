@@ -20,7 +20,7 @@ CREATE TYPE survey_static_status AS ENUM (
 
 CREATE TABLE IF NOT EXISTS public.surveys
 (
-    id uuid default public.uuid_generate_v1() not null constraint survey_pkey primary key, 
+    id uuid default public.uuid_generate_v1() not null constraint survey_pkey primary key,
     name varchar(255),
     description text,
     version int,
@@ -62,10 +62,13 @@ CREATE TABLE IF NOT EXISTS public.survey_member_instances
     "status" survey_status DEFAULT 'STARTED',
     "type" survey_type NOT NULL,
     survey_score integer DEFAULT 0,
+    survey_passed boolean,
     created_at timestamp with time zone default now() not null,
     updated_at timestamp with time zone default now() not null,
     deleted_at timestamp
 );
+
+ALTER TABLE public.survey_member_instances ADD survey_passed boolean;
 
 
 ALTER TABLE public.survey_member_instances

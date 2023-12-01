@@ -6,7 +6,7 @@ export function getEnvPath(dest: string): string {
   const fallback: string = resolve(`envs/.env`);
   const filename: string = env ? `${env}.env` : 'development.env';
   let filePath: string = resolve(`envs/${filename}`);
-
+  console.log(filePath)
   if (!existsSync(filePath)) {
     filePath = fallback;
   }

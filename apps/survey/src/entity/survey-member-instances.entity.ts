@@ -39,4 +39,8 @@ export class SurveyMemberInstanceEntity extends AbstractEntity {
   @Column({ nullable: true, default: 0 })
   survey_score: number;
 
+  @Column({
+    nullable: true,
+  })
+  survey_passed: boolean;
 }
