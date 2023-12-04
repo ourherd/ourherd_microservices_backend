@@ -9,7 +9,7 @@ import {
   SURVEY_MESSAGE_DB_RESPONSE,
   SURVEY_SERVICE,
   SURVEY_STATIC_STATUS,
-  SURVEY_STATUS, SURVEY_TYPE
+  SURVEY_STATUS
 } from "../constant/survey-patterns.constants";
 import { SubmitSurveyFinalDto } from "../dto/submit-survey-final.survey.dto";
 import { SurveyEntity } from "../entity/survey.entity";
@@ -67,15 +67,33 @@ export class SurveyService {
      const dq5Valid =  await this.surveyMemberInstanceRepo.createQueryBuilder("survey")
        .where("survey.status= :statusEnum", { statusEnum: SURVEY_STATUS.COMPLETED })
        .andWhere("survey.member_id= :member_id", { member_id: member_id })
-       .andWhere("survey.survey_score < :survey_score", { survey_score: SURVEY_DQ5_MIN_SCORE })
        .andWhere("survey.updated_at >= NOW() - :timeframe::INTERVAL",
-         { timeframe: this.configService.get('TIME_TO_WAIT_DQ5') })
+         { timeframe: '12 hours' })
+       .orderBy('survey.updated_at', 'DESC')
        .getOne();
 
-     return {
-        state: !!!dq5Valid,
-        data: dq5Valid,
-        message: !!!dq5Valid ? SURVEY_MESSAGE_DB_RESPONSE.NOT_DQ5_TO_STORY: SURVEY_MESSAGE_DB_RESPONSE.VALID_DQ5_TO_STORY
+     if (isEmptyOrNull(dq5Valid)) {
+       return {
+         state: false,
+         data: dq5Valid,
+         message: SURVEY_MESSAGE_DB_RESPONSE.NOT_DQ5_TO_STORY
+       }
+     } else {
+       if ( dq5Valid.survey_score >= SURVEY_DQ5_MIN_SCORE  ) {
+
+          return {
+            state: dq5Valid.survey_passed,
+            data: null,
+            message: SURVEY_MESSAGE_DB_RESPONSE.INVALID_SCORE_DQ5_TO_STORY
+          }
+       } else {
+
+         return {
+           state: true,
+           data: dq5Valid,
+           message: SURVEY_MESSAGE_DB_RESPONSE.VALID_DQ5_TO_STORY
+         }
+       }
      }
 
    }

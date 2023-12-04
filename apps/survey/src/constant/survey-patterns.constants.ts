@@ -43,4 +43,5 @@ export const SURVEY_MESSAGE_DB_RESPONSE = {
   INCORRECT_TYPE: 'survey.type_not_match',
   NOT_DQ5_TO_STORY: 'survey.there_not_survey_last_12_hours',
   VALID_DQ5_TO_STORY: 'survey.valid_survey_last_12_hours',
+  INVALID_SCORE_DQ5_TO_STORY: 'survey.invalid_score_survey_last_12_hours',
 }
