@@ -32,15 +32,13 @@ export class StoryDraftSaga {
   ): Promise<IServiceResponse<StoryEntity | null>> {
 
     const dq5Valid = await this.checkValidDQ5(member_id);
-    if (dq5Valid.state){
-      this.logger.log('Valid DQ5 ID ' + dq5Valid.data.id );
+    if (dq5Valid.state === true){
       const draft = await this.draftService.saveStory( member_id, draftDto);
       await this.storySettingCreated(member_id, draft.data);
       await this.storySurveyCreated(draft.data.id, dq5Valid.data);
       return draft;
     }
-
-    this.logger.log('Invalid DQ5' + dq5Valid.message );
+    this.logger.log('Invalid DQ5 due to ' + dq5Valid.message );
     return {
       state: false,
       data: null,
