@@ -53,7 +53,6 @@ export class StoryDraftSaga {
    */
   private async checkValidDQ5 ( member_id: string ): Promise<IServiceResponse<SurveyMemberInstanceEntity>> {
     const dq5Valid = await this.surveyService.completeDQ5SurveyCheck(member_id);
-    console.log(dq5Valid);
     return dq5Valid;
   }
 
