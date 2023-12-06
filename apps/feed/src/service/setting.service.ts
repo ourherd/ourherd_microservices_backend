@@ -28,7 +28,6 @@ export class SettingService {
 
     let storyMemberDto = plainToInstance(StoryMemberDto, settings);
     storyMemberDto = await this.getStoryMember(dto.id, storyMemberDto);
-    this.logger.log('Story settings ' + dto.id);
     dto.settings = storyMemberDto;
 
     return dto;
@@ -41,7 +40,6 @@ export class SettingService {
       .andWhere('s.id = :story_id', { story_id: story_id })
       .getOne();
 
-    this.logger.log('Member ID settings ' +  JSON.stringify(member.id, null, 2));
     dto.first_name = isEmptyOrNull(member.first_name) ? null : member.first_name;
     dto.country = member.country;
     dto.postal_code =  isEmptyOrNull(member.postal_code)? 0 : Number(member.postal_code);

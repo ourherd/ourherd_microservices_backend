@@ -25,7 +25,6 @@ export class TagService {
       .limit(this.TAG_LIMIT)
       .getMany();
 
-    this.logger.log('Tags By Story ' + dto.id );
     const storyTags = plainToInstance(TagDto, tags);
     dto.tags = storyTags;
 

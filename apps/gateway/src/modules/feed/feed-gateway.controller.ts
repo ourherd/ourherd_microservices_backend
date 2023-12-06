@@ -39,7 +39,6 @@ export class FeedGatewayController {
     @Body() filtersDto: FiltersDto ):
     Promise<IFeedResponse<IFeedPaginationInterface<StoryDto>>> {
 
-    // this.logger.log(' filterDto ', JSON.stringify(filtersDto))
     return await this.feedService.getFeed(member_id, listDto, filtersDto);
   };
 
