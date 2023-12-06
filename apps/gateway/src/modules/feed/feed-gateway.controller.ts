@@ -1,16 +1,14 @@
-import { Controller, Get, Query, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Controller, Get, Logger, Query, UsePipes, ValidationPipe } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { IGatewayResponse } from "../../common/interface/gateway.interface";
 // import { RabbitServiceName } from "@app/rabbit";
 // import { ClientProxy } from "@nestjs/microservices";
 import { FeedService } from "../../../../feed/src/service/feed.service";
-import { StoryEntity } from "../../../../story/src/entity/story/story.entity";
-import { Auth } from "@app/authentication";
-import { FeedDto } from "../../../../feed/src/dto/feed.dto";
+import { Auth, CurrentMember } from "@app/authentication";
 import { Payload } from "@nestjs/microservices";
-import { IPagination, PaginationDto } from "@app/common";
-import { FindMemberDto } from "../../../../member/src/dto/find.member.dto";
 import { StoriesListDto } from "../../../../feed/src/dto/stories.list.dto";
+import { StoryDto } from "../../../../feed/src/dto/story.dto";
+import { IFeedResponse } from "../../../../feed/src/interface/feed.response";
+import { IFeedPaginationInterface } from "../../../../feed/src/interface/feed.pagination.interface";
 
 @ApiTags('Feed Gateway')
 @Controller({
@@ -25,19 +23,20 @@ import { StoriesListDto } from "../../../../feed/src/dto/stories.list.dto";
 )
 export class FeedGatewayController {
 
+  private readonly logger = new Logger(FeedGatewayController.name);
+
   constructor(private feedService: FeedService){}
 
   @Get('/')
   @Auth()
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 200, description: '' })
-  async feed(  @Payload('member_id') member_id: string,
-               @Query() listDto: StoriesListDto ):
-                      Promise<IGatewayResponse<IPagination<StoryEntity>>> {
+  async feed(
+    @CurrentMember ('member_id') member_id: string,
+    @Query() listDto: StoriesListDto ):
+    Promise<IFeedResponse<IFeedPaginationInterface<StoryDto>>> {
 
-    const stories = await this.feedService.getFeed(member_id, listDto);
-    return stories;
-
+    return await this.feedService.getFeed(member_id, listDto);
   };
 
 }

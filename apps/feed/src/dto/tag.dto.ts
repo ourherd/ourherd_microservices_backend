@@ -1,17 +1,27 @@
 import { IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
+import { Exclude } from "class-transformer";
 
 export class TagDto {
 
-  @IsUUID()
-  @IsOptional()
   readonly id: string;
 
-  @IsString()
-  @IsOptional()
-  public name: string;
+  readonly name: string;
 
-  @IsNumber()
-  @IsOptional()
   readonly order: number;
+
+  @Exclude()
+  readonly created_at: string;
+
+  @Exclude()
+  readonly updated_at: string;
+
+  @Exclude()
+  readonly deleted_at: string;
+
+  @Exclude()
+  readonly verified: string;
+
+  @Exclude()
+  readonly in_app: string;
 
 }

@@ -27,11 +27,12 @@ export class StoryTagService {
 
     let tags_story: StoryTagEntity[] = [];
     let tagStory;
-    this.logger.log('Tags to Story -> ' + JSON.stringify(tags));
+
     tags.forEach(tag => {
       tagStory = new StoryTagEntity();
       tagStory.story_id = story_id;
-      tagStory.tag_id = tag.id,
+      tagStory.tag_id = tag.id;
+      this.logger.log('Tags ID to Story -> ' + JSON.stringify(tag.id));
       tags_story.push( tagStory );
     });
 

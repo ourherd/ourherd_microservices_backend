@@ -11,6 +11,14 @@ import { StorySettingEntity } from "../../story/src/entity/story/story.setting.e
 import { BookmarkEntity } from "../../story/src/entity/bookmark/bookmark.entity";
 import { ReactionEntity } from "../../story/src/entity/reaction/reaction.entity";
 import { MemberEntity } from "../../member/src/entity/member.entity";
+import { TagEntity } from "../../tag/src/entity/tag.entity";
+import { StorageResourceEntity } from "../../storage/src/entity/storage-resource.entity";
+import { BookmarkService } from "./service/bookmark.service";
+import { TagService } from "./service/tag.service";
+import { ReactionService } from "./service/reaction.service";
+import { ResourceService } from "./service/resource.service";
+import { SettingService } from "./service/setting.service";
+import { StoryService } from "./service/story.service";
 
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
@@ -21,9 +29,11 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     }),
     DatabaseModule.register(Database.PRIMARY),
     DatabaseModule.forEntity(Database.PRIMARY, [
+      TagEntity,
       StoryEntity,
       StoryTagEntity,
       StorySettingEntity,
+      StorageResourceEntity,
       BookmarkEntity,
       ReactionEntity,
       MemberEntity
@@ -31,7 +41,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     RabbitModule.forServerProxy(RabbitServiceName.FEED),
   ],
   controllers: [FeedController],
-  providers: [FeedService],
+  providers: [FeedService, BookmarkService, TagService, ReactionService, ResourceService, SettingService, StoryService],
   exports:[FeedService]
 })
 

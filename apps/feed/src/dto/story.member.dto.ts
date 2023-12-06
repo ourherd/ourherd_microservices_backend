@@ -1,35 +1,57 @@
-import { IsBoolean, IsOptional, IsString } from "class-validator";
+import { Exclude, Transform } from "class-transformer";
+import { IsOptional } from "class-validator";
 
 export class StoryMemberDto {
 
-  @IsBoolean()
+  public display_name: string;
+
+  public first_name?: string;
+
+  @IsOptional()
+  public country: string;
+
+  @IsOptional()
+  public suburb: string = '';
+
+  @IsOptional()
+  public postal_code: number;
+
+  @IsOptional()
+  public gender: string;
+
   share_name: boolean;
 
-  @IsString()
-  first_name: string;
-
-  @IsBoolean()
   share_location: boolean;
 
-  @IsString()
-  country: string;
-
-  @IsString()
-  suburb: string;
-
-  @IsString()
-  postal_code: string;
-
-  @IsBoolean()
   share_gender: boolean;
 
-  @IsString()
-  gender: string;
-
-  @IsBoolean()
   share_age: boolean;
 
-  @IsString()
+  @Exclude()
+  readonly id: string;
+
+  @Exclude()
+  readonly is_shareable: boolean;
+
+  @Exclude()
+  readonly created_at: string;
+
+  @Exclude()
+  readonly updated_at: string;
+
+  @Exclude()
+  readonly deleted_at: string;
+
+  @Exclude()
+  readonly visibility
+
+  @Exclude()
   birthday: string;
+  @Exclude()
+  share_batyr_instragram: boolean;
+  @Exclude()
+  share_batyr_tiktok: boolean;
+  @Exclude()
+  share_contacted: boolean;
 
 }

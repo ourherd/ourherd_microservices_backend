@@ -1,6 +1,7 @@
-import { Column, Entity } from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne } from "typeorm";
 import { StorageResourceDriverType, StorageResourceType } from "../interface/storage-resource.interface";
 import { AbstractEntity } from "@app/database/base/base.entity";
+import { StoryEntity } from "../../../story/src/entity/story/story.entity";
 
 @Entity({
     name: 'storage_resources'
@@ -31,5 +32,9 @@ export class StorageResourceEntity extends AbstractEntity {
         default: StorageResourceDriverType.S3
     })
     driver: StorageResourceDriverType;
+
+    @OneToOne(() => StoryEntity)
+    @JoinColumn({ name: "story_id" })
+    story: StoryEntity;
 
 }

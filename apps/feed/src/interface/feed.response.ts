@@ -1,6 +1,7 @@
 export interface IFeedResponse<T = object> {
   state: boolean;
-  stories: T;
+  feed: T;
   saved: T;
   message?: string;
 }
+

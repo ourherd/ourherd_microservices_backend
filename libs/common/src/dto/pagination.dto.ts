@@ -23,7 +23,6 @@ export class PaginationDto {
     })
     @Transform(({ value }) => parseInt(value))
     @IsNumber()
-    @IsOptional()
     @Min(1)
     page: number;
 }
