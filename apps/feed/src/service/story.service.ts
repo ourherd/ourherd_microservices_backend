@@ -12,12 +12,15 @@ import { ReactionService } from "./reaction.service";
 import { ResourceService } from "./resource.service";
 import { SettingService } from "./setting.service";
 import { BookmarkService } from "./bookmark.service";
+import { FiltersDto } from "../dto/filters.dto";
+import { isEmptyOrNull } from "@app/common/validation-rules/object-validation.rule";
+import { StoryTagEntity } from "../../../story/src/entity/tag/story.tag.entity";
 
 export class StoryService {
 
   private readonly logger = new Logger(StoryService.name);
   private readonly FEED_LIMIT = 10;
-  private readonly SAVED_STORIES_LIMIT = 10;
+  private readonly SAVED_STORIES_LIMIT = 50;
 
   constructor(
     @InjectRepository(StoryEntity, Database.PRIMARY) private storyRepository: Repository<StoryEntity>,
@@ -29,18 +32,33 @@ export class StoryService {
   ) {}
 
   // Get Stories for the feed
-  async getFeedStories (member_id: string, page: number):  Promise<IStoriesResponse<StoryDto[], number>> {
+  async getFeedStories (member_id: string, page: number, filters?: FiltersDto):  Promise<IStoriesResponse<StoryDto[], number>> {
 
-    const entities = await this.storyRepository.createQueryBuilder('feed')
-      .where('feed.story_status= :story_status' , { story_status: StoryStatus.PUBLISHED })
-      .take(this.FEED_LIMIT - 1)
-      .skip((page - 1) * this.FEED_LIMIT )
-      .getMany();
-
+    const entities = await this.getStories(page, filters);
     const stories = await this.getStoriesContent(member_id, entities);
     const total = await this.storyRepository.count({ where: { story_status: StoryStatus.PUBLISHED } });
 
     return { stories, total }
+  }
+
+  async getStories (page: number, filters?: FiltersDto) :  Promise<StoryEntity[]> {
+
+    const feedQuery = await this.storyRepository.createQueryBuilder('feed')
+      .where('feed.story_status= :story_status' , { story_status: StoryStatus.PUBLISHED }) ;
+
+    if ( !isEmptyOrNull(filters.tags) ) {
+      feedQuery.leftJoinAndSelect(StoryTagEntity, 'tag', 'feed.id = tag.story_id');
+      feedQuery.andWhere('tag.tag_id IN (:...ids)', { ids: filters.tags })
+    }
+
+    if ( !isEmptyOrNull(filters.story_medium) ) {
+      feedQuery.andWhere('feed.story_medium= :story_medium', { story_medium: filters.story_medium })
+    }
+
+    const entities = await feedQuery.take(this.FEED_LIMIT - 1)
+                                    .skip((page - 1) * this.FEED_LIMIT )
+                                    .getMany();
+    return entities;
   }
 
   // Get Saved Stories
@@ -50,8 +68,8 @@ export class StoryService {
     const entities = await this.storyRepository.createQueryBuilder('feed')
       .where('feed.story_status= :story_status' , { story_status: StoryStatus.PUBLISHED })
       .andWhere('feed.id IN (:...ids)', {ids: ids})
-      .take(this.SAVED_STORIES_LIMIT - 1)
-      .skip((page - 1) * this.SAVED_STORIES_LIMIT )
+      //.take(this.SAVED_STORIES_LIMIT - 1)
+      //.skip((page - 1) * this.SAVED_STORIES_LIMIT )
       .getMany();
 
     const stories = await this.getStoriesContent(member_id, entities);

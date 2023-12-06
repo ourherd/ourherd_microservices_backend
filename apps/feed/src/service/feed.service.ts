@@ -4,6 +4,7 @@ import { IFeedResponse } from "../interface/feed.response";
 import { IFeedPaginationInterface } from "../interface/feed.pagination.interface";
 import { StoryDto } from "../dto/story.dto";
 import { StoryService } from "./story.service";
+import { FiltersDto } from "../dto/filters.dto";
 
 
 @Injectable()
@@ -14,10 +15,10 @@ export class FeedService {
 
   constructor(private storiesService: StoryService) {}
 
-  async getFeed(member_id: string, { page }: StoriesListDto):
+  async getFeed(member_id: string, { page }: StoriesListDto, filtersDto: FiltersDto):
     Promise<IFeedResponse<IFeedPaginationInterface<StoryDto>>> {
 
-    const { stories: feed, total: totalFeed } = await this.storiesService.getFeedStories(member_id, page);
+    const { stories: feed, total: totalFeed } = await this.storiesService.getFeedStories(member_id, page, filtersDto);
     const { stories: saved, total: totalSaved } = await this.storiesService.getSavedStories(member_id, page);
 
     return {
