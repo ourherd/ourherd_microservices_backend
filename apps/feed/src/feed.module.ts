@@ -3,7 +3,6 @@ import { RabbitModule, RabbitServiceName } from "@app/rabbit";
 import { ConfigModule } from "@nestjs/config";
 import { Database, DatabaseModule } from "@app/database";
 import { getEnvPath } from "@app/common/env/env.helper";
-import { FeedController } from "./controller/feed.controller";
 import { FeedService } from "./service/feed.service";
 import { StoryEntity } from "../../story/src/entity/story/story.entity";
 import { StoryTagEntity } from "../../story/src/entity/tag/story.tag.entity";
@@ -40,7 +39,6 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     ]),
     RabbitModule.forServerProxy(RabbitServiceName.FEED),
   ],
-  controllers: [FeedController],
   providers: [FeedService, BookmarkService, TagService, ReactionService, ResourceService, SettingService, StoryService],
   exports:[FeedService]
 })
