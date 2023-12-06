@@ -5,8 +5,9 @@ import { ReactionType } from "../../../story/src/entity/reaction/reaction.entity
 import { ResourceDto } from "./resource.dto";
 import { StoryMemberDto } from "./story.member.dto";
 import { Exclude, Expose, Type } from "class-transformer";
+import { BaseAbstractDto } from "./base.abstract.dto";
 
-export class StoryDto {
+export class StoryDto extends BaseAbstractDto {
 
   readonly id: string;
 
@@ -39,15 +40,6 @@ export class StoryDto {
 
   @Exclude()
   readonly revision: number;
-
-  @Exclude()
-  readonly created_at: string;
-
-  @Exclude()
-  readonly updated_at: string;
-
-  @Exclude()
-  readonly deleted_at: string;
 
   @IsArray()
   tags: TagDto[]

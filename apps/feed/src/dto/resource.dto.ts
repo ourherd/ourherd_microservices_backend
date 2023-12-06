@@ -1,8 +1,9 @@
 import { IsEnum } from "class-validator";
 import { StorageResourceType } from "../../../storage/src/interface/storage-resource.interface";
 import { Exclude } from "class-transformer";
+import { BaseAbstractDto } from "./base.abstract.dto";
 
-export class ResourceDto {
+export class ResourceDto extends BaseAbstractDto {
 
   @Exclude()
   id: string;
@@ -18,15 +19,6 @@ export class ResourceDto {
   media_captions_path: string;
 
   media_resource_path: string;
-
-  @Exclude()
-  readonly created_at: string;
-
-  @Exclude()
-  readonly updated_at: string;
-
-  @Exclude()
-  readonly deleted_at: string;
 
   @Exclude()
   readonly driver: string;
