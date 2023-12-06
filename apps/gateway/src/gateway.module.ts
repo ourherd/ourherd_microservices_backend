@@ -23,6 +23,7 @@ import { AccountPasswordGatewayController } from "./modules/account/account-pass
 import { SurveyGatewayController } from "./modules/survey/survey-gateway.controller";
 import { TagGatewayController } from "./modules/tag/tag-gateway.controller";
 import { StorageModule } from "apps/storage/src/storage.module";
+import { FeedModule } from "../../feed/src/feed.module";
 
 import { getEnvPath } from "@app/common/env/env.helper";
 import { JwtStrategy } from '@app/authentication';
@@ -51,8 +52,8 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     RabbitModule.forClientProxy(RabbitServiceName.SURVEY),
     RabbitModule.forClientProxy(RabbitServiceName.TAG),
     PassportModule.register({ defaultStrategy: 'jwt' }),
-    // AuthenticationModule.register(),
-    // PolicyModule,
+
+    FeedModule,
     StorageModule
   ],
   controllers: [

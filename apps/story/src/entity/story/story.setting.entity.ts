@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne } from "typeorm";
 import { AbstractEntity } from "@app/database/base/base.entity";
 import { IsEnum } from "class-validator";
 import { StoryVisibility } from "../../constant/story.enum";
@@ -8,64 +8,65 @@ import { StoryEntity } from "./story.entity";
   name: 'story_settings'
 })
 export class StorySettingEntity extends AbstractEntity {
-  
-  @ManyToOne(() => StoryEntity)
-  @JoinColumn({ name: "story_id" })
-  story: StoryEntity;
-  
-  @Column({ 
-    nullable: false, 
+
+  @Column({
+    nullable: false,
     default: StoryVisibility.PUBLIC
   })
   @IsEnum(StoryVisibility)
   visibility: string;
-  
-  @Column({ 
+
+  @Column({
     nullable: true,
     default: false
   })
   is_shareable: boolean;
-  
-  @Column({ 
+
+  @Column({
     nullable: true,
     default: false
   })
   share_name: boolean;
-  
-  @Column({ 
+
+  @Column({
     nullable: true,
     default: false
   })
   share_location: boolean;
-  
-  @Column({ 
+
+  @Column({
     nullable: true,
     default: false
   })
   share_gender: boolean;
-  
-  @Column({ 
+
+  @Column({
     nullable: true,
     default: false
   })
   share_age: boolean;
-  
-  @Column({ 
+
+  @Column({
     nullable: true,
     default: false
   })
   share_batyr_instragram: boolean;
-  
-  @Column({ 
+
+  @Column({
     nullable: true,
     default: false
   })
   share_batyr_tiktok: boolean;
-  
-  @Column({ 
+
+  @Column({
     nullable: true,
     default: false
   })
   share_contacted: boolean;
-  
+
+  @OneToOne(() => StoryEntity)
+  @JoinColumn({ name: "story_id" })
+  story: StoryEntity;
+
+
 }

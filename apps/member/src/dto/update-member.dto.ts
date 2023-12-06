@@ -64,9 +64,9 @@ export class UpdateMemberDto  {
     example: '14/11/1992',
     required: false
   })
-  @IsDate()
+  @IsString()
   @IsOptional()
-  public birthday: Date;
+  public birthday: string;
 
   @ApiProperty({
     description: "Member Country",

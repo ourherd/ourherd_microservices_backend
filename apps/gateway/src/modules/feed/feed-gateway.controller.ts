@@ -1,25 +1,42 @@
-import { Controller, Inject, Post } from "@nestjs/common";
-import { ApiTags } from "@nestjs/swagger";
-import { IGatewayResponse } from "../../common/interface/gateway.interface";
-import { RabbitServiceName } from "@app/rabbit";
-import { ClientProxy } from "@nestjs/microservices";
+import { Controller, Get, Logger, Query, UsePipes, ValidationPipe } from "@nestjs/common";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+// import { RabbitServiceName } from "@app/rabbit";
+// import { ClientProxy } from "@nestjs/microservices";
+import { FeedService } from "../../../../feed/src/service/feed.service";
+import { Auth, CurrentMember } from "@app/authentication";
+import { Payload } from "@nestjs/microservices";
+import { StoriesListDto } from "../../../../feed/src/dto/stories.list.dto";
+import { StoryDto } from "../../../../feed/src/dto/story.dto";
+import { IFeedResponse } from "../../../../feed/src/interface/feed.response";
+import { IFeedPaginationInterface } from "../../../../feed/src/interface/feed.pagination.interface";
 
 @ApiTags('Feed Gateway')
 @Controller({
   path: '/feed'
 })
 
+@UsePipes(
+  new ValidationPipe({
+    whitelist: true,
+    transform: true,
+  }),
+)
 export class FeedGatewayController {
 
-  constructor(@Inject(RabbitServiceName.FEED) private feedClient: ClientProxy) { }
+  private readonly logger = new Logger(FeedGatewayController.name);
 
-  @Post('/')
-  async feed ( ) : Promise<IGatewayResponse> {
+  constructor(private feedService: FeedService){}
 
-    return {
-      state: false,
-      data : []
-    };
+  @Get('/')
+  @Auth()
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 200, description: '' })
+  async feed(
+    @CurrentMember ('member_id') member_id: string,
+    @Query() listDto: StoriesListDto ):
+    Promise<IFeedResponse<IFeedPaginationInterface<StoryDto>>> {
+
+    return await this.feedService.getFeed(member_id, listDto);
   };
 
 }

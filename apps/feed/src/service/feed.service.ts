@@ -1,35 +1,39 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { ReactionEntity } from "../../../story/src/entity/reaction/reaction.entity";
-import { Repository } from "typeorm";
-import { Database } from "@app/database";
+import { StoriesListDto } from "../dto/stories.list.dto";
+import { IFeedResponse } from "../interface/feed.response";
+import { IFeedPaginationInterface } from "../interface/feed.pagination.interface";
+import { StoryDto } from "../dto/story.dto";
+import { StoryService } from "./story.service";
+
 
 @Injectable()
 export class FeedService {
-  private readonly logger = new Logger(FeedService.name)
 
-  // constructor(
-  //   @InjectRepository(ReactionEntity, Database.PRIMARY)  private reactionRepository: Repository<ReactionEntity>
-  // ) {}
+  private readonly logger = new Logger(FeedService.name);
+  private FEED_LIMIT = 10;
 
-  // TODO Add reaction entity to be the return object
-  // async findReaction(member_id: string, story_id: string): Promise<Boolean> {
-  //   // const reaction = await this.reactionRepository.find(
-  //   //   {
-  //   //     where:{
-  //   //       member_id: member_id,
-  //   //       story_id: story_id
-  //   //     }, withDeleted: false,
-  //   //   }
-  //   // );
-  //   //
-  //   // this.logger.log('reactionRepository ' + JSON.stringify(reaction));
-  //
-  //   return true;
-  // }
-  //
-  // async deleteReaction(member_id: string, story_id: string) {
-  //
-  // }
+  constructor(private storiesService: StoryService) {}
 
+  async getFeed(member_id: string, { page }: StoriesListDto):
+    Promise<IFeedResponse<IFeedPaginationInterface<StoryDto>>> {
+
+    const { stories: feed, total: totalFeed } = await this.storiesService.getFeedStories(member_id, page);
+    const { stories: saved, total: totalSaved } = await this.storiesService.getSavedStories(member_id, page);
+
+    return {
+      state: true,
+      feed: {
+        stories: feed,
+        limit: this.FEED_LIMIT,
+        page: page,
+        total: totalFeed
+      },
+      saved: {
+        stories: saved,
+        limit: this.FEED_LIMIT,
+        page: page,
+        total: totalSaved
+      }
+    };
+  }
 }

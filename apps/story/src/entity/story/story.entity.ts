@@ -1,7 +1,9 @@
-import { Column, Entity, ManyToMany, JoinTable } from "typeorm";
+import { Column, Entity, ManyToMany, JoinTable, OneToOne, JoinColumn } from "typeorm";
 import { AbstractEntity } from "@app/database/base/base.entity";
 import { StoryMedium, StorySourceType, StoryStatus, StoryType } from "../../constant/story.enum";
+import { StorySettingEntity } from "./story.setting.entity";
 import { TagEntity } from "../../../../tag/src/entity/tag.entity";
+import { StorageResourceEntity } from "../../../../storage/src/entity/storage-resource.entity";
 
 @Entity({
   name: 'stories'
@@ -69,6 +71,14 @@ export class StoryEntity extends AbstractEntity {
 
   @Column({ nullable: true, default: 0 })
   revision: number;
+
+  @OneToOne(() => StorySettingEntity)
+  @JoinColumn({ name: "id" })
+  setting: StorySettingEntity;
+
+  @OneToOne(() => StorageResourceEntity)
+  @JoinColumn({ name: "id" })
+  resource: StorageResourceEntity;
 
   // Add many to many relationship stories and tags
   @ManyToMany(

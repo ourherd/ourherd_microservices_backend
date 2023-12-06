@@ -11,6 +11,7 @@ import { TagDto } from "../../../tag/src/dto/tag.dto";
 import { ClientProxy } from "@nestjs/microservices";
 import { TAG_STORY_MESSAGE_PATTERNS } from "../constant/tag-patterns.constants";
 import { firstValueFrom } from "rxjs";
+import { isEmptyOrNull } from "@app/common/validation-rules/object-validation.rule";
 
 @Injectable()
 export class StoryUpdateSaga {
@@ -49,6 +50,8 @@ export class StoryUpdateSaga {
 
   private async addNewTags ( story_id: string, updateDto: StoryUpdateVideoDto |
     StoryUpdateTextFreeFormDto | StoryUpdateTextGuidedDto ) {
+    if (isEmptyOrNull(updateDto.new_tags)) return;
+
     this.logger.log('Add New tags Saga ' + JSON.stringify(updateDto.new_tags));
     const tags:TagDto[] = updateDto.new_tags;
 
