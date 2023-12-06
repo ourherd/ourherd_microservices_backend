@@ -34,12 +34,13 @@ export class StoryTagService {
       tagStory = new StoryTagEntity();
       tagStory.story_id = story_id;
       tagStory.tag_id = tag.id;
-      this.logger.log('Tags ID to Story -> ' + JSON.stringify(tag.id));
+      this.logger.log('Tags ID to Story -> ' + JSON.stringify(tag.id, null, 2));
       tags_story.push( tagStory );
     });
 
     try {
       const tags_story_entity = this.storyTagRepository.create(tags_story);
+      this.logger.log('ssss Adding Tags to Story -> ' + JSON.stringify(tags_story_entity));
       await this.storyTagRepository.save(tags_story_entity);
 
     } catch (e) {

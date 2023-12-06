@@ -1,7 +1,8 @@
 import { Exclude, Transform } from "class-transformer";
 import { IsOptional } from "class-validator";
+import { BaseAbstractDto } from "./base.abstract.dto";
 
-export class StoryMemberDto {
+export class StoryMemberDto extends BaseAbstractDto {
 
   public display_name: string;
 
@@ -32,15 +33,6 @@ export class StoryMemberDto {
 
   @Exclude()
   readonly is_shareable: boolean;
-
-  @Exclude()
-  readonly created_at: string;
-
-  @Exclude()
-  readonly updated_at: string;
-
-  @Exclude()
-  readonly deleted_at: string;
 
   @Exclude()
   readonly visibility

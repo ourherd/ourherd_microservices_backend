@@ -21,7 +21,6 @@ export class ResourceService {
     const resource = await this.storageEntity.findOneBy({ story_id: dto.id  });
     const dtoResource = plainToInstance(ResourceDto, resource);
     dto.resource = dtoResource;
-    this.logger.log('Resource By Story->' + dto.id + ' Resource ID->' + JSON.stringify(resource.id, null, 2));
 
     return dto;
   }

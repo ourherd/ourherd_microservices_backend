@@ -22,7 +22,6 @@ export class BookmarkService {
       story_id: dto.id
     });
     dto.is_saved =  isEmptyOrNull(bookmark) ? false: true;
-    this.logger.log('Bookmark By Story ' + dto.id + ' is saved ' + dto.is_saved );
     return dto;
   }
 
@@ -30,7 +29,6 @@ export class BookmarkService {
     const bookmarks = await this.bookmarkRepository.findBy({
       member_id: member_id
     });
-    this.logger.log('Bookmark By Member ID ' + member_id);
     let storyIds: string[] = [];
 
     bookmarks.forEach(bookmark => {

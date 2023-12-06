@@ -1,22 +1,13 @@
-import { IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
 import { Exclude } from "class-transformer";
+import { BaseAbstractDto } from "./base.abstract.dto";
 
-export class TagDto {
+export class TagDto extends BaseAbstractDto {
 
   readonly id: string;
 
   readonly name: string;
 
   readonly order: number;
-
-  @Exclude()
-  readonly created_at: string;
-
-  @Exclude()
-  readonly updated_at: string;
-
-  @Exclude()
-  readonly deleted_at: string;
 
   @Exclude()
   readonly verified: string;
