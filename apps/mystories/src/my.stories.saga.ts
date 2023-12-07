@@ -2,6 +2,7 @@ import { Injectable, Logger } from "@nestjs/common";
 import { MyStoriesService } from "./service/my.stories.service";
 import { IMyStoriesResponse } from "./interface/my.stories.response";
 import { MyStoryDto } from "./dto/my.story.dto";
+import { isEmptyOrNull } from "@app/common/validation-rules/object-validation.rule";
 
 @Injectable()
 export class MyStoriesSaga {
@@ -12,6 +13,14 @@ export class MyStoriesSaga {
 
     const progress = await this.myStoriesService.getInProgressStories(member_id);
     const published = await this.myStoriesService.getPublishedStories(member_id);
+
+    if (isEmptyOrNull(progress) && isEmptyOrNull(published)) {
+      return {
+        state: false,
+        progress: null,
+        published: null
+      }
+    }
 
     return {
       state: true,

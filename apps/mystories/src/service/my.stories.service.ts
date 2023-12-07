@@ -28,7 +28,6 @@ export class MyStoriesService {
       .orderBy('progress.updated_at', 'ASC')
       .getMany();
     return await this.getMyStoriesContent(entities);
-
   }
 
   public async getPublishedStories (member_id: string): Promise<MyStoryDto[]> {
@@ -38,9 +37,7 @@ export class MyStoriesService {
       .andWhere('progress.member_id =:member_id' , { member_id: member_id })
       .orderBy('progress.updated_at', 'ASC')
       .getMany();
-
     return await this.getMyStoriesContent(entities);
-
   }
 
   // Get content my stories
@@ -55,10 +52,4 @@ export class MyStoriesService {
     }
     return dtos;
   }
-
-
-
-
-
-
 }
