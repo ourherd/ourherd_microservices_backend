@@ -15,9 +15,6 @@ export class MyStoryDto extends BaseAbstractDto {
   public id: string;
 
   @Expose()
-  public member_id: string;
-
-  @Expose()
   public title: string;
 
   @Expose()
@@ -27,6 +24,9 @@ export class MyStoryDto extends BaseAbstractDto {
   public story_type: string;
 
   @Expose()
+  public member_id: string;
+
+  @Exclude()
   readonly source: string;
 
   @Exclude()
@@ -35,31 +35,31 @@ export class MyStoryDto extends BaseAbstractDto {
   @Exclude()
   readonly revision: number;
 
-  @Exclude()
+  @Expose()
   readonly order: number;
 
-  @Exclude()
+  @Expose()
   readonly has_hero_statement: boolean;
 
-  @Exclude()
+  @Expose()
   readonly hero_statement: string;
 
   @Exclude()
   readonly story_status: string;
 
-  @Exclude()
+  @Expose()
   readonly content: string;
 
-  @Exclude()
+  @Expose()
   readonly content_1: string;
 
-  @Exclude()
+  @Expose()
   readonly content_2: string;
 
-  @Exclude()
+  @Expose()
   readonly content_3: string;
 
-  @Exclude()
+  @Expose()
   readonly content_4: string;
 
   @IsArray()

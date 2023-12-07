@@ -21,22 +21,22 @@ export class MyStoryMemberDto extends BaseAbstractDto {
   @Exclude()
   public gender: string;
 
-  @Exclude()
+  @Expose()
   share_name: boolean;
 
-  @Exclude()
+  @Expose()
   share_location: boolean;
 
-  @Exclude()
+  @Expose()
   share_gender: boolean;
 
-  @Exclude()
+  @Expose()
   share_age: boolean;
 
   @Exclude()
   readonly id: string;
 
-  @Exclude()
+  @Expose()
   readonly is_shareable: boolean;
 
   @Exclude()
