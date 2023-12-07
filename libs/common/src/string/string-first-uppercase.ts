@@ -23,7 +23,11 @@ export function firstUppercaseAfterHyphen(name: string): string {
     arr[i] = arr[i].charAt(0).toUpperCase() +  arr[i].slice(1).toLowerCase();
   }
   const final_tag = arr.join("-")
-  console.log(JSON.stringify(final_tag))
 
   return final_tag;
+}
+
+
+export function parseDMY(s: string):string {
+  return new Date(s.replace(/ GMT.*/,'')).toLocaleDateString('en-GB');
 }
