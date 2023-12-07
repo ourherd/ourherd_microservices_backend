@@ -5,7 +5,9 @@
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": true,
-    "assets": ["libs/common/envs/*"],
+    "assets": [
+      "libs/common/envs/*"
+    ],
     "tsConfigPath": "apps/gateway/tsconfig.app.json"
   },
   "projects": {
@@ -187,6 +189,15 @@
       "sourceRoot": "apps/tag/src",
       "compilerOptions": {
         "tsConfigPath": "apps/tag/tsconfig.app.json"
+      }
+    },
+    "mystories": {
+      "type": "application",
+      "root": "apps/mystories",
+      "entryFile": "main",
+      "sourceRoot": "apps/mystories/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/mystories/tsconfig.app.json"
       }
     }
   },

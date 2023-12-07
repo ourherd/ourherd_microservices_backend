@@ -27,6 +27,9 @@ import { FeedModule } from "../../feed/src/feed.module";
 
 import { getEnvPath } from "@app/common/env/env.helper";
 import { JwtStrategy } from '@app/authentication';
+import { MyStoryDto } from "../../mystories/src/dto/my.story.dto";
+import { MyStoriesModule } from "../../mystories/src/my.stories.module";
+import { MyStoriesGatewayController } from "./modules/mystories/mystories-gateway.controller";
 
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
@@ -54,12 +57,14 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     PassportModule.register({ defaultStrategy: 'jwt' }),
 
     FeedModule,
+    MyStoriesModule,
     StorageModule
   ],
   controllers: [
     AccountGatewayController,
     AccountPasswordGatewayController,
     FeedGatewayController,
+    MyStoriesGatewayController,
     MemberGatewayController,
     MemberVerificationGatewayController,
     ReactionGatewayController,
