@@ -17,6 +17,7 @@ export class MyStoriesSaga {
     if (isEmptyOrNull(progress) && isEmptyOrNull(published)) {
       return {
         state: false,
+        total_progress: isEmptyOrNull(progress)? 0 : progress.length,
         progress: null,
         published: null
       }
@@ -24,6 +25,7 @@ export class MyStoriesSaga {
 
     return {
       state: true,
+      total_progress: isEmptyOrNull(progress)? 0 : progress.length,
       progress: progress,
       published: published
     }

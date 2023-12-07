@@ -44,7 +44,7 @@ export class MyStoryDto extends BaseAbstractDto {
   @Expose()
   readonly hero_statement: string;
 
-  @Exclude()
+  @Expose()
   readonly story_status: string;
 
   @Expose()
