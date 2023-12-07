@@ -49,9 +49,9 @@ export class RegisterAccountDto {
     /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/,
     { message: 'invalid date of birth' },
   )
-  @isValidBirthday()
   @IsNotEmpty()
   @IsString()
+  @isValidBirthday()
   public birthday: string;
 
   @ApiProperty({
