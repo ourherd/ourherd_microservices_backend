@@ -48,11 +48,11 @@ export class StoryService {
 
     if ( !isEmptyOrNull(filters.tags) ) {
       feedQuery.leftJoinAndSelect(StoryTagEntity, 'tag', 'feed.id = tag.story_id');
-      feedQuery.andWhere('tag.tag_id IN (:...ids)', { ids: filters.tags })
+      feedQuery.andWhere('tag.tag_id IN (:...ids)', { ids: filters.tags });
     }
 
     if ( !isEmptyOrNull(filters.story_medium) ) {
-      feedQuery.andWhere('feed.story_medium= :story_medium', { story_medium: filters.story_medium })
+      feedQuery.andWhere('feed.story_medium= :story_medium', { story_medium: filters.story_medium });
     }
 
     const entities = await feedQuery.take(this.FEED_LIMIT - 1)
@@ -65,15 +65,20 @@ export class StoryService {
   async getSavedStories (member_id: string, page: number):  Promise<IStoriesResponse<StoryDto[], number>> {
     // get all ids for the saved stories
     let ids = await this.bookmarkService.getBookmarkIds(member_id);
-    const entities = await this.storyRepository.createQueryBuilder('feed')
-      .where('feed.story_status= :story_status' , { story_status: StoryStatus.PUBLISHED })
-      .andWhere('feed.id IN (:...ids)', {ids: ids})
-      //.take(this.SAVED_STORIES_LIMIT - 1)
-      //.skip((page - 1) * this.SAVED_STORIES_LIMIT )
-      .getMany();
+    if (!isEmptyOrNull(ids)) {
+      const entities = await this.storyRepository.createQueryBuilder('feed')
+        .where('feed.story_status= :story_status', { story_status: StoryStatus.PUBLISHED })
+        .andWhere('feed.id IN (:...ids)', { ids: ids })
+        .getMany();
+        const stories = await this.getStoriesContent(member_id, entities);
+        return { stories, total: ids.length }
+    }
 
-    const stories = await this.getStoriesContent(member_id, entities);
-    return { stories, total: ids.length }
+    return {
+      stories: null,
+      total: 0
+    }
+
   }
 
   // Get content
