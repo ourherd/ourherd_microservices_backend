@@ -6,6 +6,7 @@ import {
   ValidatorConstraintInterface,
 } from "class-validator";
 import { STORY_MESSAGE } from "../../../story/src/constant/story-patterns.constants";
+import { isEmptyOrNull } from "@app/common/validation-rules/object-validation.rule";
 
 const MIN_AGE = 13;
 
@@ -14,6 +15,7 @@ export class DateOfBirthValidation implements ValidatorConstraintInterface {
 
   validate(value: string, args: ValidationArguments): boolean {
 
+    if (isEmptyOrNull(value)) return false;
     const [day, month, year] = value.split('/');
     let birthday = new Date( +year, +month-1, +day );
     let min_age = new Date();

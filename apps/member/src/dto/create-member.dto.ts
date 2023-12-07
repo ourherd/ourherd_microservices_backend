@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString, IsUUID, Matches, MinLength } from "class-validator";
+import { IsBoolean, IsEmail, IsNotEmpty, IsOptional, IsString, IsUUID, Matches, MinLength } from "class-validator";
 import { Transform } from "class-transformer";
 import { v4 } from 'uuid';
 import { ApiProperty } from "@nestjs/swagger";
@@ -34,5 +34,14 @@ export class CreateMemberDto  {
   @IsNotEmpty()
   @IsString()
   public birthday: string;
+
+  @ApiProperty({
+    description: "Newsletter",
+    example: true,
+    required: false,
+    type: Boolean
+  })
+  @IsBoolean()
+  public newsletter: boolean = false;
 
 }

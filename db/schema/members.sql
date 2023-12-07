@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS public.members
     mobile_number text,
     gender text,
     freeform_gender boolean default false,
+    newsletter boolean default false,
     employment text, -- potentially use and based on legacy
     avatar text,
     bio text,
@@ -30,6 +31,10 @@ CREATE TABLE IF NOT EXISTS public.members
 
 
 ALTER TABLE public.members ADD freeform_gender boolean default false;
+ALTER TABLE public.members ADD newsletter boolean default false;
+
+ALTER TABLE members ALTER COLUMN birthday TYPE VARCHAR;
+
 
 ALTER TABLE public.members
     ADD CONSTRAINT fk_member_account foreign key (id) references accounts (id) deferrable initially deferred;
