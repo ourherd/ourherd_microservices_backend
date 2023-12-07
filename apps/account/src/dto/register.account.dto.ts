@@ -1,4 +1,14 @@
-import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID, Matches, MinLength } from "class-validator";
+import {
+  IsBoolean,
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Matches,
+  MinLength
+} from "class-validator";
 import { Exclude, Transform } from "class-transformer";
 import { isValidBirthday } from "../validation/date.of.birth.validation"
 import { v4 } from "uuid";
@@ -43,6 +53,15 @@ export class RegisterAccountDto {
   @IsNotEmpty()
   @IsString()
   public birthday: string;
+
+  @ApiProperty({
+    description: "Newsletter",
+    example: true,
+    required: false,
+    type: Boolean
+  })
+  @IsBoolean()
+  public newsletter: boolean = false;
 
   @IsEnum(Role)
   @IsOptional()
