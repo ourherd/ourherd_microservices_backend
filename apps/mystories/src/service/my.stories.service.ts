@@ -59,7 +59,6 @@ export class MyStoriesService {
   async archivedStory  (member_id: string, story_id: string) :
     Promise<IServiceResponse<UpdateResult | null>> {
 
-    this.logger.log('Story ID ' + story_id);
     try {
       const result = await this.storyRepository.update(
       {
@@ -68,7 +67,7 @@ export class MyStoriesService {
         story_status: StoryStatus.ARCHIVED
       });
 
-      this.logger.log('Story Setting Updated to ' + result);
+      this.logger.log('Story Setting Updated to ' + StoryStatus.ARCHIVED);
 
       return {
         state: !!result,
