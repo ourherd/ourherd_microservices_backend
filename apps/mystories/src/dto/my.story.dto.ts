@@ -1,9 +1,11 @@
 import { IsArray, IsOptional } from "class-validator";
-import { TagDto } from "./tag.dto";
-import { MyStoryMemberDto } from "./my.story.member.dto";
 import { Exclude, Expose, Transform, Type } from "class-transformer";
 import { BaseAbstractDto } from "./base.abstract.dto";
+import { TagDto } from "./tag.dto";
+import { MyStoryMemberDto } from "./my.story.member.dto";
+import { MyStoryResourceDto } from "./my.story.resource.dto";
 import { parseDMY } from "@app/common/string/string-first-uppercase";
+
 
 export class MyStoryDto extends BaseAbstractDto {
 
@@ -69,5 +71,9 @@ export class MyStoryDto extends BaseAbstractDto {
   @IsOptional()
   @Type(() => MyStoryMemberDto)
   settings: MyStoryMemberDto;
+
+  @Expose()
+  @Type(() => MyStoryResourceDto)
+  resource: MyStoryResourceDto;
 
 }

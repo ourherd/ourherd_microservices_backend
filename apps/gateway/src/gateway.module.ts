@@ -4,14 +4,14 @@ import { RabbitModule, RabbitServiceName } from "@app/rabbit";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { MulterModule } from "@nestjs/platform-express";
-import { PassportModule } from '@nestjs/passport';
+import { PassportModule } from "@nestjs/passport";
 import multer from "multer";
 
 import { MemberGatewayController } from "./modules/member/member-gateway.controller";
 import { MemberVerificationGatewayController } from "./modules/member/member-verification-gateway.controller";
-import { FeedGatewayController } from './modules/feed/feed-gateway.controller';
-import { ReactionGatewayController } from './modules/reaction/reaction-gateway.controller';
-import { ViolationGatewayController } from './modules/violation/violation-gateway.controller';
+import { FeedGatewayController } from "./modules/feed/feed-gateway.controller";
+import { ReactionGatewayController } from "./modules/reaction/reaction-gateway.controller";
+import { ViolationGatewayController } from "./modules/violation/violation-gateway.controller";
 import { BookmarkGatewayController } from "./modules/bookmark/bookmark-gateway.controller";
 import { StorySubmitGatewayController } from "./modules/story/story-submit-gateway.controller";
 import { StoryDraftGatewayController } from "./modules/story/story-draft-gateway.controller";
@@ -22,14 +22,14 @@ import { AccountGatewayController } from "./modules/account/account-gateway.cont
 import { AccountPasswordGatewayController } from "./modules/account/account-password-gateway.controller";
 import { SurveyGatewayController } from "./modules/survey/survey-gateway.controller";
 import { TagGatewayController } from "./modules/tag/tag-gateway.controller";
+import { MyStoriesGatewayController } from "./modules/mystories/mystories-gateway.controller";
+
 import { StorageModule } from "apps/storage/src/storage.module";
 import { FeedModule } from "../../feed/src/feed.module";
+import { MyStoriesModule } from "../../mystories/src/my.stories.module";
 
 import { getEnvPath } from "@app/common/env/env.helper";
-import { JwtStrategy } from '@app/authentication';
-import { MyStoryDto } from "../../mystories/src/dto/my.story.dto";
-import { MyStoriesModule } from "../../mystories/src/my.stories.module";
-import { MyStoriesGatewayController } from "./modules/mystories/mystories-gateway.controller";
+import { JwtStrategy } from "@app/authentication";
 
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
@@ -54,6 +54,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     RabbitModule.forClientProxy(RabbitServiceName.STORAGE),
     RabbitModule.forClientProxy(RabbitServiceName.SURVEY),
     RabbitModule.forClientProxy(RabbitServiceName.TAG),
+    RabbitModule.forClientProxy(RabbitServiceName.MY_STORY),
     PassportModule.register({ defaultStrategy: 'jwt' }),
 
     FeedModule,
