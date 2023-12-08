@@ -19,7 +19,7 @@ export class SurveyController {
   @MessagePattern(SURVEY_MESSAGE_PATTERNS.START)
   async startSurveyInstance(
     @Payload('member_id') member_id: string,
-  @Payload('createDto') createSurveyInstanceDto: CreateInstanceSurveyDto
+    @Payload('createDto') createSurveyInstanceDto: CreateInstanceSurveyDto
   ): Promise<IServiceResponse<SurveyMemberInstanceEntity|SurveyEntity>> {
 
     const survey = this.surveyService.createSurveyMemberInstance(
