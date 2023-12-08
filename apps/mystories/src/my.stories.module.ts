@@ -14,6 +14,7 @@ import { RabbitModule, RabbitServiceName } from "@app/rabbit";
 import { getEnvPath } from "@app/common/env/env.helper";
 import { MyStoriesTagService } from "./service/my.stories.tag.service";
 import { MyStoriesSettingService } from "./service/my.stories.setting.service";
+import { MyStoriesController } from "./my.stories.controller";
 
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
@@ -30,10 +31,10 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
       StorySettingEntity,
       MemberEntity
     ]),
-    RabbitModule.forServerProxy(RabbitServiceName.MY_STORY),
+    RabbitModule.forServerProxy(RabbitServiceName.MY_STORY)
   ],
-  controllers: [],
+  controllers: [MyStoriesController],
   providers: [MyStoriesSaga, MyStoriesService, MyStoriesTagService, MyStoriesSettingService],
-  exports:[MyStoriesSaga]
+ exports:[MyStoriesSaga]
 })
 export class MyStoriesModule {}
