@@ -43,10 +43,12 @@ export class AccountService {
       // TODO replace this with a validation injection
       // https://gist.github.com/zarv1k/3ce359af1a3b2a7f1d99b4f66a17f1bc
       const accountExist = await this.findByEmail(createAccountDto.email);
+      this.logger.log('return accountExist ' , accountExist)
+
       if (accountExist.state) {
         return {
-          state: accountExist.state,
-          data: accountExist.data,
+          state: false,
+          data: null,
           message: ACCOUNT_MESSAGE_DB_RESPONSE.EXISTING_EMAIL
         };
       }
