@@ -199,6 +199,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/mystories/tsconfig.app.json"
       }
+    },
+    "transcribe": {
+      "type": "application",
+      "root": "apps/transcribe",
+      "entryFile": "main",
+      "sourceRoot": "apps/transcribe/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/transcribe/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,
