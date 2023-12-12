@@ -14,9 +14,8 @@ export class StorageService {
   private readonly logger = new Logger(StorageService.name);
 
   constructor(
-    @InjectRepository(StorageResourceEntity, Database.PRIMARY)
-      private storageRepository: Repository<StorageResourceEntity>,
-      private s3Service: ResourceS3AwsService) { }
+    @InjectRepository(StorageResourceEntity, Database.PRIMARY) private storageRepository: Repository<StorageResourceEntity>,
+    private s3Service: ResourceS3AwsService) { }
 
   async upload(
     storageDto: CreateStorageResourceDto,
@@ -69,9 +68,7 @@ export class StorageService {
         state: false,
         data: error
       };
-
     }
-
   }
 
   async resourceByStoryId (story_id:string) : Promise<StorageResourceEntity> {

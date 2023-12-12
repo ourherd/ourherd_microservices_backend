@@ -10,7 +10,6 @@ import { getEnvPath } from '@app/common/env/env.helper';
 import { StoryTagEntity } from "../../story/src/entity/tag/story.tag.entity";
 import { StoryTagService } from "../../story/src/service/tag/story.tag.service";
 
-
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
 @Module({
