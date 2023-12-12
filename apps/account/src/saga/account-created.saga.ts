@@ -28,8 +28,9 @@ export class AccountCreatedSaga {
    */
   public async accountCreated ( registerDto: RegisterAccountDto ): Promise<IServiceResponse<AccountEntity>> {
     const account = await this.accountService.register(registerDto);
-    registerDto.id = account.data.id;
+    if (!account.state) return account;
 
+    registerDto.id = account.data.id;
     await this.memberCreated(registerDto);
     await this.welcomeEmailSent(registerDto);
 
