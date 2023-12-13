@@ -16,7 +16,7 @@ CREATE TYPE survey_type AS ENUM (
 CREATE TYPE survey_static_status AS ENUM (
     'ACTIVE',
     'INACTIVE'
-    );
+);
 
 CREATE TABLE IF NOT EXISTS public.surveys
 (
@@ -87,6 +87,12 @@ CREATE TABLE IF NOT EXISTS public.survey_single_responses
     updated_at timestamp with time zone default now() not null,
     deleted_at timestamp
 );
+
+ALTER TABLE public.survey_single_responses
+    ADD CONSTRAINT fk_survey_member_instance_id foreign key(survey_member_instance_id)
+        references survey_member_instances(id);
+
+
 
 CREATE TABLE IF NOT EXISTS public.survey_final_responses
 (

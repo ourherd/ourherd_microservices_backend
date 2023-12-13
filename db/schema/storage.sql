@@ -13,6 +13,9 @@ CREATE TABLE IF NOT EXISTS public.storage_resources
     has_captions_included boolean DEFAULT false,
     media_captions_path text,
 
+    media_transcript_path text DEFAULT NULL,
+    media_original_resource_path text DEFAULT NULL,
+
     driver varchar(255),
     created_at timestamp with time zone default now() not null,
     updated_at timestamp with time zone default now() not null,
@@ -20,3 +23,6 @@ CREATE TABLE IF NOT EXISTS public.storage_resources
 
     CONSTRAINT fk_story FOREIGN KEY(story_id) REFERENCES stories(id)
 );
+
+ALTER TABLE storage_resources ALTER COLUMN media_transcript_path TYPE text;
+ALTER TABLE storage_resources ALTER COLUMN media_original_resource_path TYPE text;
