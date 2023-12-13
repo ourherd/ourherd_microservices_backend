@@ -44,8 +44,7 @@ export class StorySubmitService {
       return member;
     }
     this.logger.log('The story status has been updated --> ' + StoryStatus.SUBMITTED);
-    await this.createTranscripts(story_id);
-
+    //await this.createTranscripts(story_id);
     return await this.updateStatus(story.data, StoryStatus.SUBMITTED);
   }
 

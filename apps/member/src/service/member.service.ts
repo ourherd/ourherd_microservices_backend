@@ -12,7 +12,6 @@ import { MemberVerificationEntity } from "../entity/member-verification.entity";
 import { MemberPrivacyDto } from "../dto/member-privacy.dto";
 import { isEmptyOrNull } from "@app/common/validation-rules/object-validation.rule";
 
-
 @Injectable()
 export class MemberService {
 
