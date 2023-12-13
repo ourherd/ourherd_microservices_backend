@@ -24,7 +24,13 @@ export class StorageResourceEntity extends AbstractEntity {
     media_captions_path: string;
 
     @Column({ nullable: true })
+    media_transcript_path: string;
+
+    @Column({ nullable: true })
     media_resource_path: string;
+
+    @Column({ nullable: true })
+    media_original_resource_path: string;
 
     @Column({
         type: 'enum',

@@ -2,17 +2,17 @@ import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
 import { MicroserviceOptions } from '@nestjs/microservices';
 import { RABBIT_SERVICE_OPTIONS } from '@app/rabbit';
-import { TRANSCRIBE_SERVICE, TRANSCRIBE_MODULE } from "./constant/transcribe-patterns.constants";
-import { TranscribeModule } from './transcribe.module';
+import { MEDIA_SERVICE, MEDIA_MODULE } from "./constant/media-patterns.constants";
+import { MediaModule } from './media.module';
 
 async function bootstrap() {
 
-  let logger = new Logger(TRANSCRIBE_SERVICE);
-  const app = await NestFactory.create(TranscribeModule);
+  let logger = new Logger(MEDIA_SERVICE);
+  const app = await NestFactory.create(MediaModule);
   // * setup
   app.connectMicroservice<MicroserviceOptions>(app.get<MicroserviceOptions>(RABBIT_SERVICE_OPTIONS));
   // * start
   await app.startAllMicroservices();
-  logger.log(`🚀 Application { ` + TRANSCRIBE_MODULE +` } running 🚀`);
+  logger.log(`🚀 Application { ` + MEDIA_MODULE +` } running 🚀`);
 }
 bootstrap();

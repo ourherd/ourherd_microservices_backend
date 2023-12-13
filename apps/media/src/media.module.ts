@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { TranscribeController } from './transcribe.controller';
-import { TranscribeService } from './transcribe.service';
+import { MediaController } from './media.controller';
+import { MediaTranscribeService } from './service/media.transcribe.service';
 import { ConfigModule } from "@nestjs/config";
 import { Database, DatabaseModule } from "@app/database";
 import { StorageResourceEntity } from "../../storage/src/entity/storage-resource.entity";
@@ -20,9 +20,9 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
       StoryEntity,
       StorageResourceEntity,
     ]),
-    RabbitModule.forServerProxy(RabbitServiceName.TRANSCRIBE),
+    RabbitModule.forServerProxy(RabbitServiceName.MEDIA),
   ],
-  controllers: [TranscribeController],
-  providers: [TranscribeService],
+  controllers: [MediaController],
+  providers: [MediaTranscribeService],
 })
-export class TranscribeModule {}
+export class MediaModule {}

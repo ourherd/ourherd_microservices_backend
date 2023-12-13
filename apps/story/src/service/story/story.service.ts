@@ -33,6 +33,7 @@ export class StoryService {
   }
   //
   public async updateStatusStory (story :StoryEntity, status: StoryStatus):  Promise<StoryUpdateStatusResponseDto> {
+    //TODO check status if its published move it to submitted again
     story.story_status = status
     await this.storyRepository.update({ id: story.id }, story);
 

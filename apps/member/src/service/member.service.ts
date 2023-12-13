@@ -32,11 +32,6 @@ export class MemberService {
       const member = this.memberRepository.create(createDto);
       const result = await this.memberRepository.save(member);
 
-      this.logger.log('member status--> ' + JSON.stringify(
-        !!result ?
-          MEMBER_MESSAGE_DB_RESPONSE.CREATED : MEMBER_MESSAGE_DB_RESPONSE.CREATED_FAILED
-      ));
-
       return {
         state: !!result,
         data: member,
@@ -45,6 +40,7 @@ export class MemberService {
       };
 
     } catch (error) {
+      this.logger.error('member dto error --> ' + JSON.stringify(error));
       return {
         state: false,
         data: error,

@@ -37,7 +37,7 @@ export const RABBIT_SERVICES: Record<RabbitServiceName, { queue: string }> =
     TAG_SERVICE: {
       queue: 'tag_queue'
     },
-    TRANSCRIBE_SERVICE: {
-      queue: 'transcribe_queue'
+    MEDIA_SERVICE: {
+      queue: 'media_queue'
     }
 }

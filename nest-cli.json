@@ -200,13 +200,13 @@
         "tsConfigPath": "apps/mystories/tsconfig.app.json"
       }
     },
-    "transcribe": {
+    "media": {
       "type": "application",
-      "root": "apps/transcribe",
+      "root": "apps/media",
       "entryFile": "main",
-      "sourceRoot": "apps/transcribe/src",
+      "sourceRoot": "apps/media/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/transcribe/tsconfig.app.json"
+        "tsConfigPath": "apps/media/tsconfig.app.json"
       }
     }
   },

@@ -1,14 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { TranscribeModule } from './../src/transcribe.module';
+import { MediaModule } from './../src/transcribe.module';
 
 describe('TranscribeController (e2e)', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [TranscribeModule],
+      imports: [MediaModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
