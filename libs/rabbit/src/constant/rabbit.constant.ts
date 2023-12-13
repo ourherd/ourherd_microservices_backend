@@ -36,5 +36,8 @@ export const RABBIT_SERVICES: Record<RabbitServiceName, { queue: string }> =
     },
     TAG_SERVICE: {
       queue: 'tag_queue'
+    },
+    MEDIA_SERVICE: {
+      queue: 'media_queue'
     }
 }

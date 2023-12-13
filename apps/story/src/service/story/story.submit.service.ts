@@ -1,14 +1,19 @@
-import { Injectable, Logger } from "@nestjs/common";
+import { Inject, Injectable, Logger } from "@nestjs/common";
+import { TRANSCRIBE_MESSAGE_PATTERNS } from "../../../../media/src/constant/media-patterns.constants";
 import { StoryTagService } from "../tag/story.tag.service";
 import { MemberService } from "../../../../member/src/service/member.service";
 import { StoryService } from "./story.service";
-import { IServiceResponse } from "@app/rabbit";
+import { IServiceResponse, RabbitServiceName } from "@app/rabbit";
 import { StoryEntity } from "../../entity/story/story.entity";
 import { StoryTagEntity } from "../../entity/tag/story.tag.entity";
 import { MemberEntity } from "../../../../member/src/entity/member.entity";
 import { isEmptyOrNull } from "@app/common/validation-rules/object-validation.rule";
 import { StoryStatus, StoryType } from "../../constant/story.enum";
 import { StoryUpdateStatusResponseDto } from "../../dto/story/story.update.status.response.dto";
+import { ClientProxy } from "@nestjs/microservices";
+import { firstValueFrom } from "rxjs";
+import { UpdateResult } from "typeorm";
+
 
 @Injectable()
 export class StorySubmitService {
@@ -18,7 +23,8 @@ export class StorySubmitService {
   constructor(
     private readonly storyService: StoryService,
     private readonly storyTagService: StoryTagService,
-    private readonly memberService: MemberService
+    private readonly memberService: MemberService,
+    @Inject(RabbitServiceName.MEDIA) private mediaClient: ClientProxy
   ) {}
 
   public async submit (member_id: string, story_id: string ): Promise<IServiceResponse<any>> {
@@ -37,8 +43,9 @@ export class StorySubmitService {
     if(!member.state) {
       return member;
     }
-    this.logger.log('The story status has been updated --> ' + StoryStatus.AWAITING_REVIEW);
-    return await this.updateStatus(story.data, StoryStatus.AWAITING_REVIEW);
+    this.logger.log('The story status has been updated --> ' + StoryStatus.SUBMITTED);
+    //await this.createTranscripts(story_id);
+    return await this.updateStatus(story.data, StoryStatus.SUBMITTED);
   }
 
   private async hasStoryContent ( member_id:string, story_id: string) {
@@ -87,10 +94,22 @@ export class StorySubmitService {
 
   private async updateStatus ( story: StoryEntity, status: StoryStatus ):
     Promise<IServiceResponse<StoryUpdateStatusResponseDto>> {
-    const response = await this.storyService.updateStatusStory(story, StoryStatus.AWAITING_REVIEW);
+    const response = await this.storyService.updateStatusStory(story, status);
     return {
       state: true,
       data: response
     }
   }
+
+  private async createTranscripts ( story_id: string ) : Promise<void> {
+    await firstValueFrom(
+      this.mediaClient.emit<IServiceResponse<UpdateResult>, { story_id: string }>(
+        TRANSCRIBE_MESSAGE_PATTERNS.CREATE,
+        {
+          story_id
+        }
+      )
+    );
+  }
+
 }

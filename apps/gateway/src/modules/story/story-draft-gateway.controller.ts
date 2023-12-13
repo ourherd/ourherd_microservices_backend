@@ -31,6 +31,7 @@ import { StorageService } from "apps/storage/src/service/storage.service";
 import { ParseUploadVideoFilePipe } from "@app/common/pipe/parse-upload-video-file.pipe";
 import { ParseUploadImageFilePipe } from "@app/common/pipe/parse-upload-image-file.pipe";
 import { CreateStorageResourceDto } from "apps/storage/src/dto/create-storage-resource.dto";
+import { STORAGE_MESSAGE_DB_RESPONSE } from "../../../../storage/src/constant/storage-patterns.constant";
 
 @ApiTags('Story Create Gateway')
 @Controller({
@@ -88,7 +89,7 @@ export class StoryDraftGatewayController {
 
     //TODO Refactor this, create another DTO
     const draftVideoDto = new StoryDraftVideoDto()
-    const { state: storyState, data: storyData } = await firstValueFrom(
+    const { state: storyState, data: storyData, message } = await firstValueFrom(
       this.storyProxy.send<IServiceResponse<StoryEntity>, { member_id: string, draftVideoDto: StoryDraftVideoDto }>
         (
           STORY_MESSAGE_PATTERNS.DRAFT_VIDEO,
@@ -98,6 +99,14 @@ export class StoryDraftGatewayController {
           }
         )
     );
+
+    if (storyState === false) {
+      return {
+        state: false,
+        data: storyData,
+        message: message
+      };
+    }
 
     let storageDto = new CreateStorageResourceDto()
     storageDto = {

@@ -17,14 +17,29 @@ export class StorageResourceEntity extends AbstractEntity {
     })
     resource_type: StorageResourceType;
 
+    // If resource_type is VIDEO
+    // if captions has been created
     @Column({ default: false, nullable: true })
     has_captions_included: boolean;
 
+    // If resource_type is VIDEO
+    // if has_captions_included is TRUE
     @Column({ default: false , nullable: true })
     media_captions_path: string;
 
+    // If resource_type is VIDEO
+    // if has_captions_included is TRUE
+    @Column({ nullable: true })
+    media_transcript_path: string;
+
+    // If new media resource If VIDEO MP4
+    // If new media resource If IMAGE jpg
     @Column({ nullable: true })
     media_resource_path: string;
+
+    // Original file
+    @Column({ nullable: true })
+    media_original_resource_path: string;
 
     @Column({
         type: 'enum',

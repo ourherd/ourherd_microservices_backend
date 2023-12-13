@@ -58,6 +58,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     ]),
     RabbitModule.forServerProxy(RabbitServiceName.STORY),
     RabbitModule.forClientProxy(RabbitServiceName.TAG),
+    RabbitModule.forClientProxy(RabbitServiceName.MEDIA),
     MemberModule
   ],
   controllers: [
