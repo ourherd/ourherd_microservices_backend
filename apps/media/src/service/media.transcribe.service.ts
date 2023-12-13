@@ -115,9 +115,11 @@ export class MediaTranscribeService {
   }
 
   private async updateStoryResource(resource: StorageResourceEntity, job: TranscriptionJob): Promise<void> {
-    resource.media_captions_path = job.Subtitles.SubtitleFileUris[0]; // VTT
+
     resource.has_captions_included = true;
-    //job.Transcript.RedactedTranscriptFileUri // transcript.json
+    resource.media_captions_path = job.Subtitles.SubtitleFileUris[0]; // VTT
+    resource.media_transcript_path = job.Transcript.RedactedTranscriptFileUri;
+
     await this.storageResourceRepository.update(
       {
         id: resource.id
