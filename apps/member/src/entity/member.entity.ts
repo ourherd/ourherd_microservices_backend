@@ -51,7 +51,7 @@ export class MemberEntity extends AbstractEntity {
   @ApiProperty()
   @IsOptional()
   @Column({ nullable: true })
-  birthday: Date;
+  birthday: string;
 
   @ApiProperty({
     isArray: false,

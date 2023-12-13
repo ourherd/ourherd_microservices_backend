@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS public.members
 
     first_name text,
     last_name text, -- potentially use and based on legacy
-    birthday  date,
+    birthday  text,
     "status" member_status default 'ACTIVATED',
     verified boolean default false,
     country text,
