@@ -45,6 +45,7 @@ export class MemberService {
       };
 
     } catch (error) {
+      this.logger.log('member create fail--> ' + error);
       return {
         state: false,
         data: error,
