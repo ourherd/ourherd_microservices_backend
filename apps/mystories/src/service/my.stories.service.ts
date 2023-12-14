@@ -11,6 +11,7 @@ import { MyStoriesSettingService } from "./my.stories.setting.service";
 import { MyStoriesResourceService } from "./my.stories.resource.service";
 import { MY_STORIES_MESSAGE_DB_RESPONSE } from "../constant/mystories-patterns.constants";
 import { IServiceResponse } from "@app/rabbit";
+import { parseDMY } from "@app/common/string/string-first-uppercase";
 
 @Injectable()
 export class MyStoriesService {
@@ -29,7 +30,7 @@ export class MyStoriesService {
       .where('progress.story_status !=:status_published' , { status_published: StoryStatus.PUBLISHED })
       .andWhere('progress.story_status !=:status_archived' , { status_archived: StoryStatus.ARCHIVED })
       .andWhere('progress.member_id =:member_id' , { member_id: member_id })
-      .orderBy('progress.updated_at', 'ASC')
+      .orderBy('progress.updated_at', 'DESC')
       .getMany();
     return await this.getMyStoriesContent(entities);
   }
@@ -39,7 +40,7 @@ export class MyStoriesService {
     const entities = await this.storyRepository.createQueryBuilder('progress')
       .where('progress.story_status =:status_published' , { status_published: StoryStatus.PUBLISHED })
       .andWhere('progress.member_id =:member_id' , { member_id: member_id })
-      .orderBy('progress.updated_at', 'ASC')
+      .orderBy('progress.updated_at', 'DESC')
       .getMany();
     return await this.getMyStoriesContent(entities);
   }
@@ -50,6 +51,7 @@ export class MyStoriesService {
     const stories = plainToInstance(MyStoryDto, entities);
     let dtos: MyStoryDto[] = [];
     for ( let dto of stories ) {
+      dto.updated_at = parseDMY(dto.updated_at.toString());
       dto = await this.tagService.getTagsByMyStory(dto);
       dto = await this.settingService.getSettingByMyStory(dto);
       dto = await this.resourceService.getStorageResource(dto);

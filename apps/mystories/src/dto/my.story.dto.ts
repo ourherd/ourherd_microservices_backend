@@ -10,10 +10,6 @@ import { parseDMY } from "@app/common/string/string-first-uppercase";
 export class MyStoryDto extends BaseAbstractDto {
 
   @Expose()
-  @Transform(({ value }) => parseDMY(value.toString()))
-  readonly updated_at: string;
-
-  @Expose()
   public id: string;
 
   @Expose()
@@ -63,6 +59,9 @@ export class MyStoryDto extends BaseAbstractDto {
 
   @Expose()
   readonly content_4: string;
+
+  @Expose()
+  updated_at: string;
 
   @IsArray()
   tags: TagDto[]
