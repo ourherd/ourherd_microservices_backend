@@ -33,6 +33,11 @@ CREATE TABLE IF NOT EXISTS public.surveys
     deleted_at timestamp
 );
 
+insert into public.surveys (id, name, description, version, type, status)
+values  ('01b1dcab-2807-453a-be3a-f22543c689df', 'DQ5', 'DQ5 v1', 1, 'DQ5_MEMBER_STORY', 'ACTIVE'),
+        ('dd7303f6-ad76-48ad-b489-c258d51d60bb', 'Long Survey', 'Long Survey v1', 1, 'LONG_SURVEY_ONBOARDING', 'ACTIVE'),
+        ('c5ea0e15-1ffa-4c95-97e6-d912643e3120', 'Short Survey ', 'Short Survey v1', 1, 'SHORT_SURVEY_ONBOARDING', 'ACTIVE');
+
 
 -- CREATE TABLE IF NOT EXISTS public.survey_questions
 -- (

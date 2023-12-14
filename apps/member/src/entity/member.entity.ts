@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToMany } from "typeorm";
+import { Column, DeleteDateColumn, Entity, JoinColumn, OneToMany } from "typeorm";
 
 import { AbstractEntity } from "@app/database/base/base.entity";
 import { IsEnum, IsOptional } from "class-validator";
@@ -97,6 +97,9 @@ export class MemberEntity extends AbstractEntity {
 
   @Column({ nullable: true })
   sequence_identity: string;
+
+  @DeleteDateColumn({ type: 'timestamp' })
+  public verified_at!: Date;
 
   // @OneToMany(() => MemberVerificationEntity, verification => verification.member )
   // verification: MemberVerificationEntity;

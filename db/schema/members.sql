@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS public.members
 ALTER TABLE public.members ADD freeform_gender boolean default false;
 ALTER TABLE public.members ADD newsletter boolean default false;
 
-ALTER TABLE members ALTER COLUMN birthday TYPE VARCHAR;
+ALTER TABLE members ALTER COLUMN birthday TYPE TEXT;
 
 
 ALTER TABLE public.members
