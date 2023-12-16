@@ -23,3 +23,7 @@ CREATE TABLE IF NOT EXISTS public.storage_resources
 
     CONSTRAINT fk_story FOREIGN KEY(story_id) REFERENCES stories(id)
 );
+
+
+ALTER TABLE public.storage_resources ADD media_original_resource_path text DEFAULT NULL;
+ALTER TABLE public.storage_resources ADD media_transcript_path text DEFAULT NULL;
