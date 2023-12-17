@@ -21,7 +21,11 @@ export class MediaService {
     });
   }
 
-  async updateResource(resource: StorageResourceEntity, job: TranscriptionJob): Promise<void> {
+  async updateFileResource(resource: StorageResourceEntity): Promise<void> {
+
+  }
+
+  async updateCaptionResource(resource: StorageResourceEntity, job: TranscriptionJob): Promise<void> {
 
     resource.has_captions_included = true;
     resource.media_captions_path = job.Subtitles.SubtitleFileUris[0]; // VTT

@@ -40,9 +40,12 @@ export class MediaTranscribeService {
           secretAccessKey:  this.configService.get('AWS_S3_SECRET_KEY')
         },
       };
-
+      // TODO only video
+      // TODO if resource exist PROCEED
       const resource = await this.mediaService.getStoryResource(story_id);
       if (resource === null) return
+      // TODO if resources table on media_resource_path has an MP4 THEN PROCEED
+      //  Otherwise abort operation and LOG the reason
 
       const transcribeClient = new TranscribeClient(transcribeConfig);
       const transcriptionJobResponse = await this.sendTranscribeJob(transcribeClient , resource);
@@ -68,7 +71,7 @@ export class MediaTranscribeService {
       const transcribeCommand = new StartTranscriptionJobCommand({
         TranscriptionJobName: transcriptionJobName,
         LanguageCode: "en-US",
-        MediaFormat: "mp4",
+        MediaFormat: "mp4", //TODO this needs to come from the resource and we need to make sure the MP4 exists
         Media: { MediaFileUri: resource.media_resource_path },
         OutputBucketName: 'ourherd-public-dev',
         OutputKey: route,
