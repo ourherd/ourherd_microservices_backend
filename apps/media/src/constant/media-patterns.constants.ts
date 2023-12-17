@@ -8,7 +8,3 @@ export const MEDIA_MESSAGE_PATTERNS = {
 export const TRANSCRIBE_MESSAGE_PATTERNS = {
   CREATE: 'transcribe.create'
 }
-
-
-
-
