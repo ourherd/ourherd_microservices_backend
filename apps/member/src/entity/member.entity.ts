@@ -98,7 +98,7 @@ export class MemberEntity extends AbstractEntity {
   @Column({ nullable: true })
   sequence_identity: string;
 
-  @DeleteDateColumn({ type: 'timestamp' })
+  @Column({ nullable: true })
   public verified_at!: Date;
 
   // @OneToMany(() => MemberVerificationEntity, verification => verification.member )
