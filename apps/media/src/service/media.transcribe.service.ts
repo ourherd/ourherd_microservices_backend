@@ -13,6 +13,7 @@ import { StorageResourceEntity } from "../../../storage/src/entity/storage-resou
 import { v4 } from "uuid";
 import { ConfigService } from "@nestjs/config";
 import { StorageResourceRoute } from "../../../storage/src/interface/storage-resource.interface";
+import { MediaService } from "./media.service";
 
 
 @Injectable()
@@ -24,6 +25,7 @@ export class MediaTranscribeService {
 
   constructor(
     private configService: ConfigService,
+    private readonly mediaService: MediaService,
     @InjectRepository(StorageResourceEntity, Database.PRIMARY) private storageResourceRepository:
       Repository<StorageResourceEntity>
   ) {}
@@ -38,9 +40,12 @@ export class MediaTranscribeService {
           secretAccessKey:  this.configService.get('AWS_S3_SECRET_KEY')
         },
       };
-
-      const resource = await this.getStoryResource(story_id);
+      // TODO only video
+      // TODO if resource exist PROCEED
+      const resource = await this.mediaService.getStoryResource(story_id);
       if (resource === null) return
+      // TODO if resources table on media_resource_path has an MP4 THEN PROCEED
+      //  Otherwise abort operation and LOG the reason
 
       const transcribeClient = new TranscribeClient(transcribeConfig);
       const transcriptionJobResponse = await this.sendTranscribeJob(transcribeClient , resource);
@@ -66,7 +71,7 @@ export class MediaTranscribeService {
       const transcribeCommand = new StartTranscriptionJobCommand({
         TranscriptionJobName: transcriptionJobName,
         LanguageCode: "en-US",
-        MediaFormat: "mp4",
+        MediaFormat: "mp4", //TODO this needs to come from the resource and we need to make sure the MP4 exists
         Media: { MediaFileUri: resource.media_resource_path },
         OutputBucketName: 'ourherd-public-dev',
         OutputKey: route,
@@ -106,12 +111,6 @@ export class MediaTranscribeService {
         setTimeout(resolve, 1000);
       });
     }
-  }
-
-  private async getStoryResource(story_id: string): Promise<StorageResourceEntity> {
-    return this.storageResourceRepository.findOneBy({
-      story_id: story_id
-    });
   }
 
   private async updateStoryResource(resource: StorageResourceEntity, job: TranscriptionJob): Promise<void> {

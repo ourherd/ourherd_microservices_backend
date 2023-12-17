@@ -26,7 +26,6 @@ CREATE TABLE IF NOT EXISTS public.members
     created_at timestamp with time zone default now() not null,
     updated_at timestamp with time zone default now() not null,
     deleted_at timestamptz
-    
     -- field from old db
     verified_at timestamptz
 
@@ -36,8 +35,8 @@ CREATE TABLE IF NOT EXISTS public.members
 ALTER TABLE public.members ADD freeform_gender boolean default false;
 ALTER TABLE public.members ADD newsletter boolean default false;
 ALTER TABLE public.members ADD verified_at timestamptz;
-
 ALTER TABLE members ALTER COLUMN birthday TYPE TEXT;
+
 
 
 ALTER TABLE public.members
