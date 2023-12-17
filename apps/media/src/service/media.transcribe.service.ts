@@ -13,6 +13,7 @@ import { StorageResourceEntity } from "../../../storage/src/entity/storage-resou
 import { v4 } from "uuid";
 import { ConfigService } from "@nestjs/config";
 import { StorageResourceRoute } from "../../../storage/src/interface/storage-resource.interface";
+import { MediaService } from "./media.service";
 
 
 @Injectable()
@@ -24,6 +25,7 @@ export class MediaTranscribeService {
 
   constructor(
     private configService: ConfigService,
+    private readonly mediaService: MediaService,
     @InjectRepository(StorageResourceEntity, Database.PRIMARY) private storageResourceRepository:
       Repository<StorageResourceEntity>
   ) {}
@@ -39,7 +41,7 @@ export class MediaTranscribeService {
         },
       };
 
-      const resource = await this.getStoryResource(story_id);
+      const resource = await this.mediaService.getStoryResource(story_id);
       if (resource === null) return
 
       const transcribeClient = new TranscribeClient(transcribeConfig);
@@ -106,12 +108,6 @@ export class MediaTranscribeService {
         setTimeout(resolve, 1000);
       });
     }
-  }
-
-  private async getStoryResource(story_id: string): Promise<StorageResourceEntity> {
-    return this.storageResourceRepository.findOneBy({
-      story_id: story_id
-    });
   }
 
   private async updateStoryResource(resource: StorageResourceEntity, job: TranscriptionJob): Promise<void> {

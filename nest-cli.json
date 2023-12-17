@@ -74,6 +74,15 @@
         "tsConfigPath": "libs/policy/tsconfig.lib.json"
       }
     },
+    "ffmpeg": {
+      "type": "library",
+      "root": "libs/ffmpeg",
+      "entryFile": "index",
+      "sourceRoot": "libs/ffmpeg/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/ffmpeg/tsconfig.lib.json"
+      }
+    },
     "gateway": {
       "type": "application",
       "root": "apps/gateway",

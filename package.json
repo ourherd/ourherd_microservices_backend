@@ -54,6 +54,7 @@
     "class-validator": "^0.14.0",
     "compression": "^1.7.4",
     "date-fns": "^2.30.0",
+    "fluent-ffmpeg": "^2.1.2",
     "helmet": "^7.0.0",
     "jwks-rsa": "^3.1.0",
     "lodash": "^4.17.21",
@@ -79,6 +80,7 @@
     "@types/bcrypt": "^5.0.1",
     "@types/compression": "^1.7.3",
     "@types/express": "^4.17.17",
+    "@types/fluent-ffmpeg": "^2.1.24",
     "@types/jest": "29.5.2",
     "@types/lodash": "^4.14.195",
     "@types/multer": "^1.4.7",
@@ -129,7 +131,8 @@
       "^@app/language(|/.*)$": "<rootDir>/libs/language/src/$1",
       "^@app/token(|/.*)$": "<rootDir>/libs/token/src/$1",
       "^@app/mail(|/.*)$": "<rootDir>/libs/mail/src/$1",
-      "^@libs/cognito(|/.*)$": "<rootDir>/libs/cognito/src/$1"
+      "^@libs/cognito(|/.*)$": "<rootDir>/libs/cognito/src/$1",
+      "^@app/ffmpeg(|/.*)$": "<rootDir>/libs/ffmpeg/src/$1"
     }
   }
 }

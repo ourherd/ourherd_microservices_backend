@@ -84,6 +84,12 @@
       ],
       "@libs/cognito/*": [
         "libs/cognito/src/*"
+      ],
+      "@app/ffmpeg": [
+        "libs/ffmpeg/src"
+      ],
+      "@app/ffmpeg/*": [
+        "libs/ffmpeg/src/*"
       ]
     }
   }
