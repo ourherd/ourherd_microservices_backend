@@ -33,7 +33,7 @@ export class StorageService {
         const { state, data: { key } } = await this.s3Service.upload(storageDto, story_resource)
 
         if (state === true) {
-          resource.media_resource_path = key;
+          resource.media_original_resource_path = key;
           resource.resource_type = storageDto.resource_type;
           result = await this.storageRepository.save(resource);
         }
@@ -56,6 +56,10 @@ export class StorageService {
         }, resource)
       }
 
+      //TODO call function to go to @EventPattern(MEDIA_MESSAGE_PATTERNS.CREATE_IMAGE)
+      // ADD to the module MEDIA
+      //TODO this function depending on resource_type if its IMAGE
+      //TODO this function depending on resource_type if its VIDEO
       return {
         state: !!result,
         data: result

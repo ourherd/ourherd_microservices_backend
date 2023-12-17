@@ -18,6 +18,11 @@ export class StorageResourceEntity extends AbstractEntity {
     resource_type: StorageResourceType;
 
     // If resource_type is VIDEO
+    // it needs an image to be used a preload
+    @Column({ default: false , nullable: true })
+    media_preview_path: string;
+
+    // If resource_type is VIDEO
     // if captions has been created
     @Column({ default: false, nullable: true })
     has_captions_included: boolean;
