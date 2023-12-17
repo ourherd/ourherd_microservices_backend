@@ -18,6 +18,7 @@ import { StorySettingEntity } from 'apps/story/src/entity/story/story.setting.en
 import { ResetPasswordVerificationEntity } from 'apps/account/src/entity/reset-password-verification.entity';
 import { TagEntity } from "../../../../apps/tag/src/entity/tag.entity";
 import { StorySurveyEntity } from "../../../../apps/story/src/entity/survey/story.survey.entity";
+import { ModerationEntity } from "../../../../apps/moderation/src/entity/moderation.entity";
 
 export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string, entities: EntityClassOrSchema[] }> = {
     primary: {
@@ -41,6 +42,7 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
             TagEntity,
             StoryTagEntity,
             StorySurveyEntity,
+            ModerationEntity
         ]
     },
     secondary: {
@@ -64,6 +66,7 @@ export const DATABASE_CONFIG: Record<Database, { type: DatabaseType, env: string
           TagEntity,
           StoryTagEntity,
           StorySurveyEntity,
+          ModerationEntity
         ]
     }
 };
