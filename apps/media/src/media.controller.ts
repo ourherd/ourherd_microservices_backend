@@ -13,9 +13,9 @@ export class MediaController {
   ) {}
 
   @EventPattern(MEDIA_MESSAGE_PATTERNS.CREATE_IMAGE)
-  createdPreviewImage(
+  createdImage(
     @Payload('story_id') story_id: string,
-    @Payload('story_type') story_type: string) {
+    @Payload('story_type') story_type: string): Promise<void> {
     return this.previewService.createdImage(story_id, story_type);
   }
 
