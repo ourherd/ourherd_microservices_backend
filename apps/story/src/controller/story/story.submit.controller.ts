@@ -12,7 +12,7 @@ export class StorySubmitController {
   @MessagePattern(STORY_MESSAGE_PATTERNS.SUBMIT_STORY)
   async submit (
     @Payload('member_id') member_id: string,
-    @Payload('story_id') story_id: string) :
+    @Payload('story_id') story_id: string):
     Promise<IServiceResponse<StoryEntity>> {
 
     return await this.storySubmitService.submit( member_id, story_id );

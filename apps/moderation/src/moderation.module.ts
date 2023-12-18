@@ -1,11 +1,16 @@
 import { Module } from '@nestjs/common';
 import { ModerationController } from './moderation.controller';
-import { ModerationService } from './moderation.service';
+import { ModerationService } from './service/moderation.service';
+import { StaffModerationService } from "./service/staff.moderation.service";
+import { StoryModerationService } from "./service/story.moderation.service";
 import { RabbitModule, RabbitServiceName } from '@app/rabbit';
 import { ModerationEntity } from './entity/moderation.entity';
+import { StoryEntity } from "../../story/src/entity/story/story.entity";
+import { MemberEntity } from "../../member/src/entity/member.entity";
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Database, DatabaseModule } from '@app/database';
 import { getEnvPath } from '@app/common/env/env.helper';
+
 
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
@@ -15,11 +20,11 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
       envFilePath: envFilePath
     }),
     DatabaseModule.register(Database.PRIMARY),
-    DatabaseModule.forEntity(Database.PRIMARY, [ModerationEntity]),
+    DatabaseModule.forEntity(Database.PRIMARY, [ModerationEntity, StoryEntity, MemberEntity]),
     RabbitModule.forServerProxy(RabbitServiceName.MODERATION)
   ],
   controllers: [ModerationController],
-  providers: [ModerationService],
+  providers: [ModerationService, StaffModerationService, StoryModerationService],
 })
 
 export class ModerationModule {}

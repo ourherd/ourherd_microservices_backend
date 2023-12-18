@@ -8,14 +8,11 @@ import { MODERATION_MODULE, MODERATION_SERVICE } from "./constant/moderation-pat
 async function bootstrap() {
 
   let logger = new Logger(MODERATION_MODULE);
-
   const app = await NestFactory.create(ModerationModule);
   // * setup
   app.connectMicroservice<MicroserviceOptions>(app.get<MicroserviceOptions>(RABBIT_SERVICE_OPTIONS));
   // * start
   await app.startAllMicroservices();
-
   logger.log(`🚀 Application { ` + MODERATION_SERVICE +` } running 🚀`);
-
 }
 bootstrap();

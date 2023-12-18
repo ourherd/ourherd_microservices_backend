@@ -23,6 +23,7 @@ import { AccountPasswordGatewayController } from "./modules/account/account-pass
 import { SurveyGatewayController } from "./modules/survey/survey-gateway.controller";
 import { TagGatewayController } from "./modules/tag/tag-gateway.controller";
 import { MyStoriesGatewayController } from "./modules/mystories/mystories-gateway.controller";
+import { ModerationGatewayController } from "./modules/moderation/moderation-gateway.controller";
 
 import { StorageModule } from "apps/storage/src/storage.module";
 import { FeedModule } from "../../feed/src/feed.module";
@@ -56,6 +57,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     RabbitModule.forClientProxy(RabbitServiceName.TAG),
     RabbitModule.forClientProxy(RabbitServiceName.MY_STORY),
     RabbitModule.forClientProxy(RabbitServiceName.MEDIA),
+    RabbitModule.forClientProxy(RabbitServiceName.MODERATION),
     PassportModule.register({ defaultStrategy: 'jwt' }),
 
     FeedModule,
@@ -78,7 +80,8 @@ const envFilePath: string = getEnvPath(`${__dirname}/`);
     StorySettingsGatewayController,
     ViolationGatewayController,
     SurveyGatewayController,
-    TagGatewayController
+    TagGatewayController,
+    ModerationGatewayController
   ],
   providers: [JwtStrategy],
 })
