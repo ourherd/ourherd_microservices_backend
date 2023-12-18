@@ -17,4 +17,6 @@ export const  MODERATION_STORY_MESSAGE_DB_RESPONSE = {
   STORY_NOT_FOUND: 'moderation.story-not-found',
   MEMBER_FOUND: 'moderation.member-found',
   MEMBER_NOT_FOUND: 'moderation.member-not-found',
+  MODERATION_FOUND: 'moderation.moderation-found',
+  MODERATION_NOT_FOUND: 'moderation.moderation-not-found',
 }

@@ -9,6 +9,7 @@ import { MODERATION_STORY_MESSAGE_DB_RESPONSE } from "../constant/moderation-pat
 import { CreateModerationDto } from "../dto/create-moderation.dto";
 import { StoryModerationService } from "./story.moderation.service";
 import { StaffModerationService } from "./staff.moderation.service";
+import { UpdateModerationDto } from "../dto/update-moderation.dto";
 
 @Injectable()
 export class ModerationService {
@@ -45,6 +46,32 @@ export class ModerationService {
     }
   }
 
+
+  async updateModeration (member_id: string, moderation_id: string, dto: UpdateModerationDto):
+    Promise<IServiceResponse<ModerationEntity>> {
+
+    const moderation = await this.moderationRepository.findOneBy({ id: moderation_id });
+    if (isEmptyOrNull(moderation)) {
+      return {
+        state: false,
+        data: null,
+        message: MODERATION_STORY_MESSAGE_DB_RESPONSE.MODERATION_NOT_FOUND
+      }
+    }
+
+    const update = await this.moderationRepository.update(
+      {
+        id: moderation_id
+      }, dto);
+
+    return {
+      state: true,
+      data: null,
+      message: MODERATION_STORY_MESSAGE_DB_RESPONSE.MODERATION_NOT_FOUND
+    }
+
+  }
+
   private async getModerationByStory(story_id: string): Promise<IServiceResponse<ModerationEntity[]>> {
 
     const entities = await this.moderationRepository.createQueryBuilder('moderation')
@@ -64,7 +91,6 @@ export class ModerationService {
       state: true,
       data: entities,
     }
-
   }
 
 

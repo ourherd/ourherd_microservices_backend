@@ -1,16 +1,15 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { ModerationStatus } from "../entity/moderation.entity";
 import { IsEnum, IsOptional, IsString, IsUUID, Length } from "class-validator";
-import { Exclude } from "class-transformer";
 
 export class CreateModerationDto {
 
   @ApiProperty({
-    description: "Member status",
+    description: "Moderation status",
     enum: ModerationStatus,
     isArray: false,
     default: ModerationStatus.ON_REVIEW,
-    example: 'ON_REVIEW | CO_CREATION | REJECTED',
+    example: 'ON_REVIEW | CO_CREATION | REJECTED | PUBLISHED',
     required: false
   })
   @IsEnum(ModerationStatus)
@@ -37,6 +36,5 @@ export class CreateModerationDto {
   @IsString()
   @IsOptional()
   public message_member: string;
-
 
 }
