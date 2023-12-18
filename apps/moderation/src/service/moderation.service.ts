@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Database } from "@app/database";
 import { Repository } from "typeorm";
@@ -27,11 +27,11 @@ export class ModerationService {
   async createModeration (member_id: string, story_id: string, dto: CreateModerationDto):
     Promise<IServiceResponse<ModerationEntity>> {
 
-    // const story = await this.storyModerationService.getStory(story_id);
-    // if (story.state === false) return story;
+    const story = await this.storyModerationService.getStory(story_id);
+    if (story.state === false) throw new NotFoundException('NotFoundException');
 
     const member = await this.staffModerationService.getMember(member_id);
-    // if (member.state === false) return member;
+    if (member.state === true) throw new NotFoundException('NotFoundException');
 
     dto.story_id = story_id;
     dto.moderator_name = isEmptyOrNull(member.data.first_name) ? member.data.email : member.data.first_name;
