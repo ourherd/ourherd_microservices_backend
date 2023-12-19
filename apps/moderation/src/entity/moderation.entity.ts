@@ -36,12 +36,6 @@ export class ModerationEntity extends AbstractEntity {
   @Column({ nullable: true })
   public moderator_name: string;
 
-  @Column({ nullable: true, type: 'timestamp' })
-  public requested_changes_at!: Date;
-
-  @Column({ nullable: true, type: 'timestamp' })
-  public approved_at!: Date;
-
   @Column({ nullable: true, default: 0 })
   readonly revision: number;
 

@@ -8,7 +8,7 @@ import { MODERATION_STORY_MESSAGE_DB_RESPONSE } from "../constant/moderation-pat
 import { MemberEntity } from "../../../member/src/entity/member.entity";
 
 @Injectable()
-export class StaffModerationService {
+export class MemberModerationService {
 
   constructor(
     @InjectRepository(MemberEntity, Database.PRIMARY) private memberRepository: Repository<MemberEntity>,

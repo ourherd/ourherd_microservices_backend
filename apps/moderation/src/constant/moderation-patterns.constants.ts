@@ -12,11 +12,12 @@ export const MODERATION_MESSAGE_PATTERNS = {
 export const  MODERATION_STORY_MESSAGE_DB_RESPONSE = {
   CREATED: 'moderation-story.created',
   NO_MODERATION: 'moderation-story.no-moderation',
-  CHANGED: 'tag-story.changed',
+  CHANGED: 'moderation.messaged_changed',
   STORY_FOUND: 'moderation.story-found',
   STORY_NOT_FOUND: 'moderation.story-not-found',
   MEMBER_FOUND: 'moderation.member-found',
   MEMBER_NOT_FOUND: 'moderation.member-not-found',
   MODERATION_FOUND: 'moderation.moderation-found',
   MODERATION_NOT_FOUND: 'moderation.moderation-not-found',
+  MODERATION_DELETED: 'moderation.moderation-deleted',
 }

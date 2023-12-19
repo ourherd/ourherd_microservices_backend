@@ -7,6 +7,7 @@ import { IServiceResponse } from "@app/rabbit";
 import { isEmptyOrNull } from "@app/common/validation-rules/object-validation.rule";
 import { MODERATION_STORY_MESSAGE_DB_RESPONSE } from "../constant/moderation-patterns.constants";
 import { StoryStatus } from "../../../story/src/constant/story.enum";
+import { ModerationStatus } from "../entity/moderation.entity";
 
 @Injectable()
 export class StoryModerationService {
@@ -17,8 +18,7 @@ export class StoryModerationService {
 
   async getStory(story_id: string): Promise<IServiceResponse<StoryEntity>> {
     const result = await this.storyRepository.findOneBy({
-      id: story_id,
-      story_status: StoryStatus.SUBMITTED
+      id: story_id
     });
 
     if (isEmptyOrNull(result)) {
@@ -36,4 +36,9 @@ export class StoryModerationService {
     }
   }
 
+  async updateStoryStatus(story_id: string, status: StoryStatus): Promise<StoryEntity> {
+
+    await this.storyRepository.update( story_id, { story_status: status });
+    return await this.storyRepository.findOneBy( { id: story_id });
+  }
 }

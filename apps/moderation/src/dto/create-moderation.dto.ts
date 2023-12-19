@@ -1,6 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { ModerationStatus } from "../entity/moderation.entity";
-import { IsEnum, IsOptional, IsString, IsUUID, Length } from "class-validator";
+import { IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID, Length, ValidateIf } from "class-validator";
+
+const INTERNAL_MESSAGE_MIN = 20;
+const INTERNAL_MESSAGE_MAX = 300;
+const MESSAGE_MEMBER_MIN = 50;
 
 export class CreateModerationDto {
 
@@ -14,7 +18,7 @@ export class CreateModerationDto {
   })
   @IsEnum(ModerationStatus)
   @IsOptional()
-  readonly status?: ModerationStatus = ModerationStatus.ON_REVIEW;
+  public status?: ModerationStatus = ModerationStatus.ON_REVIEW;
 
   @IsString()
   @IsOptional()
@@ -29,12 +33,16 @@ export class CreateModerationDto {
   @IsOptional()
   public story_id: string;
 
-  @IsString()
-  @IsOptional()
+  @ValidateIf(o => o.status === ModerationStatus.CO_CREATION ||
+    o.status === ModerationStatus.REJECTED)
+  @IsNotEmpty()
+  @Length(INTERNAL_MESSAGE_MIN, INTERNAL_MESSAGE_MAX)
   public internal_note: string;
 
-  @IsString()
-  @IsOptional()
+  @ValidateIf(o => o.status === ModerationStatus.CO_CREATION ||
+    o.status === ModerationStatus.REJECTED)
+  @IsNotEmpty()
+  @Length(MESSAGE_MEMBER_MIN)
   public message_member: string;
 
 }

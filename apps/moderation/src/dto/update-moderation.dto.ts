@@ -1,32 +1,17 @@
+import { OmitType } from "@nestjs/mapped-types";
+import { CreateModerationDto } from "./create-moderation.dto";
 import { ApiProperty } from "@nestjs/swagger";
-import { ModerationStatus } from "../entity/moderation.entity";
-import { IsEnum, IsOptional, IsString, Length } from "class-validator";
+import { IsOptional, IsUUID } from "class-validator";
 
-export class UpdateModerationDto {
+export class UpdateModerationDto extends OmitType(CreateModerationDto,
+  ["story_id", "status"]) {
 
   @ApiProperty({
-    description: "Member status",
-    enum: ModerationStatus,
-    isArray: false,
-    default: ModerationStatus.ON_REVIEW,
-    example: 'ON_REVIEW | CO_CREATION | REJECTED',
-    required: false
+    description: "Moderation ID",
+    example: '116dcaf4-c1ea-4218-b6b4-e4fd95a3c28e'
   })
-  @IsEnum(ModerationStatus)
+  @IsUUID()
   @IsOptional()
-  readonly status?: ModerationStatus;
-
-  @IsString()
-  @IsOptional()
-  @Length(1, 255)
-  public moderator_name: string;
-
-  @IsString()
-  @IsOptional()
-  public internal_note: string;
-
-  @IsString()
-  @IsOptional()
-  public message_member: string;
+  public id: string;
 
 }
