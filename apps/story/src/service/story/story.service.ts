@@ -24,7 +24,7 @@ export class StoryService {
 
   public async getStoryByID (story_id :string, member_id: string):  Promise<IServiceResponse<StoryEntity>> {
     const story = await this.storyRepository.findOneBy({ id: story_id, member_id:member_id });
-    this.logger.log('Story details  id ' + JSON.stringify(story_id));
+    this.logger.log('Story details ID with member ' + JSON.stringify(story));
     return {
       state: !isEmptyOrNull(story),
       data: story,
