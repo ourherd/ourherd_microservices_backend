@@ -3,7 +3,8 @@ export enum EmailEnum {
   WELCOME = "welcome",
   VERIFY_EMAIL = "verify_email",
   RESET_PASSWORD = "reset_password",
-  RESET_PASSWORD_SUCCESSFULLY = "reset_password_successfully"
+  RESET_PASSWORD_SUCCESSFULLY = "reset_password_successfully",
+  MODERATION_MESSAGE = "moderation_message"
 }
 
 export interface IEmailTemplate {
@@ -34,5 +35,11 @@ export const TemplateMap: Record<string, IEmailTemplate> = {
     from: "hello@ourherd.io",
     subject: "Reset Password!",
     template_id: "d-be1f9e90b95449aeb579b44459144217",
+  },
+  moderation_message: <IEmailTemplate>{
+    from: "hello@ourherd.io",
+    subject: "Moderation Message from Ourherd!",
+    template_id: "d-c078dccd44ed464792eb50bea1de6c44",
   }
+
 }

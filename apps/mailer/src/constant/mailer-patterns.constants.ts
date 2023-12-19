@@ -12,6 +12,7 @@ export const MAILER_EVENT_PATTERNS = {
   EMAIL_SENT: 'mailer.sent',
   EMIT_WELCOME_EMAIL: 'mailer.emit-welcome',
   EMIT_VERIFICATION_EMAIL: 'mailer.verification-email',
+  EMIT_MODERATION_EMAIL: 'mailer.moderation-email',
   WELCOME_EMAIL_REQUEST_SENT: 'mailer.welcome-email-sent'
 }
 

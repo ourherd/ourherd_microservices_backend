@@ -26,4 +26,11 @@ export class MailerController {
     await this.mailerService.sendEmailVerification( verifyTokenDto );
   }
 
+  @EventPattern(MAILER_EVENT_PATTERNS.EMIT_MODERATION_EMAIL)
+  async sentModerationMessageEmail(
+    @Payload('email') email: string) {
+    this.logger.log('Sent Moderation Message Email');
+    await this.mailerService.sendEmailModerationMessage( email );
+  }
+
 }
