@@ -1,13 +1,15 @@
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiResponse, ApiTags } from "@nestjs/swagger";
 import {
   Body,
   Controller,
   Get,
+  Patch,
+  Post,
+  Delete,
   Inject,
   Logger,
   Param,
   ParseUUIDPipe,
-  Post,
   UsePipes,
   ValidationPipe
 } from "@nestjs/common";
@@ -17,10 +19,9 @@ import { Auth, CurrentMember } from "@app/authentication";
 import { ModerationEntity } from "../../../../moderation/src/entity/moderation.entity";
 import { firstValueFrom } from "rxjs";
 import { MODERATION_MESSAGE_PATTERNS } from "../../../../moderation/src/constant/moderation-patterns.constants";
-import { Roles } from "@app/authentication/decorator/role.decorator";
-import { Role } from "@app/authentication/constant/roles.enum";
-import { RegisterAccountDto } from "../../../../account/src/dto/register.account.dto";
 import { CreateModerationDto } from "../../../../moderation/src/dto/create-moderation.dto";
+import { UpdateModerationDto } from "../../../../moderation/src/dto/update-moderation.dto";
+import { DeleteModerationDto } from "../../../../moderation/src/dto/delete-moderation.dto";
 
 @ApiTags('Moderation Gateway')
 @Controller({
@@ -84,7 +85,50 @@ export class ModerationGatewayController {
       )
     );
     return { state, data };
+  }
 
+  @Auth()
+  @Patch('/')
+  //@Roles([ Role.MODERATOR, Role.ADMIN])
+  async updateModerationMessage (
+    @CurrentMember ('member_id') member_id: string,
+    @Body() dto: UpdateModerationDto
+  ) : Promise<IServiceResponse<any>> {
+
+    const { state, data } = await firstValueFrom(
+      this.moderationClient.send<IServiceResponse<any>,
+        { member_id: string, dto: UpdateModerationDto }>
+      (
+        MODERATION_MESSAGE_PATTERNS.UPDATE,
+        {
+          member_id,
+          dto
+        }
+      )
+    );
+    return { state, data };
+  }
+
+  @Auth()
+  @Delete('/')
+  //@Roles([ Role.MODERATOR, Role.ADMIN])
+  async deleteModerationMessage (
+    @CurrentMember ('member_id') member_id: string,
+    @Body() dto: DeleteModerationDto
+  ) : Promise<IServiceResponse<any>> {
+
+    const { state, data } = await firstValueFrom(
+      this.moderationClient.send<IServiceResponse<any>,
+        { member_id: string, dto: DeleteModerationDto }>
+      (
+        MODERATION_MESSAGE_PATTERNS.DELETE,
+        {
+          member_id,
+          dto
+        }
+      )
+    );
+    return { state, data };
   }
 
 }
