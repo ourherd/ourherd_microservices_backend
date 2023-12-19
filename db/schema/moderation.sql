@@ -1,5 +1,5 @@
 DROP TYPE IF EXISTS ModerationStatus;
-CREATE TYPE ModerationStatus AS ENUM ('APPROVED', 'CO_CREATION', 'ON_REVIEW', 'CLOSED', 'REJECTED');
+CREATE TYPE ModerationStatus AS ENUM ('PUBLISHED', 'CO_CREATION', 'ON_REVIEW', 'CLOSED', 'REJECTED');
 
 CREATE TABLE IF NOT EXISTS public.moderation
 (
@@ -9,10 +9,8 @@ CREATE TABLE IF NOT EXISTS public.moderation
     "status" ModerationStatus,
     internal_note text,
     message_member text,
-    requested_changes_at timestamp,
     moderator_name text,
     created_at timestamp with time zone default now() not null,
     updated_at timestamp with time zone default now() not null,
-    deleted_at timestamp,
-    approved_at timestamp
+    deleted_at timestamp
 );
