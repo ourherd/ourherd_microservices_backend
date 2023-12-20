@@ -11,20 +11,19 @@ export function firstUppercase(name: string): string {
   for (let i = 0; i < arr.length; i++) {
     arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1).toLowerCase();
   }
-  const final_tag = arr.join(" ")
+  let final_tag = arr.join(" ")
   return final_tag;
 }
 
 //TODO refactor this
 export function firstUppercaseAfterHyphen(name: string): string {
 
-  const arr = name.split("-");
+  const arr = name.split("-").join(",").split(',').join(' ').split(' ');
   for (let i = 0; i < arr.length; i++) {
     arr[i] = arr[i].charAt(0).toUpperCase() +  arr[i].slice(1).toLowerCase();
   }
-  const final_tag = arr.join("-")
-
-  return final_tag;
+  let final_ = arr.join(" ")
+  return final_;
 }
 
 
