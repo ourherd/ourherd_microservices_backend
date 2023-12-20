@@ -3,6 +3,7 @@ import { firstUppercaseAfterHyphen } from "@app/common/string/string-first-upper
 import { ApiProperty } from "@nestjs/swagger";
 import { EmploymentType, MemberStatus } from "../entity/member.entity";
 import { Transform } from "class-transformer";
+import { GENDER } from "../constant/member-patterns.constants";
 
 export class UpdateMemberDto  {
 
@@ -118,8 +119,12 @@ export class UpdateMemberDto  {
     example: 'Androgyny',
     required: false
   })
-  @Matches(RegExp('^(?=.*[A-Za-z])[A-Za-z]+(?:-[A-Za-z]+)+$'))
-  @Transform(({ value }) => firstUppercaseAfterHyphen(value.toString()))
+  @Transform(({ value }) => {
+    if (Object.values(GENDER).includes(value.toString()) && value.freeform_gender === false) {
+      return value.toString();
+    }
+    return firstUppercaseAfterHyphen(value.toString())
+  })
   @IsString()
   @IsOptional()
   public gender: string;

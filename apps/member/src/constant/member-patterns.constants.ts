@@ -32,3 +32,12 @@ export const MEMBER_MESSAGE_DB_RESPONSE = {
   VERIFIED: 'member.verified',
   NO_VERIFIED: 'member.no-verified'
 }
+
+export const GENDER = {
+  FEMALE: "Female",
+  MALE: "Male",
+  TRANS: "Trans",
+  NON_BINARY: "Non Binary",
+  INTERSEX: "Intersex",
+  PREFER_NOT_TO_ANSWER: "Prefer not to answer"
+}

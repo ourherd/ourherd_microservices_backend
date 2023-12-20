@@ -18,9 +18,7 @@ export class MemberService {
   private readonly logger = new Logger(MemberService.name);
 
   constructor(
-    @InjectRepository(MemberEntity, Database.PRIMARY)
-    private memberRepository: Repository<MemberEntity>,
-
+    @InjectRepository(MemberEntity, Database.PRIMARY) private memberRepository: Repository<MemberEntity>,
     //TODO move it no being used
     @InjectRepository(MemberVerificationEntity, Database.PRIMARY)
     private memberVerificationRepository: Repository<MemberVerificationEntity>  ) { }
