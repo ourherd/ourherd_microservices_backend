@@ -9,6 +9,7 @@ import { RegisterAccountDto } from "../../../account/src/dto/register.account.dt
 import { MAILER_EVENT_PATTERNS, MAILER_MESSAGE_PATTERNS } from "../../../mailer/src/constant/mailer-patterns.constants";
 import { ClientProxy } from "@nestjs/microservices";
 import { MemberModerationService } from "../service/member.moderation.service";
+import { EmailEnum } from "../../../mailer/src/constant/template-map-constants";
 
 @Injectable()
 export class CreatedModerationSaga {
@@ -29,8 +30,10 @@ export class CreatedModerationSaga {
       await this.updateStoryStatus(story_id, moderation.data.status);
 
       if ( moderation.data.status === ModerationStatus.CO_CREATION ||
-        moderation.data.status === ModerationStatus.PUBLISHED) {
-        await this.sendEmailToMember(story_id);
+        moderation.data.status === ModerationStatus.PUBLISHED ||
+        moderation.data.status === ModerationStatus.REJECTED ) {
+        // const template =
+        await this.sendEmailToMember(story_id, moderation.data.status );
       }
     }
     return moderation;
@@ -45,24 +48,45 @@ export class CreatedModerationSaga {
       case ModerationStatus.PUBLISHED:
         status = StoryStatus.PUBLISHED
         break
+      case ModerationStatus.REJECTED:
+        status = StoryStatus.DRAFT
+        break
     }
     await this.storyService.updateStoryStatus( story_id, status );
 
   }
 
-  private async sendEmailToMember (story_id: string) {
+  private async sendEmailToMember (story_id: string, moderationStatus: string) {
 
     const story = await this.storyService.getStory(story_id);
     const member = await this.memberService.getMember(story.data.member_id);
     if (member.state === false) throw new NotFoundException('NotFoundException');
 
     const email = member.data.email;
+    const template = this.getEmailTemplate(moderationStatus);
 
-    this.emailClient.emit<IServiceResponse<String>, { email: string }>(
+    this.emailClient.emit<IServiceResponse<String>, { email: string, template: string }>(
       MAILER_EVENT_PATTERNS.EMIT_MODERATION_EMAIL,
       {
-        email
+        email,
+        template
     });
+  }
+
+  private getEmailTemplate (moderationStatus: string): string {
+    let template;
+    switch(moderationStatus) {
+      case ModerationStatus.CO_CREATION:
+        template = EmailEnum.MODERATION_MESSAGE
+        break
+      case ModerationStatus.PUBLISHED:
+        template = EmailEnum.MODERATION_PUBLISHED
+        break
+      case ModerationStatus.REJECTED:
+        template = EmailEnum.MODERATION_REJECTED
+        break
+    }
+    return template;
   }
 
 }

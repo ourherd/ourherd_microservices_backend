@@ -4,6 +4,7 @@ import { MAILER_EVENT_PATTERNS, MAILER_MESSAGE_PATTERNS, MAILER_SERVICE } from "
 import { EventPattern, Payload } from "@nestjs/microservices";
 import { RegisterAccountDto } from "../../account/src/dto/register.account.dto";
 import { EmailVerifyTokenDto } from "../../member/src/dto/email-verify-token.account.dto";
+import { EmailEnum } from "./constant/template-map-constants";
 
 @Controller()
 export class MailerController {
@@ -28,9 +29,11 @@ export class MailerController {
 
   @EventPattern(MAILER_EVENT_PATTERNS.EMIT_MODERATION_EMAIL)
   async sentModerationMessageEmail(
-    @Payload('email') email: string) {
+    @Payload('email') email: string,
+    @Payload('template') template: EmailEnum
+    ) {
     this.logger.log('Sent Moderation Message Email');
-    await this.mailerService.sendEmailModerationMessage( email );
+    await this.mailerService.sendEmailModerationMessage( email, template );
   }
 
 }

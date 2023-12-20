@@ -1,7 +1,6 @@
 import { EmailEnum, IEmailTemplate, TemplateMap } from "./constant/template-map-constants";
 import { ConfigService } from "@nestjs/config";
 
-
 export const mailOptionsData = ( email: string, template_name: string,
                                  configService: ConfigService, token?: string ) => {
 
@@ -26,7 +25,7 @@ export const createLink = ( emailType : string, configService: ConfigService, to
     case EmailEnum.VERIFY_EMAIL:
       return configService.get('LINK_EMAIL_VALIDATION_URL') + token;
     default:
-      console.log("No such day exists!");
+      console.log("No such LINK exists!");
       break;
   }
 }

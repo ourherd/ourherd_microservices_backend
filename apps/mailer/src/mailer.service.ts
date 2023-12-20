@@ -41,9 +41,9 @@ export class MailerService {
     }
   }
 
-  public async sendEmailModerationMessage (email: string){
+  public async sendEmailModerationMessage (email: string, template: EmailEnum ){
 
-    const mailOptions = mailOptionsData( email, EmailEnum.MODERATION_MESSAGE, this.configService );
+    const mailOptions = mailOptionsData( email, template, this.configService );
     try {
       await this.mailService.send( mailOptions );
       this.logger.log('Mail sent ' + EmailEnum.MODERATION_MESSAGE + ' to '+ JSON.stringify(email));
