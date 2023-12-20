@@ -12,7 +12,6 @@ import { Database, DatabaseModule } from '@app/database';
 import { getEnvPath } from '@app/common/env/env.helper';
 import { CreatedModerationSaga } from "./saga/created.moderation.saga";
 
-
 const envFilePath: string = getEnvPath(`${__dirname}/`);
 
 @Module({

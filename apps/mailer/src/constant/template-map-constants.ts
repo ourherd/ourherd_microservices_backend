@@ -4,7 +4,9 @@ export enum EmailEnum {
   VERIFY_EMAIL = "verify_email",
   RESET_PASSWORD = "reset_password",
   RESET_PASSWORD_SUCCESSFULLY = "reset_password_successfully",
-  MODERATION_MESSAGE = "moderation_message"
+  MODERATION_MESSAGE = "moderation_message",
+  MODERATION_PUBLISHED = "moderation_published",
+  MODERATION_REJECTED = "moderation_rejected",
 }
 
 export interface IEmailTemplate {
@@ -38,8 +40,17 @@ export const TemplateMap: Record<string, IEmailTemplate> = {
   },
   moderation_message: <IEmailTemplate>{
     from: "hello@ourherd.io",
-    subject: "Moderation Message from Ourherd!",
+    subject: "You’ve got a new message!",
     template_id: "d-c078dccd44ed464792eb50bea1de6c44",
+  },
+  moderation_rejected: <IEmailTemplate>{
+    from: "The OurHerd crew <\hello@ourherd.io\>",
+    subject: "Your story is live!",
+    template_id: "d-ed15232127934da785d00a7e88798952",
+  },
+  moderation_published: <IEmailTemplate>{
+    from: "hello@ourherd.io",
+    subject: "☝️ Hold on a minute…",
+    template_id: "d-b19a78218ce842fb9a6874462537ac83",
   }
-
 }
