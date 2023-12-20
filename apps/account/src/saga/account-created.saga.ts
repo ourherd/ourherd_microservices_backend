@@ -70,8 +70,7 @@ export class AccountCreatedSaga {
       MAILER_MESSAGE_PATTERNS.EMIT_WELCOME_EMAIL,
       {
         registerDto
-      }
-);
+      });
   }
 
   /**
